@@ -1,82 +1,51 @@
-# EnGram — PWA
+# EnGram
 
-Личный конспект по английской грамматике и практика с AI (Google Gemini).
-Веб-версия расширения [`engram`](../engram): та же логика и вёрстка, но без Chrome
-Extension API — статический сайт, который ставится на iPhone через «На экран «Домой»».
+English grammar notes with AI practice, as an installable web app.
+A PWA port of the EnGram Chrome extension: same content and views, no extension APIs.
 
-## Как устроено
+Live: add it to the iPhone home screen from Safari — Share → Add to Home Screen.
 
-Сборки нет: браузер грузит ES-модули как есть.
+## Stack
+
+No build step: the browser loads ES modules as they are.
 
 ```
-index.html              каркас: шапка, поиск, контейнер #app
-manifest.webmanifest    PWA-манифест (иконки, standalone, start_url)
-sw.js                   service worker: офлайн-кэш, Gemini не кэшируется
-vercel.json             заголовки для деплоя
-css/app.css             вся вёрстка, включая тёмную тему и iPhone
-js/router.js            hash-роутер + поиск по темам
-js/storage.js           localStorage (в расширении был chrome.storage.local)
-js/gemini.js            запросы к Gemini с ключом и моделью из настроек
-js/pwa.js               регистрация service worker
-js/views/*              экраны
-data/*                  грамматика и словарь
+index.html              shell: header, search, #app container
+manifest.webmanifest    PWA manifest
+sw.js                   service worker: offline cache, Gemini never cached
+css/app.css             all styling, dark theme and iPhone included
+js/router.js            hash router and search
+js/storage.js           localStorage (chrome.storage.local in the extension)
+js/gemini.js            Gemini requests with the key and model from Settings
+js/views/*              screens
+data/*                  grammar and vocabulary
 ```
 
-## Локальный запуск
+## Run locally
 
-Service worker и ES-модули требуют http, не `file://`:
+Service workers and ES modules need http, not `file://`:
 
 ```bash
 npm run dev      # http://localhost:3000
 ```
 
-## Деплой на Vercel
+## Deploy
 
-```bash
-npx vercel        # превью
-npx vercel --prod # прод
-```
+Vercel, no build: Framework Preset **Other**, empty Build Command and Output
+Directory. `vercel.json` sets the headers.
 
-Через веб-интерфейс: New Project → импорт репозитория → Framework Preset **Other**,
-Build Command и Output Directory оставить пустыми. Билд не нужен.
+## API key
 
-## Установка на iPhone
+The Gemini key is entered in Settings and stored in `localStorage`. There is no
+backend and no key in the repository — requests go straight from the browser to
+`generativelanguage.googleapis.com`. That also means anyone with access to the
+device or DevTools can read it, so keep the key quota-limited and the app personal.
 
-1. Открыть сайт в **Safari** (Chrome на iOS не умеет добавлять PWA).
-2. «Поделиться» → «На экран «Домой»».
-3. Запускать с иконки: приложение открывается без адресной строки.
+The model is picked in Settings from `MODELS` in `js/storage.js`.
 
-## API-ключ
+## Notes
 
-Ключ Gemini вводится в Settings и хранится в `localStorage` этого браузера.
-В коде и в репозитории его нет; бэкенда нет — запросы идут из браузера прямо в
-`generativelanguage.googleapis.com`.
-
-Из этого следует: ключ виден любому, кто имеет доступ к устройству или к DevTools.
-Стоит ограничить ключ в Google AI Studio квотой и держать сайт для личного пользования.
-Если понадобится раздать приложение другим — понадобится прокси-функция, которая
-держит ключ на сервере.
-
-## Модель
-
-В Settings закрытый список из трёх моделей — тот же набор, что в LingoPop:
-две помощнее и одна дешёвая. Задан массивом `MODELS` в `js/storage.js`,
-по умолчанию `gemini-3.5-flash-lite`. Сохранённая модель, которой в списке
-больше нет, тихо заменяется на модель по умолчанию — иначе каждый запрос
-падал бы с 404. Запрос под разные семейства подстраивает `thinkingConfigFor()`
-в `js/gemini.js`.
-
-Кнопка «Все модели ключа» заменяет эти три реальным списком из API: полезно,
-чтобы проверить точные ID или найти модель, которой в пресетах нет.
-
-## Перенос слов из расширения
-
-Список «Мои слова» лежит в хранилище браузера и не переносится сам.
-В Settings есть экспорт в JSON и импорт — этим же файлом слова переезжают
-между устройствами.
-
-## Обновление
-
-Кэш service worker привязан к константе `VERSION` в `sw.js`. После изменения
-файлов её нужно поднять — иначе установленное приложение продолжит показывать
-старую версию.
+- Bump `VERSION` in `sw.js` after changing files, or installed apps keep serving
+  the cached build.
+- Saved words live in the browser. Settings has JSON export/import to move them
+  between devices.

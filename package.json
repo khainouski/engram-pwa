@@ -2,7 +2,7 @@
   "name": "engram-pwa",
   "version": "1.0.0",
   "private": true,
-  "description": "EnGram — конспект по английской грамматике и практика с AI. PWA без сборки.",
+  "description": "English grammar notes with AI practice. PWA, no build step.",
   "scripts": {
     "dev": "npx --yes serve@14 -l 3000 ."
   }
