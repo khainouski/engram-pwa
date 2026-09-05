@@ -7,7 +7,7 @@
  * Gemini API → not touched at all.
  */
 
-const VERSION = 'v12';
+const VERSION = 'v17';
 const CACHE = `engram-${VERSION}`;
 
 /** App shell. Cached separately, see install. */
@@ -23,6 +23,7 @@ const SHELL = [
   './js/prompts.js',
   './js/pwa.js',
   './js/icons.js',
+  './js/install.js',
   './js/views/home.js',
   './js/views/group.js',
   './js/views/topic.js',

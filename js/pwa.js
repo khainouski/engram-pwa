@@ -4,6 +4,9 @@
  */
 
 import { toast } from './ui.js';
+import { mountInstallBanner } from './install.js';
+
+window.addEventListener('load', mountInstallBanner);
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', async () => {

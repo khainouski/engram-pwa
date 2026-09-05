@@ -2,16 +2,7 @@ import { store, MODELS } from '../storage.js';
 import { testKey } from '../gemini.js';
 import { crumbs, esc, toast } from '../ui.js';
 import { icon } from '../icons.js';
-
-/** iPhone Safari is the only browser where "Add to Home Screen" is manual. */
-function isIosSafari() {
-  const ua = navigator.userAgent;
-  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  return iOS && !/CriOS|FxiOS|EdgiOS/.test(ua);
-}
-
-const isStandalone = () =>
-  window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+import { canOfferInstall, startInstall, INSTALLABLE_EVENT } from '../install.js';
 
 const option = ({ id, label }, selected) =>
   `<option value="${esc(id)}"${selected ? ' selected' : ''}>${esc(label ? `${id} — ${label}` : id)}</option>`;
@@ -21,9 +12,16 @@ export async function renderSettings(root) {
   const model = await store.getModel();
   const words = await store.getWords();
 
-  const installHint = isIosSafari() && !isStandalone()
-    ? `<div class="tip">Чтобы открывать EnGram как приложение: «Поделиться» → «На экран «Домой»».</div>`
-    : '';
+  const installBlock = canOfferInstall() ? `
+    <div class="result-card stack" style="margin-top:16px">
+      <div>
+        <div style="font-weight:550">Установить приложение</div>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 0">
+          Иконка на экране «Домой», запуск без адресной строки, работа офлайн.
+        </p>
+      </div>
+      <div class="row"><button id="install" class="btn primary">Установить</button></div>
+    </div>` : '';
 
   root.innerHTML = `
     ${crumbs([{ title: 'Грамматика', href: '#/' }, { title: 'Settings' }])}
@@ -68,7 +66,11 @@ export async function renderSettings(root) {
       </div>
     </div>
 
-    ${installHint}`;
+    ${installBlock}`;
+
+  const install = root.querySelector('#install');
+  if (install) install.addEventListener('click', startInstall);
+  else window.addEventListener(INSTALLABLE_EVENT, () => renderSettings(root), { once: true });
 
   const input = root.querySelector('#key');
   const select = root.querySelector('#model');
