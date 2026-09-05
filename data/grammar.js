@@ -23,8 +23,8 @@ export const GROUPS = [
           ],
         },
         story: {
-          title: 'Story example (все настоящие вместе)',
-          text: 'I work (работаю) as a backend developer on a fintech product, and our team releases (выпускает) a new version every two weeks. At the moment we are rebuilding (перестраиваем) the payment service, because the old one no longer handles (не справляется) the load.\nWe have already migrated (уже перенесли) half of the endpoints, and the first results look (выглядят) promising. I have been working (работаю уже) on this migration since March, so I know (знаю) every corner of the code. Right now my colleague is reviewing (просматривает) my pull request while I am writing (пишу) the documentation. He has been testing (тестирует уже) the new service for two days and has not found (не нашёл) a single critical bug yet.\nUsually we deploy (деплоим) on Thursdays, but this week we are deploying (деплоим — на этой неделе) on Friday, because the client wants (хочет) to see the demo first. The team has done (сделала) a lot, and everyone feels (чувствует) that the product finally works (работает) the way we want.',
+          title: 'Story example',
+          text: 'I work (работаю) as a backend developer, and our team releases (выпускает) a new version every two weeks. At the moment we are rebuilding (перестраиваем) the payment service.\nWe have already migrated (уже перенесли) half of the endpoints. I have been working (работаю уже) on this migration since March, so I know (знаю) the code well. Right now my colleague is reviewing (просматривает) my pull request, and he has not found (не нашёл) a single critical bug yet.\nUsually we deploy (деплоим) on Thursdays, but this week we are deploying (деплоим — на этой неделе) on Friday, because the client wants (хочет) to see the demo first.',
         },
       },
       {
@@ -42,8 +42,8 @@ export const GROUPS = [
           ],
         },
         story: {
-          title: 'Story example (все прошедшие вместе)',
-          text: 'Our team was developing (разрабатывала) a mobile app for personal finance management. We wanted (хотели) to simplify how users monitored (отслеживали) and controlled their spending.\nWhen we were adding (добавляли) new features, a critical bug caused (вызвал) the app to crash, putting us under pressure with approaching deadlines. Previously, I had written (написал заранее) a code that effectively tracked user expenses. Confident in my past experience, I took up (взялся за) the new challenge. When I was fixing (чинил / исправлял) the bug, my colleagues completed (завершили / дополнили) the review of user feedback from earlier versions to make sure all needs were met.\nThanks to my expertise, the bug was swiftly resolved. We successfully launched (запустили) the app which became (стало) a powerful tool used globally for finance management.',
+          title: 'Story example',
+          text: 'Our team was developing (разрабатывала) a mobile app for personal finance. We wanted (хотели) to simplify how users monitored (отслеживали) their spending.\nWhen we were adding (добавляли) new features, a critical bug caused (вызвал) the app to crash. Previously, I had written (написал заранее) the code that tracked user expenses, and by then I had been working (работал уже) on it for two months, so I took up (взялся за) the fix.\nThe bug was resolved quickly. We launched (запустили) the app, which became (стало) a tool used globally.',
         },
       },
       {
@@ -62,8 +62,8 @@ export const GROUPS = [
           ],
         },
         story: {
-          title: 'Story example (все будущие вместе)',
-          text: 'Next month our team will launch (запустит) the new payment service. We are going to move (собираемся перенести) the last endpoints next week: the load tests have shown that the old service will not survive (не выдержит) Black Friday.\nI am meeting (встречаюсь — договорённость) the client on Tuesday to confirm the scope, and the demo starts (начинается — расписание) at 10:00 sharp, because the schedule never changes. While you are presenting the results, I will be monitoring (буду следить) the logs, so if anything goes wrong, we will roll back (откатим) the release immediately.\nBy the end of the sprint we will have fixed (исправим — к этому моменту) all the blockers, and by December the service will have handled (обработает — к тому времени) millions of transactions. I think (думаю) the client is going to be (будет) happy.',
+          title: 'Story example',
+          text: 'Next month our team will launch (запустит) the new payment service. We are going to move (собираемся перенести) the last endpoints next week.\nI am meeting (встречаюсь — договорённость) the client on Tuesday, and the demo starts (начинается — расписание) at 10:00 sharp. While you are presenting, I will be monitoring (буду следить) the logs, and if anything goes wrong, we will roll back (откатим) the release.\nBy the end of the sprint we will have fixed (исправим — к этому моменту) all the blockers. I think (думаю) the client is going to be (будет) happy.',
         },
       },
     ],
