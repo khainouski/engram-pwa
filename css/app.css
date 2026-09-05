@@ -727,3 +727,13 @@ body:has(.install-bar) .app { padding-bottom: calc(150px + env(safe-area-inset-b
   .rv-word { font-size: 26px; }
   .rv-actions .btn { flex: 1; min-width: 0; }
 }
+
+/* CEFR level next to a word. */
+.level {
+  display: inline-block; vertical-align: middle;
+  margin-left: 8px; padding: 2px 7px;
+  border-radius: 6px; background: var(--accent-soft); color: var(--accent);
+  font-family: var(--mono); font-size: 11.5px; font-weight: 650;
+  letter-spacing: .3px; line-height: 1.5;
+}
+.rv-word .level { font-size: 13px; vertical-align: 6px; }

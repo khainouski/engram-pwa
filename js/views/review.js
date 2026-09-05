@@ -46,7 +46,9 @@ export async function renderReview(root) {
     progress.textContent = `${done + 1} из ${done + queue.length}`;
     card.innerHTML = `
       <div class="rv-card">
-        <div class="rv-word">${esc(word.text)}</div>
+        <div class="rv-word">
+          ${esc(word.text)}${word.cefr ? `<span class="level">${esc(word.cefr)}</span>` : ''}
+        </div>
         <div class="rv-back" hidden>
           <div class="rv-translation">${esc(word.translation || 'без перевода')}</div>
           ${word.forms ? `<div class="word-forms">${esc(word.forms)}</div>` : ''}

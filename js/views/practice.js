@@ -42,10 +42,10 @@ export function mountPractice(slot, ctx) {
 
   // The last word is prefilled: usually the same word is practised across topics.
   store.getLastWord().then((last) => { if (last && !wordInput.value) wordInput.value = last; });
-  // Suggestions from My Words as chips rather than a native datalist.
+  // The 10 most recent of My Words as chips, rather than a native datalist.
   const chips = slot.querySelector('#p-chips');
   store.getWords().then((words) => {
-    chips.innerHTML = words.slice(0, 8)
+    chips.innerHTML = words.slice(0, 10)
       .map((w) => `<span class="chip" data-w="${esc(w.text)}">${esc(w.text)}</span>`).join('');
   });
   chips.addEventListener('click', (e) => {

@@ -6,7 +6,7 @@ import { crumbs, errorBox, esc, loading, mdLite } from '../ui.js';
 import { icon } from '../icons.js';
 
 const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-const COUNTS = [5, 10, 20];
+const COUNTS = Array.from({ length: 10 }, (_, i) => i + 1);
 
 /** Suggestions for the theme field; anything typed by hand works too. */
 const THEMES = [
@@ -122,7 +122,9 @@ export async function renderWords(root, term) {
       ? `<div class="list">${items.map((w) => `
           <a class="row" href="#/words/${encodeURIComponent(w.text)}">
             <span class="row-text">
-              <span class="row-title">${esc(w.text)}</span>
+              <span class="row-title">
+                ${esc(w.text)}${w.cefr ? `<span class="level">${esc(w.cefr)}</span>` : ''}
+              </span>
               <span class="row-sub">${esc(w.translation || 'без перевода')}</span>
             </span>
             <button class="btn small w-del" data-del="${esc(w.text)}" title="Удалить">✕</button>
@@ -197,7 +199,9 @@ function mountPicker(root, drawList) {
         ${picked.map((w, i) => `
           <div class="row">
             <span class="row-text">
-              <span class="row-title">${esc(w.text)}</span>
+              <span class="row-title">
+                ${esc(w.text)}${w.cefr ? `<span class="level">${esc(w.cefr)}</span>` : ''}
+              </span>
               <span class="row-sub">${esc(w.translation)}${w.pos ? ` · ${esc(w.pos)}` : ''}</span>
               ${w.example ? `<span class="picker-ex">${esc(w.example)}</span>` : ''}
             </span>
@@ -277,7 +281,9 @@ async function renderWord(root, text) {
 
     <section class="rule-card">
       <div class="rc-head">
-        <h1 class="rc-title">${esc(word.pos || 'перевод')}</h1>
+        <h1 class="rc-title">
+          ${esc(word.pos || 'перевод')}${word.cefr ? `<span class="level">${esc(word.cefr)}</span>` : ''}
+        </h1>
         <div class="word-translation">${esc(word.translation || '—')}</div>
         ${word.forms ? `<div class="word-forms">${esc(word.forms)}</div>` : ''}
         <a class="pronounce" href="${youglish(word.text)}" target="_blank" rel="noreferrer">

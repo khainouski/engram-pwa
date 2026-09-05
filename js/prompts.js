@@ -285,11 +285,12 @@ export const translateSchema = {
   properties: {
     translation: { type: 'string' },
     pos: { type: 'string' },
+    cefr: { type: 'string' },
     forms: { type: 'string' },
     example: { type: 'string' },
     exampleRu: { type: 'string' },
   },
-  required: ['translation', 'pos', 'forms', 'example', 'exampleRu'],
+  required: ['translation', 'pos', 'cefr', 'forms', 'example', 'exampleRu'],
 };
 
 export function translatePrompt(text) {
@@ -298,6 +299,7 @@ export function translatePrompt(text) {
 Task: prepare a short dictionary entry for a Russian-speaking developer.
 "translation": the Russian translation — 1-3 variants separated by commas, nothing else.
 "pos": part of speech in Russian, one word (глагол, существительное, прилагательное, фраза, фразовый глагол…).
+"cefr": the CEFR level of the word, one of A1, A2, B1, B2, C1, C2.
 "forms": for a verb — its three forms and the -ing form, e.g. "deploy · deployed · deployed · deploying". For anything else — an empty string.
 "example": one natural English sentence with this word, preferably a work context.
 "exampleRu": the Russian translation of that sentence.`;
