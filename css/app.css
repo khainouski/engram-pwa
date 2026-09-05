@@ -591,3 +591,23 @@ body:has(.install-bar) .app { padding-bottom: calc(150px + env(safe-area-inset-b
   .sheet-backdrop { place-items: center; }
   .sheet { margin: 0; }
 }
+
+/* ── Collapsible help (how to get an API key) ───────────── */
+.help { margin-top: 10px; font-size: 13.5px; }
+.help > summary {
+  cursor: pointer; color: var(--accent); width: fit-content;
+  list-style: none; padding: 2px 0;
+}
+.help > summary::-webkit-details-marker { display: none; }
+.help > summary::before { content: '›'; display: inline-block; margin-right: 6px; transition: transform .15s ease; }
+.help[open] > summary::before { transform: rotate(90deg); }
+.help-steps {
+  margin: 10px 0 0; padding: 14px 16px 14px 34px;
+  background: var(--surface-2); border-radius: 10px;
+  display: flex; flex-direction: column; gap: 8px;
+  line-height: 1.5;
+}
+.help-steps li::marker { color: var(--muted); }
+.help a { color: var(--accent); text-decoration: underline; }
+.help code { font-family: var(--mono); font-size: 12.5px; background: var(--accent-soft); color: var(--accent); padding: 1px 5px; border-radius: 5px; }
+.help > .muted { margin: 8px 0 0; font-size: 13px; }

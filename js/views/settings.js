@@ -4,6 +4,23 @@ import { crumbs, esc, toast } from '../ui.js';
 import { icon } from '../icons.js';
 import { canOfferInstall, startInstall, INSTALLABLE_EVENT } from '../install.js';
 
+const KEY_URL = 'https://aistudio.google.com/apikey';
+
+const KEY_STEPS = [
+  `Открой <a href="${KEY_URL}" target="_blank" rel="noreferrer">Google AI Studio</a> и войди в Google-аккаунт.`,
+  'Нажми «Create API key» и выбери проект (или создай новый — название любое).',
+  'Скопируй ключ: он начинается с <code>AIza</code>.',
+  'Вставь его в поле выше и нажми «Сохранить», затем «Проверить ключ».',
+];
+
+/** Open by default while there is no key: without one the app cannot do anything. */
+const keyHelp = (hasKey) => `
+  <details class="help"${hasKey ? '' : ' open'}>
+    <summary>Где взять ключ</summary>
+    <ol class="help-steps">${KEY_STEPS.map((t) => `<li>${t}</li>`).join('')}</ol>
+    <p class="muted">Ключ бесплатный: у Gemini есть уровень без оплаты, лимитов хватает для личных занятий.</p>
+  </details>`;
+
 const option = ({ id, label }, selected) =>
   `<option value="${esc(id)}"${selected ? ' selected' : ''}>${esc(label ? `${id} — ${label}` : id)}</option>`;
 
@@ -33,9 +50,7 @@ export async function renderSettings(root) {
         <label for="key" style="display:block;margin-bottom:6px;font-weight:550">API-ключ</label>
         <input id="key" class="input" type="password" placeholder="AIza…" value="${esc(key)}"
                autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-        <p class="muted" style="font-size:13.5px;margin:8px 0 0">
-          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer" style="text-decoration:underline">Получить ключ</a>
-        </p>
+        ${keyHelp(!!key)}
       </div>
 
       <div>
