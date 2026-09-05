@@ -18,7 +18,7 @@ class GeminiError extends Error {
 }
 
 /** 2.x takes a token budget, 3.x a level, and only Lite accepts "minimal". */
-export function thinkingConfigFor(model) {
+function thinkingConfigFor(model) {
   const id = model.toLowerCase();
   if (id.includes('2.5')) return { thinkingBudget: 0 };
   if (id.includes('lite')) return { thinkingLevel: 'minimal' };

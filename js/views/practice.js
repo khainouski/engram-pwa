@@ -26,7 +26,7 @@ export function mountPractice(slot, ctx) {
           <button class="btn" data-mode="compare">Compare</button>
         </div>`}
       <div class="word-bar">
-        <div class="row">
+        <div class="actions">
           <input id="p-word" class="input" style="flex:1;min-width:200px"
                  placeholder="${isMix ? 'Твоё слово, напр. work' : 'Своё слово (необязательно), напр. deploy'}"
                  autocomplete="off">
@@ -105,7 +105,7 @@ export function mountPractice(slot, ctx) {
             <input class="input ex-answer" placeholder="Твой ответ">
             <div class="ex-verdict"></div>
           </div>`).join('')}
-        <div class="row" style="margin-top:16px">
+        <div class="actions" style="margin-top:16px">
           <button class="btn primary" id="ex-check">Проверить</button>
           <button class="btn" id="ex-new">Новые задания</button>
         </div>`);
@@ -168,7 +168,7 @@ export function mountPractice(slot, ctx) {
         <p class="gen-en" style="margin:6px 0 4px">${esc(s.task)}</p>
         <p class="gen-why" style="margin-bottom:14px">${esc(s.hint)}</p>
         <textarea class="input" id="use-answer" placeholder="Твой ответ на английском…"></textarea>
-        <div class="row" style="margin-top:12px">
+        <div class="actions" style="margin-top:12px">
           <button class="btn primary" id="use-check">Проверить ответ</button>
           <button class="btn" id="use-new">Другая ситуация</button>
         </div>
@@ -230,11 +230,11 @@ export function mountPractice(slot, ctx) {
       .join('');
     card(`
       <p style="margin:0 0 12px">С чем сравнить <b>${esc(topic.title)}</b>?</p>
-      ${curated.length ? `<div class="row">${buttons(curated, true)}</div>` : ''}
+      ${curated.length ? `<div class="actions">${buttons(curated, true)}</div>` : ''}
       ${rest.length ? `
         <div class="cmp-more">
           <div class="cmp-label">Ещё конструкции</div>
-          <div class="row">${buttons(rest, false)}</div>
+          <div class="actions">${buttons(rest, false)}</div>
         </div>` : ''}`);
     result.querySelectorAll('[data-cmp]').forEach((b) => {
       b.addEventListener('click', () => runCompare(b.dataset.cmp));
@@ -254,7 +254,7 @@ export function mountPractice(slot, ctx) {
             <div class="gen-en" style="margin-top:8px"><span class="gen-label">${esc(p.b_label)}</span><br>${mdLite(p.b_sentence)}</div>
             <div class="gen-why">${esc(p.difference)}</div>
           </div>`).join('')}
-        <div class="row" style="margin-top:16px">
+        <div class="actions" style="margin-top:16px">
           <button class="btn" id="cmp-back">← Выбрать другую пару</button>
         </div>`);
       result.querySelector('#cmp-back').addEventListener('click', modeCompare);

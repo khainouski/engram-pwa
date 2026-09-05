@@ -17,10 +17,10 @@ export const INSTALLABLE_EVENT = 'engram:installable';
 /** Deferred native prompt, captured as early as the module loads. */
 let deferredPrompt = null;
 
-export const isStandalone = () =>
+const isStandalone = () =>
   window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 
-export function isIos() {
+function isIos() {
   const ua = navigator.userAgent;
   return /iPad|iPhone|iPod/.test(ua)
     || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -47,7 +47,7 @@ const STEPS = [
 ];
 
 /** Sheet with the manual iOS steps. */
-export function openInstallHelp() {
+function openInstallHelp() {
   document.querySelector('.sheet-backdrop')?.remove();
 
   const node = el(`

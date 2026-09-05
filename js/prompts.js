@@ -1,7 +1,7 @@
 import { TOPICS } from '../data/grammar.js';
 
 /** Compact topic summary; goes into the prompt as the source of truth. */
-export function topicBrief(id, { maxExamples = 4 } = {}) {
+function topicBrief(id, { maxExamples = 4 } = {}) {
   const t = TOPICS[id];
   if (!t) return id;
   const rules = (t.use || []).map((u) => `- ${u.en}${u.ru ? ` (${u.ru})` : ''}`).join('\n');
@@ -301,4 +301,92 @@ Task: prepare a short dictionary entry for a Russian-speaking developer.
 "forms": for a verb — its three forms and the -ing form, e.g. "deploy · deployed · deployed · deploying". For anything else — an empty string.
 "example": one natural English sentence with this word, preferably a work context.
 "exampleRu": the Russian translation of that sentence.`;
+}
+
+/* ─────────────────── MY WORDS: suggest new words ─────────────────── */
+export const suggestSchema = {
+  type: 'object',
+  properties: {
+    words: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          text: { type: 'string' },
+          translation: { type: 'string' },
+          pos: { type: 'string' },
+          forms: { type: 'string' },
+          example: { type: 'string' },
+          exampleRu: { type: 'string' },
+        },
+        required: ['text', 'translation', 'pos', 'forms', 'example', 'exampleRu'],
+      },
+    },
+  },
+  required: ['words'],
+};
+
+/**
+ * @param {{level: string, count: number, topic?: string, known?: string[]}} opts
+ */
+export function suggestPrompt({ level, count, topic = '', known = [] }) {
+  const skip = known.length
+    ? `\nThe learner already knows these, do not repeat them:\n${known.slice(0, 200).join(', ')}`
+    : '';
+
+  return `Task: pick ${count} English words or short expressions to learn.
+
+CEFR level: ${level}. Words must be typical for this level — not easier, not harder.
+Theme: ${topic || 'general vocabulary a developer meets at work and in daily life'}.${skip}
+
+For every entry:
+"text": the word or expression in English, lowercase, no article.
+"translation": the Russian translation — 1-3 variants separated by commas.
+"pos": part of speech in Russian, one word (глагол, существительное, прилагательное, фраза, фразовый глагол…).
+"forms": for a verb — its three forms and the -ing form, e.g. "deploy · deployed · deployed · deploying". For anything else — an empty string.
+"example": one natural English sentence using it.
+"exampleRu": the Russian translation of that sentence.
+
+Return exactly ${count} entries, all different.`;
+}
+
+/* ─────────────────── Story: another take on the same tenses ─────────────────── */
+export const storySchema = {
+  type: 'object',
+  properties: {
+    paragraphs: { type: 'array', items: { type: 'string' } },
+  },
+  required: ['paragraphs'],
+};
+
+/**
+ * @param {{title: string, topicIds: string[], sample: string}} opts
+ *   sample is the hand-written story, passed as the format to copy
+ */
+export function storyPrompt({ title, topicIds, sample }) {
+  const forms = topicIds
+    .map((id) => (TOPICS[id] ? `- ${TOPICS[id].title}: ${TOPICS[id].formula}` : null))
+    .filter(Boolean)
+    .join('\n');
+
+  return `Write a short story that uses every form of "${title}" at least once.
+
+FORMS THAT MUST ALL APPEAR:
+${forms}
+
+Rules:
+- 3 paragraphs, 2-3 sentences each. A single connected story, not separate examples.
+- About 30% shorter than the sample: keep every form, drop the padding.
+- Context: a software team at work — releases, bugs, reviews, deadlines, clients.
+- After every verb that demonstrates one of the forms, put its Russian translation
+  in parentheses, exactly as in the sample below.
+- When two forms share the same Russian translation, add a hint after a dash,
+  e.g. "am meeting (встречаюсь — договорённость)".
+- Plain text only, no markdown, no headings, no list of forms at the end.
+- A different plot from the sample.
+
+SAMPLE OF THE FORMAT:
+${sample}
+
+Return the three paragraphs as separate strings in "paragraphs".`;
 }

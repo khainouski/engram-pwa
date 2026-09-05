@@ -91,7 +91,7 @@ function renderDetail(host, item, section) {
       ${item.example
         ? `<div class="word-example"><span class="gen-label">Пример из конспекта</span><div class="gen-en">👉 ${esc(item.example)}</div></div>`
         : '<p class="muted" style="margin:12px 0 0">В конспекте примера нет.</p>'}
-      <div class="row" style="margin-top:16px">
+      <div class="actions" style="margin-top:16px">
         <button class="btn primary" data-act="examples">Примеры</button>
         <button class="btn" data-act="use">Use It</button>
       </div>
@@ -140,7 +140,7 @@ function renderDetail(host, item, section) {
           <p class="gen-en" style="margin:6px 0 4px">${esc(s.task)}</p>
           <p class="gen-why" style="margin-bottom:14px">${esc(s.hint)}</p>
           <textarea class="input" id="v-answer" placeholder="Твой ответ на английском…"></textarea>
-          <div class="row" style="margin-top:12px">
+          <div class="actions" style="margin-top:12px">
             <button class="btn primary" id="v-check">Проверить ответ</button>
             <button class="btn" id="v-new">Другая ситуация</button>
           </div>

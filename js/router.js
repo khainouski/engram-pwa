@@ -5,8 +5,11 @@ import { renderGroup, renderSubgroup } from './views/group.js';
 import { renderTopic } from './views/topic.js';
 import { renderVocabulary } from './views/vocabulary.js';
 import { renderWords } from './views/words.js';
+import { renderReview } from './views/review.js';
 import { renderSettings } from './views/settings.js';
+import { store } from './storage.js';
 import { esc } from './ui.js';
+import { icon } from './icons.js';
 
 const app = document.getElementById('app');
 
@@ -27,6 +30,7 @@ async function route() {
       case 't': await renderTopic(app, a); break;
       case 'vocab': await renderVocabulary(app, a, b); break;
       case 'words': await renderWords(app, a); break;
+      case 'review': await renderReview(app); break;
       case 'settings': await renderSettings(app); break;
       default: app.innerHTML = '<p class="empty">Страница не найдена. <a href="#/">На главную</a></p>';
     }
@@ -38,10 +42,33 @@ async function route() {
 }
 
 /* ── Search across topics, rules and examples ──────────────── */
+const topbar = document.querySelector('.topbar');
+const searchWrap = document.querySelector('.search-wrap');
 const searchInput = document.getElementById('search');
 const searchResults = document.getElementById('search-results');
+const searchToggle = document.getElementById('search-toggle');
 
-const SEARCH_INDEX = (() => {
+searchToggle.innerHTML = icon('search');
+
+/** The field is revealed by the magnifier and covers the bar while open. */
+function openSearch() {
+  searchWrap.hidden = false;
+  topbar.classList.add('searching');
+  searchToggle.setAttribute('aria-expanded', 'true');
+  searchInput.focus();
+}
+
+function closeSearch() {
+  hideSearch();
+  searchInput.value = '';
+  searchWrap.hidden = true;
+  topbar.classList.remove('searching');
+  searchToggle.setAttribute('aria-expanded', 'false');
+}
+
+const searchOpen = () => !searchWrap.hidden;
+
+const STATIC_INDEX = (() => {
   const items = [];
   for (const g of GROUPS) {
     const subs = g.subgroups || [{ id: null, topics: g.topics || [] }];
@@ -73,6 +100,22 @@ const SEARCH_INDEX = (() => {
   return items;
 })();
 
+/** Saved words are searchable too, so the index is rebuilt as they change. */
+let SEARCH_INDEX = STATIC_INDEX;
+
+async function refreshWordIndex() {
+  const words = await store.getWords();
+  SEARCH_INDEX = [
+    ...STATIC_INDEX,
+    ...words.map((w) => ({
+      id: `words/${encodeURIComponent(w.text)}`,
+      title: w.text,
+      path: 'Мои слова',
+      haystack: [w.text, w.translation, w.example].filter(Boolean).join(' ').toLowerCase(),
+    })),
+  ];
+}
+
 let activeIdx = -1;
 
 function runSearch(q) {
@@ -102,10 +145,13 @@ function hideSearch() {
   activeIdx = -1;
 }
 
+searchToggle.addEventListener('click', () => (searchOpen() ? closeSearch() : openSearch()));
+document.getElementById('search-close').addEventListener('click', closeSearch);
+
 searchInput.addEventListener('input', (e) => runSearch(e.target.value));
 searchInput.addEventListener('keydown', (e) => {
   const links = [...searchResults.querySelectorAll('a')];
-  if (e.key === 'Escape') { searchInput.value = ''; hideSearch(); searchInput.blur(); return; }
+  if (e.key === 'Escape') { closeSearch(); searchInput.blur(); return; }
   if (!links.length) return;
   if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
     e.preventDefault();
@@ -118,16 +164,22 @@ searchInput.addEventListener('keydown', (e) => {
   }
 });
 searchResults.addEventListener('click', (e) => {
-  if (e.target.closest('a')) { searchInput.value = ''; hideSearch(); }
+  if (e.target.closest('a')) closeSearch();
 });
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('.search-wrap')) hideSearch();
+  if (searchOpen() && !e.target.closest('.search-wrap') && !e.target.closest('#search-toggle')) {
+    closeSearch();
+  }
 });
 document.addEventListener('keydown', (e) => {
   const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
-  if (e.key === '/' && !typing) { e.preventDefault(); searchInput.focus(); }
+  if (e.key === '/' && !typing) { e.preventDefault(); openSearch(); }
   if (e.key === 'Escape' && !typing && location.hash && location.hash !== '#/') history.back();
 });
 
-window.addEventListener('hashchange', route);
-route();
+window.addEventListener('hashchange', async () => {
+  await route();
+  refreshWordIndex();
+});
+
+route().then(refreshWordIndex);

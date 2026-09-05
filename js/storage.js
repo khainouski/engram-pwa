@@ -11,7 +11,19 @@ export const MODELS = [
 ];
 
 /** Lite by default: cheap and with the highest free limits. */
-export const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
+const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
+
+/**
+ * Spaced repetition, Leitner style: every correct answer moves the word to the
+ * next interval, a wrong one drops it back to the start. Days, not hours —
+ * the whole point is that the gaps grow.
+ */
+export const INTERVALS_DAYS = [1, 3, 7, 16, 35];
+
+const DAY = 24 * 60 * 60 * 1000;
+
+/** A word answered wrong comes back within the same sitting. */
+const RETRY_MS = 10 * 60 * 1000;
 
 const PREFIX = 'engram:';
 const KEYS = { apiKey: 'apiKey', model: 'model', lastWord: 'lastWord', words: 'myWords' };
@@ -58,7 +70,35 @@ export const store = {
     const words = await get(KEYS.words, []);
     const i = words.findIndex((w) => w.text.toLowerCase() === word.text.toLowerCase());
     if (i >= 0) words[i] = { ...words[i], ...word };
-    else words.unshift({ addedAt: Date.now(), ...word });
+    else words.unshift({ addedAt: Date.now(), step: 0, due: Date.now(), ...word });
+    await set(KEYS.words, words);
+    return words;
+  },
+
+  /** Words to review now. Anything saved before scheduling existed counts as due. */
+  async dueWords(at = Date.now()) {
+    const words = await get(KEYS.words, []);
+    return words
+      .filter((w) => (w.due ?? 0) <= at)
+      .sort((a, b) => (a.due ?? 0) - (b.due ?? 0));
+  },
+
+  /**
+   * @param {string} text
+   * @param {boolean} known answered correctly
+   */
+  async reviewWord(text, known) {
+    const words = await get(KEYS.words, []);
+    const w = words.find((x) => x.text === text);
+    if (!w) return words;
+
+    const step = known ? Math.min((w.step ?? 0) + 1, INTERVALS_DAYS.length) : 0;
+    w.step = step;
+    w.due = known
+      ? Date.now() + INTERVALS_DAYS[Math.min(step, INTERVALS_DAYS.length) - 1] * DAY
+      : Date.now() + RETRY_MS;
+    w.reviewedAt = Date.now();
+
     await set(KEYS.words, words);
     return words;
   },
@@ -72,11 +112,7 @@ export const store = {
   getLastWord: () => get(KEYS.lastWord, ''),
   setLastWord: (v) => set(KEYS.lastWord, String(v || '').trim()),
 
-  /** Export/import is the only way to move words between devices. */
-  async exportAll() {
-    return { version: 1, exportedAt: new Date().toISOString(), words: await get(KEYS.words, []) };
-  },
-
+  /** Import is the only way to move words between devices; see js/markdown.js. */
   async importWords(words, { merge = true } = {}) {
     if (!Array.isArray(words)) throw new Error('Ожидался массив слов.');
     const clean = words

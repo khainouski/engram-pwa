@@ -28,15 +28,19 @@
       <span class="brand-mark">EG</span>
       <span class="brand-name">EnGram</span>
     </a>
-    <div class="search-wrap">
-      <input id="search" type="search" placeholder="Поиск темы, правила или примера…"
-             autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-      <div id="search-results" class="search-results" hidden></div>
-    </div>
     <nav class="topnav">
       <a href="#/words">Мои слова</a>
       <a href="#/settings">Settings</a>
+      <button id="search-toggle" class="icon-btn" type="button" aria-label="Поиск" aria-expanded="false"></button>
     </nav>
+    <div class="search-wrap" hidden>
+      <div class="search-box">
+        <input id="search" type="search" placeholder="Поиск темы, правила или примера…"
+               autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+        <button id="search-close" class="icon-btn" type="button" aria-label="Закрыть поиск">✕</button>
+        <div id="search-results" class="search-results" hidden></div>
+      </div>
+    </div>
   </header>
   <main id="app" class="app"></main>
   <script type="module" src="js/router.js"></script>

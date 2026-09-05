@@ -1,5 +1,5 @@
-// Vocabulary & Expressions — из личного конспекта "English grammar.docx".
-// Единая форма: раздел → группы → выражения { term, ru?, example? }.
+// Vocabulary & Expressions, from the same notes.
+// Shape: section → groups → items { term, ru?, example? }.
 
 export const VOCAB = [
   {
@@ -181,7 +181,7 @@ export function findVocabSection(id) {
   return VOCAB.find((s) => s.id === id) || null;
 }
 
-/** Плоский список выражений раздела — индекс в нём используется в ссылках. */
+/** Flat list of a section's items; links address them by index. */
 export function flatItems(section) {
   const out = [];
   for (const g of section.groups) {

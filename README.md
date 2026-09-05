@@ -17,7 +17,7 @@ css/app.css             all styling, dark theme and iPhone included
 js/router.js            hash router and search
 js/storage.js           localStorage (chrome.storage.local in the extension)
 js/gemini.js            Gemini requests with the key and model from Settings
-js/views/*              screens
+js/views/*              screens, including review.js (spaced repetition)
 data/*                  grammar and vocabulary
 ```
 
@@ -47,5 +47,8 @@ The model is picked in Settings from `MODELS` in `js/storage.js`.
 
 - Bump `VERSION` in `sw.js` after changing files, or installed apps keep serving
   the cached build.
-- Saved words live in the browser. Settings has JSON export/import to move them
-  between devices.
+- Saved words live in the browser. Settings exports them as Markdown in the
+  same file format LingoPop uses, so one file works in both apps
+  (`js/markdown.js`).
+- Review schedule is Leitner: 1, 3, 7, 16 and 35 days, reset on a wrong answer
+  (`INTERVALS_DAYS` in `js/storage.js`).

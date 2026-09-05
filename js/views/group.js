@@ -1,7 +1,47 @@
 import { findGroup, findSubgroup, TOPICS } from '../../data/grammar.js';
-import { crumbs, esc, rowList, summaryTable } from '../ui.js';
+import { callGemini, NoKeyError } from '../gemini.js';
+import * as P from '../prompts.js';
+import { crumbs, errorBox, esc, loading, rowList, summaryTable } from '../ui.js';
 import { mountPractice } from './practice.js';
 import { icon } from '../icons.js';
+
+const storyHtml = (paragraphs) => paragraphs.map((t) => `<p>${esc(t)}</p>`).join('');
+
+/**
+ * The written story is the default; the button asks the model for another one
+ * on the same forms. Nothing is stored — reopening the page shows the original.
+ */
+function mountStory(root, { title, topicIds, sample }) {
+  const box = root.querySelector('#story-box');
+  const button = root.querySelector('#story-new');
+  const back = root.querySelector('#story-back');
+  const original = box.innerHTML;
+
+  back.addEventListener('click', () => {
+    box.innerHTML = original;
+    back.hidden = true;
+  });
+
+  button.addEventListener('click', async () => {
+    button.disabled = true;
+    box.innerHTML = `<p>${loading('Пишу новую историю…')}</p>`;
+    try {
+      const data = await callGemini(
+        P.storyPrompt({ title, topicIds, sample }),
+        P.storySchema,
+        { temperature: 1 },
+      );
+      box.innerHTML = storyHtml(data.paragraphs || []);
+      back.hidden = false;
+    } catch (err) {
+      box.innerHTML = original;
+      box.insertAdjacentHTML('beforeend', err instanceof NoKeyError
+        ? errorBox('Для новой истории нужен API-ключ.', true)
+        : errorBox(err.message));
+    }
+    button.disabled = false;
+  });
+}
 
 function topicRows(ids) {
   return rowList(ids.filter((id) => TOPICS[id]).map((id) => ({
@@ -58,9 +98,19 @@ export async function renderSubgroup(root, groupId, subId) {
     ${topicRows(s.topics)}
     ${s.table ? `<div class="section-title">Summary Table</div>${summaryTable(s.table)}` : ''}
     ${s.story ? `
-      <div class="section-title">${esc(s.story.title)}</div>
-      <div class="story">${s.story.text.split('\n').map((p) => `<p>${esc(p)}</p>`).join('')}</div>` : ''}
+      <div class="section-title story-title">
+        ${esc(s.story.title)}
+        <span class="story-actions">
+          <button id="story-back" class="btn small" hidden>Исходная</button>
+          <button id="story-new" class="btn small">Новый вариант</button>
+        </span>
+      </div>
+      <div class="story" id="story-box">${storyHtml(s.story.text.split('\n'))}</div>` : ''}
     <div id="practice-slot"></div>`;
+
+  if (s.story) {
+    mountStory(root, { title: s.title, topicIds: s.topics, sample: s.story.text });
+  }
 
   if (s.mix) {
     mountPractice(root.querySelector('#practice-slot'), {

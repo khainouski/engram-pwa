@@ -3,6 +3,7 @@ import { testKey } from '../gemini.js';
 import { crumbs, esc, toast } from '../ui.js';
 import { icon } from '../icons.js';
 import { canOfferInstall, startInstall, INSTALLABLE_EVENT } from '../install.js';
+import { FILE_NAME, fromMarkdown, toMarkdown } from '../markdown.js';
 
 const KEY_URL = 'https://aistudio.google.com/apikey';
 
@@ -37,7 +38,7 @@ export async function renderSettings(root) {
           Иконка на экране «Домой», запуск без адресной строки, работа офлайн.
         </p>
       </div>
-      <div class="row"><button id="install" class="btn primary">Установить</button></div>
+      <div class="actions"><button id="install" class="btn primary">Установить</button></div>
     </div>` : '';
 
   root.innerHTML = `
@@ -60,7 +61,7 @@ export async function renderSettings(root) {
         </select>
       </div>
 
-      <div class="row">
+      <div class="actions">
         <button id="save" class="btn primary">Сохранить</button>
         <button id="test" class="btn">Проверить ключ</button>
         <span id="status" class="muted"></span>
@@ -71,13 +72,14 @@ export async function renderSettings(root) {
       <div>
         <div style="font-weight:550">Мои слова</div>
         <p class="muted" style="font-size:13.5px;margin:6px 0 0">
-          Сохранено слов: ${words.length}. Перенос на другое устройство — через файл.
+          Сохранено слов: ${words.length}. Экспорт — Markdown-список, его можно
+          править руками и вернуть обратно.
         </p>
       </div>
-      <div class="row">
+      <div class="actions">
         <button id="export" class="btn">Экспорт в файл</button>
         <button id="import" class="btn">Импорт из файла</button>
-        <input id="import-file" type="file" accept="application/json,.json" hidden>
+        <input id="import-file" type="file" accept="text/markdown,.md,.markdown,.txt" hidden>
       </div>
     </div>
 
@@ -119,13 +121,16 @@ export async function renderSettings(root) {
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') root.querySelector('#save').click(); });
 
   root.querySelector('#export').addEventListener('click', async () => {
-    const data = await store.exportAll();
-    const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+    const list = await store.getWords();
+    if (!list.length) { toast('Пока нечего экспортировать.'); return; }
+
+    const url = URL.createObjectURL(new Blob([toMarkdown(list)], { type: 'text/markdown' }));
     const a = document.createElement('a');
     a.href = url;
-    a.download = `engram-words-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = FILE_NAME;
     a.click();
-    URL.revokeObjectURL(url);
+    // Revoked on the next tick: the browser needs the URL while the save starts.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   });
 
   const file = root.querySelector('#import-file');
@@ -134,10 +139,13 @@ export async function renderSettings(root) {
     const f = file.files?.[0];
     if (!f) return;
     try {
-      const parsed = JSON.parse(await f.text());
-      const list = Array.isArray(parsed) ? parsed : parsed.words;
-      const merged = await store.importWords(list);
-      toast(`Импортировано. Всего слов: ${merged.length}`);
+      const incoming = fromMarkdown(await f.text());
+      if (!incoming.length) { toast('В файле не нашлось слов.'); file.value = ''; return; }
+
+      const known = new Set((await store.getWords()).map((w) => w.text.toLowerCase()));
+      const added = incoming.filter((w) => !known.has(w.text.toLowerCase())).length;
+      await store.importWords(incoming);
+      toast(`Импортировано ${incoming.length}: новых ${added}, уже было ${incoming.length - added}`);
       renderSettings(root);
     } catch (e) {
       toast('Не удалось прочитать файл: ' + e.message);

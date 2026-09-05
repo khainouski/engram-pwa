@@ -16,13 +16,28 @@ export function mdLite(s) {
     .replace(/(^|\W)\*([^*]+)\*(?=\W|$)/g, '$1<i>$2</i>');
 }
 
+/**
+ * Back link to the parent screen, the way a phone app does it: one large
+ * target naming where it leads. The trail is still passed in full, so deeper
+ * screens can also show the path above it on wide viewports.
+ *
+ * @param {{title: string, href?: string}[]} items root → current
+ */
 export function crumbs(items) {
-  const parts = items.map((it, i) => {
-    const last = i === items.length - 1;
-    const label = esc(it.title);
-    return last ? `<span>${label}</span>` : `<a href="${it.href}">${label}</a><span class="sep">›</span>`;
-  });
-  return `<div class="crumbs">${parts.join('')}</div>`;
+  const parent = items[items.length - 2];
+  if (!parent) return '';
+
+  const path = items.slice(0, -1)
+    .map((it) => `<a href="${it.href}">${esc(it.title)}</a>`)
+    .join('<span class="sep">›</span>');
+
+  return `
+    <div class="crumbs">
+      <a class="back" href="${parent.href}">
+        <span class="back-chevron" aria-hidden="true">‹</span>${esc(parent.title)}
+      </a>
+      ${items.length > 2 ? `<span class="crumbs-path">${path}</span>` : ''}
+    </div>`;
 }
 
 export function summaryTable(table) {

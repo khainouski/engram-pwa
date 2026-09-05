@@ -1,5 +1,5 @@
-// Контент перенесён из личного конспекта "English grammar.docx".
-// Правила, формулы и примеры — дословно из заметок.
+// Content comes from the learner's own notes ("English grammar.docx"):
+// rules, formulas and examples are copied verbatim.
 
 export const GROUPS = [
   {
@@ -907,7 +907,7 @@ He works → He doesn't work → Does he work?`,
   },
 };
 
-// id темы → { groupId, subId } для навигации и хлебных крошек
+// topic id → { groupId, subId }, for navigation and breadcrumbs
 export const TOPIC_INDEX = (() => {
   const index = {};
   for (const g of GROUPS) {

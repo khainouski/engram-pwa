@@ -6,6 +6,7 @@ import { icon } from '../icons.js';
 
 export async function renderHome(root) {
   const wordCount = String((await store.getWords()).length);
+  const dueCount = (await store.dueWords()).length;
   const grammar = GROUPS.map((g) => ({
     href: `#/g/${g.id}`,
     icon: icon(g.id) || g.icon,
@@ -32,6 +33,15 @@ export async function renderHome(root) {
     <div class="list-label">Словарь</div>
     ${rowList(vocab)}
     <div class="list-label">Мои слова</div>
-    ${rowList([{ href: '#/words', icon: icon('words'), title: 'Мои слова', sub: 'Свои слова с переводом и практикой', meta: wordCount }])}
+    ${rowList([
+      { href: '#/words', icon: icon('words'), title: 'Мои слова', sub: 'Свои слова с переводом и практикой', meta: wordCount },
+      {
+        href: '#/review',
+        icon: icon('repeat'),
+        title: 'Повторение',
+        sub: dueCount ? 'Карточки по расписанию' : 'На сегодня всё повторено',
+        meta: dueCount ? String(dueCount) : '',
+      },
+    ])}
     <p class="hint">${Object.keys(TOPICS).length} тем · поиск по <kbd>/</kbd></p>`;
 }

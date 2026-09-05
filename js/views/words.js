@@ -5,6 +5,20 @@ import { store } from '../storage.js';
 import { crumbs, errorBox, esc, loading, mdLite } from '../ui.js';
 import { icon } from '../icons.js';
 
+const LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const COUNTS = [5, 10, 20];
+
+/** Suggestions for the theme field; anything typed by hand works too. */
+const THEMES = [
+  'IT и разработка', 'Работа и митинги', 'Собеседование', 'Путешествия',
+  'Еда и рестораны', 'Здоровье', 'Деньги и финансы', 'Эмоции и характер',
+  'Повседневная речь', 'Фразовые глаголы',
+];
+
+/** Real speech from YouTube: the best way to hear how a word is actually said. */
+const youglish = (text) =>
+  `https://youglish.com/pronounce/${encodeURIComponent(text)}/english/us`;
+
 const CRUMB_ROOT = { title: 'Грамматика', href: '#/' };
 const CRUMB_WORDS = { title: 'Мои слова', href: '#/words' };
 
@@ -25,22 +39,85 @@ export async function renderWords(root, term) {
   if (term) return renderWord(root, decodeURIComponent(term));
 
   const words = await store.getWords();
+  const dueCount = (await store.dueWords()).length;
   root.innerHTML = `
     ${crumbs([CRUMB_ROOT, { title: 'Мои слова' }])}
     <h1 class="page-title">${icon('words', 'title-icon')}Мои слова</h1>
     <p class="page-sub">Введи слово по-английски — перевод подставится сам.</p>
-    <div class="row" style="margin-bottom:24px">
+    <div class="actions" style="margin-bottom:20px">
       <input id="w-text" class="input" style="flex:1;min-width:200px" placeholder="deploy, come up with, …" autocomplete="off" spellcheck="false">
       <button id="w-add" class="btn primary">Добавить</button>
     </div>
     <div id="w-status"></div>
+
+    <div class="actions" style="margin-bottom:20px">
+      <a class="btn primary" href="#/review">
+        ${dueCount ? `Повторить ${dueCount}` : 'Повторение'}
+      </a>
+      <span class="muted" style="font-size:13.5px">
+        ${dueCount ? 'карточек ждут сегодня' : 'на сегодня всё повторено'}
+      </span>
+    </div>
+
+    <details class="picker" id="w-picker">
+      <summary>Подобрать новые слова</summary>
+      <div class="picker-body">
+        <div class="picker-fields">
+          <label>Уровень
+            <select id="p-level" class="input">
+              ${LEVELS.map((l) => `<option${l === 'B2' ? ' selected' : ''}>${l}</option>`).join('')}
+            </select>
+          </label>
+          <label>Сколько
+            <select id="p-count" class="input">
+              ${COUNTS.map((c) => `<option${c === 10 ? ' selected' : ''}>${c}</option>`).join('')}
+            </select>
+          </label>
+          <label class="picker-theme">Тема
+            <input id="p-topic" class="input" list="p-themes" placeholder="любая" autocomplete="off">
+            <datalist id="p-themes">${THEMES.map((t) => `<option value="${esc(t)}">`).join('')}</datalist>
+          </label>
+        </div>
+        <div class="actions">
+          <button id="p-go" class="btn primary">Подобрать</button>
+          <span id="p-status" class="muted"></span>
+        </div>
+        <div id="p-result"></div>
+      </div>
+    </details>
+
+    <div class="section-title">Сохранённые слова</div>
+    <input id="w-filter" class="input" placeholder="Фильтр по слову или переводу"
+           autocomplete="off" style="margin-bottom:12px"${words.length > 5 ? '' : ' hidden'}>
     <div id="w-list"></div>`;
 
   const input = root.querySelector('#w-text');
   const status = root.querySelector('#w-status');
   const list = root.querySelector('#w-list');
+  const filter = root.querySelector('#w-filter');
+
+  /** Everything currently saved; the filter narrows what draw() shows. */
+  let all = words;
 
   function draw(items) {
+    all = items;
+    filter.hidden = all.length <= 5;
+    drawFiltered();
+  }
+
+  function drawFiltered() {
+    const q = filter.value.trim().toLowerCase();
+    const items = q
+      ? all.filter((w) => `${w.text} ${w.translation || ''}`.toLowerCase().includes(q))
+      : all;
+    if (q && !items.length) {
+      list.innerHTML = '<p class="empty">Ничего не найдено.</p>';
+      return;
+    }
+    drawList(items);
+  }
+
+  function drawList(items) {
     list.innerHTML = items.length
       ? `<div class="list">${items.map((w) => `
           <a class="row" href="#/words/${encodeURIComponent(w.text)}">
@@ -81,6 +158,9 @@ export async function renderWords(root, term) {
     input.focus();
   }
 
+  mountPicker(root, draw);
+
+  filter.addEventListener('input', drawFiltered);
   root.querySelector('#w-add').addEventListener('click', add);
   input.addEventListener('keydown', (e) => { if (e.key === 'Enter') add(); });
   list.addEventListener('click', async (e) => {
@@ -92,6 +172,93 @@ export async function renderWords(root, term) {
 
   draw(words);
   input.focus();
+}
+
+/* ─────────────────── Word picker ─────────────────── */
+/**
+ * Asks the model for new words by level and theme. Nothing is stored until
+ * the learner adds them, and any suggestion can be thrown out first.
+ *
+ * @param {HTMLElement} root
+ * @param {(words: object[]) => void} drawList redraws the saved list
+ */
+function mountPicker(root, drawList) {
+  const status = root.querySelector('#p-status');
+  const result = root.querySelector('#p-result');
+  const go = root.querySelector('#p-go');
+
+  /** Suggestions still on screen; dropping one removes it from here. */
+  let picked = [];
+
+  function drawPicked() {
+    if (!picked.length) { result.innerHTML = ''; return; }
+    result.innerHTML = `
+      <div class="list picker-list">
+        ${picked.map((w, i) => `
+          <div class="row">
+            <span class="row-text">
+              <span class="row-title">${esc(w.text)}</span>
+              <span class="row-sub">${esc(w.translation)}${w.pos ? ` · ${esc(w.pos)}` : ''}</span>
+              ${w.example ? `<span class="picker-ex">${esc(w.example)}</span>` : ''}
+            </span>
+            <button class="btn small w-del" data-drop="${i}" title="Убрать">✕</button>
+          </div>`).join('')}
+      </div>
+      <div class="actions" style="margin-top:12px">
+        <button id="p-add" class="btn primary">Добавить ${picked.length} в мои слова</button>
+        <button id="p-clear" class="btn">Очистить</button>
+      </div>`;
+  }
+
+  result.addEventListener('click', async (e) => {
+    const drop = e.target.closest('[data-drop]');
+    if (drop) {
+      picked.splice(Number(drop.dataset.drop), 1);
+      drawPicked();
+      return;
+    }
+    if (e.target.closest('#p-clear')) { picked = []; drawPicked(); return; }
+    if (!e.target.closest('#p-add')) return;
+
+    let words = [];
+    for (const w of picked) words = await store.saveWord(w);
+    picked = [];
+    drawPicked();
+    drawList(words);
+    status.textContent = 'Добавлено ✓';
+    status.style.color = 'var(--good)';
+  });
+
+  go.addEventListener('click', async () => {
+    const level = root.querySelector('#p-level').value;
+    const count = Number(root.querySelector('#p-count').value);
+    const topic = root.querySelector('#p-topic').value.trim();
+    const known = (await store.getWords()).map((w) => w.text);
+
+    go.disabled = true;
+    status.innerHTML = '<span class="spinner"></span> подбираю…';
+    status.style.color = '';
+    try {
+      const data = await callGemini(
+        P.suggestPrompt({ level, count, topic, known }),
+        P.suggestSchema,
+        { temperature: 1 },
+      );
+      // The model can still repeat a saved word; drop those quietly.
+      const seen = new Set(known.map((t) => t.toLowerCase()));
+      picked = (data.words || [])
+        .filter((w) => w?.text && !seen.has(w.text.toLowerCase()))
+        .map((w) => ({ ...w, cefr: level }));
+      status.textContent = picked.length ? '' : 'Ничего нового не нашлось, попробуй другую тему.';
+      drawPicked();
+    } catch (err) {
+      status.innerHTML = '';
+      result.innerHTML = err instanceof NoKeyError
+        ? errorBox('Для подбора слов нужен API-ключ.', true)
+        : errorBox(err.message);
+    }
+    go.disabled = false;
+  });
 }
 
 /* ─────────────────── Single word page ─────────────────── */
@@ -113,6 +280,9 @@ async function renderWord(root, text) {
         <h1 class="rc-title">${esc(word.pos || 'перевод')}</h1>
         <div class="word-translation">${esc(word.translation || '—')}</div>
         ${word.forms ? `<div class="word-forms">${esc(word.forms)}</div>` : ''}
+        <a class="pronounce" href="${youglish(word.text)}" target="_blank" rel="noreferrer">
+          ${icon('sound')}Послушать произношение
+        </a>
       </div>
       ${word.example ? `
         <div class="rc-body">
@@ -121,13 +291,13 @@ async function renderWord(root, text) {
         </div>` : ''}
     </section>
 
-    ${word.translation ? '' : '<div class="row" style="margin-bottom:20px"><button class="btn" id="w-translate">Перевести</button></div>'}
+    ${word.translation ? '' : '<div class="actions" style="margin-bottom:20px"><button class="btn" id="w-translate">Перевести</button></div>'}
 
     <div class="section-title">Слово в конструкциях</div>
     <div class="modes modes-wide" id="w-drills">
       ${DRILLS.map((d) => `<button class="btn" data-drill="${d.id}">${esc(d.title)}</button>`).join('')}
     </div>
-    <div class="row" style="margin-top:10px">
+    <div class="actions" style="margin-top:10px">
       <button class="btn" data-act="examples">Примеры</button>
       <button class="btn" data-act="use">Use It</button>
     </div>
@@ -199,7 +369,7 @@ async function renderWord(root, text) {
         <p class="gen-en" style="margin:6px 0 4px">${esc(s.task)}</p>
         <p class="gen-why" style="margin-bottom:14px">${esc(s.hint)}</p>
         <textarea class="input" id="w-answer" placeholder="Твой ответ на английском…"></textarea>
-        <div class="row" style="margin-top:12px">
+        <div class="actions" style="margin-top:12px">
           <button class="btn primary" id="w-check">Проверить ответ</button>
         </div>
         <div id="w-verdict"></div>`);

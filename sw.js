@@ -7,7 +7,7 @@
  * Gemini API → not touched at all.
  */
 
-const VERSION = 'v18';
+const VERSION = 'v30';
 const CACHE = `engram-${VERSION}`;
 
 /** App shell. Cached separately, see install. */
@@ -19,6 +19,7 @@ const SHELL = [
   './js/router.js',
   './js/ui.js',
   './js/storage.js',
+  './js/markdown.js',
   './js/gemini.js',
   './js/prompts.js',
   './js/pwa.js',
@@ -29,6 +30,7 @@ const SHELL = [
   './js/views/topic.js',
   './js/views/vocabulary.js',
   './js/views/words.js',
+  './js/views/review.js',
   './js/views/practice.js',
   './js/views/settings.js',
   './data/grammar.js',
