@@ -774,11 +774,5 @@ body:has(.install-bar) .app { padding-bottom: calc(150px + env(safe-area-inset-b
 }
 .rv-word .level { font-size: 13px; vertical-align: 6px; }
 
-/* CEFR verdict on a checked set of exercises. */
-.ex-level {
-  margin-top: 18px; padding: 12px 14px;
-  border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2);
-}
-.ex-level-head { display: flex; align-items: center; font-size: 14.5px; font-weight: 550; }
-.ex-level .level { font-size: 13px; }
-.ex-level .gen-why { margin-top: 6px; }
+/* CEFR level of a written answer, inside the verdict. */
+.verdict .level-line .level { margin: 0 6px 0 4px; }

@@ -169,6 +169,7 @@ function renderDetail(host, item, section) {
               <span class="why"><b>Correct:</b> ${esc(r.corrected)}</span>
               <span class="why">${esc(r.notes)}</span>
               <span class="why"><b>Natural alternative:</b> ${esc(r.natural)}</span>
+              ${r.level ? `<span class="why level-line"><b>Твой уровень:</b><span class="level">${esc(r.level)}</span>${r.levelNote ? ` ${esc(r.levelNote)}` : ''}</span>` : ''}
             </div>`;
         } catch (err) {
           box.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;

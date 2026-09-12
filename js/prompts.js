@@ -85,8 +85,6 @@ Do NOT include answers. "question" for a "translate" item is the Russian sentenc
 export const checkSchema = {
   type: 'object',
   properties: {
-    level: { type: 'string', enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] },
-    levelNote: { type: 'string' },
     items: {
       type: 'array',
       items: {
@@ -100,7 +98,7 @@ export const checkSchema = {
       },
     },
   },
-  required: ['level', 'levelNote', 'items'],
+  required: ['items'],
 };
 
 export function checkPrompt(topicId, items, answers) {
@@ -117,12 +115,7 @@ Task: check every answer, in the same order, one result per exercise.
 "correct": true only if the answer is grammatically right for this topic (ignore letter case, punctuation and obvious typos; accept contractions and any valid synonym).
 "expected": the full correct sentence in English.
 "explanation": in Russian — if correct, one short confirming remark; if wrong, explain the mistake and the rule briefly.
-An empty answer counts as incorrect.
-
-Then judge the English the learner actually wrote, across all the answers together:
-"level": their CEFR level — A1, A2, B1, B2, C1 or C2. Judge what the answers show: accuracy with this construction, word choice, word order, articles and prepositions.
-Be honest, not polite: a level is worth nothing if it is given away. Empty and copied answers count against it; short answers that a gap-fill cannot show more of are not held against it.
-"levelNote": in Russian, 1-2 sentences — what in these answers points to that level, and the one thing to fix to reach the next one.`;
+An empty answer counts as incorrect.`;
 }
 
 /* ─────────────────────────── USE IT ─────────────────────────── */
@@ -153,9 +146,19 @@ export const answerSchema = {
     corrected: { type: 'string' },
     notes: { type: 'string' },
     natural: { type: 'string' },
+    level: { type: 'string', enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] },
+    levelNote: { type: 'string' },
   },
-  required: ['verdict', 'corrected', 'notes', 'natural'],
+  required: ['verdict', 'corrected', 'notes', 'natural', 'level', 'levelNote'],
 };
+
+/**
+ * Asked after every free-form answer: here the learner writes a whole sentence
+ * of their own, which is the only place their actual English shows.
+ */
+const LEVEL_TASK = `"level": the learner's CEFR level as this answer shows it — A1, A2, B1, B2, C1 or C2. Judge the English they wrote: grammar, word choice, word order, articles, prepositions, and how natural it sounds.
+Be honest, not polite: a level given away is worth nothing. An empty or copied answer is A1.
+"levelNote": in Russian, 1-2 sentences — what in this answer points to that level, and the one thing to fix to reach the next one.`;
 
 export function answerPrompt(topicId, situation, task, answer) {
   return `${topicBrief(topicId)}
@@ -168,7 +171,8 @@ Task: evaluate the answer for BOTH grammatical correctness and naturalness.
 "verdict": "correct" (no issues), "almost" (understandable but not fully natural or a small slip), "wrong" (the required construction is missing or misused).
 "corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
 "notes": in Russian — what exactly is wrong or unnatural and why, referring to the rule. If everything is fine, say what was done well.
-"natural": one alternative phrasing a native speaker would use, in English.`;
+"natural": one alternative phrasing a native speaker would use, in English.
+${LEVEL_TASK}`;
 }
 
 /* ─────────────────────────── COMPARE ─────────────────────────── */
@@ -364,7 +368,8 @@ Task: evaluate the answer for BOTH grammatical correctness and natural use of th
 "verdict": "correct" (the expression is used correctly and naturally), "almost" (understandable but slightly off), "wrong" (the expression is missing or misused).
 "corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
 "notes": in Russian — what is wrong or unnatural and why; if everything is fine, say what was done well.
-"natural": one alternative phrasing a native speaker would use, in English.`;
+"natural": one alternative phrasing a native speaker would use, in English.
+${LEVEL_TASK}`;
 }
 
 /* ─────────────────── MY WORDS: translate on add ─────────────────── */

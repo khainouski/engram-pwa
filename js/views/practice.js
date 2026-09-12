@@ -113,7 +113,7 @@ export function mountPractice(slot, ctx) {
             <input class="input ex-answer" placeholder="Твой ответ">
             <div class="ex-verdict"></div>
           </div>`).join('')}
-        <div id="ex-level"></div>
+        <div id="ex-error"></div>
         <div class="actions" style="margin-top:16px">
           <button class="btn primary" id="ex-check">Проверить</button>
           <button class="btn" id="ex-new">Новые задания</button>
@@ -138,10 +138,10 @@ export function mountPractice(slot, ctx) {
         const inputs = [...result.querySelectorAll('.ex-answer')];
         const answers = inputs.map((i) => i.value.trim());
         const btn = result.querySelector('#ex-check');
-        const levelBox = result.querySelector('#ex-level');
+        const errorBoxSlot = result.querySelector('#ex-error');
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> проверяю…';
-        levelBox.innerHTML = '';
+        errorBoxSlot.innerHTML = '';
         try {
           const res = await callGemini(P.checkPrompt(ctx.topicId, items, answers), P.checkSchema, { temperature: 0.2 });
           (res.items || []).forEach((r, i) => {
@@ -155,17 +155,6 @@ export function mountPractice(slot, ctx) {
               </div>`;
           });
           const right = (res.items || []).filter((r) => r.correct).length;
-
-          // The score says how this round went; the level says where the
-          // learner stands, which is the thing worth coming back for.
-          if (res.level) {
-            levelBox.innerHTML = `
-              <div class="ex-level">
-                <div class="ex-level-head">Твой уровень по этим ответам<span class="level">${esc(res.level)}</span></div>
-                ${res.levelNote ? `<div class="gen-why">${esc(res.levelNote)}</div>` : ''}
-              </div>`;
-          }
-
           btn.disabled = false;
           btn.textContent = `Проверить ещё раз (${right} из ${items.length})`;
         } catch (err) {
@@ -173,7 +162,7 @@ export function mountPractice(slot, ctx) {
           btn.textContent = 'Проверить';
           // Under the answers, where the verdicts would have been: the panel
           // has no .row of its own, and the error must not be swallowed.
-          levelBox.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;
+          errorBoxSlot.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;
         }
       });
     }, { text: 'Составляю упражнения…' });
@@ -219,6 +208,7 @@ export function mountPractice(slot, ctx) {
               <span class="why"><b>Correct:</b> ${esc(r.corrected)}</span>
               <span class="why">${esc(r.notes)}</span>
               <span class="why"><b>Natural alternative:</b> ${esc(r.natural)}</span>
+              ${r.level ? `<span class="why level-line"><b>Твой уровень:</b><span class="level">${esc(r.level)}</span>${r.levelNote ? ` ${esc(r.levelNote)}` : ''}</span>` : ''}
             </div>`;
         } catch (err) {
           box.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;
