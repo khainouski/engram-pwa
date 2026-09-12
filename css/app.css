@@ -126,9 +126,9 @@ a { color: inherit; text-decoration: none; }
 .crumbs-path a:hover { color: var(--accent); }
 .crumbs-path .sep { opacity: .5; margin: 0 6px; }
 
-/* Wide screens have room for the whole path; narrow ones get the back button. */
+/* The back button is always there — as a home-screen app there is no address
+   bar behind it. Wide screens have room to show the whole path next to it. */
 @media (min-width: 860px) {
-  .crumbs .back { display: none; }
   .crumbs-path { display: inline; }
 }
 
@@ -310,6 +310,20 @@ table.summary td:nth-child(3) { font-family: var(--mono); font-size: 13px; }
   background: var(--surface); color: var(--text); font: inherit; font-size: 15px;
 }
 .input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+/* ── Checkbox group (topics of the examples) ────────────── */
+.checks { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.check {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); cursor: pointer;
+}
+.check:hover { border-color: var(--accent); }
+.check:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.check input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--accent); }
+.check-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.check-title { font-size: 14.5px; font-weight: 500; }
+.check-sub { font-size: 12.5px; color: var(--muted); line-height: 1.35; }
 select.input {
   appearance: none; cursor: pointer; padding-right: 34px;
   background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
@@ -324,8 +338,28 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 /* ── Practice panel ─────────────────────────────────────── */
 .practice { margin-top: 36px; }
-.modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
 .word-bar { margin-bottom: 16px; }
+
+/* "Say it": a Russian phrase in, the English forms out. */
+.say-bar { display: grid; gap: 10px; margin-bottom: 16px; }
+/* Both "say" fields are the same control, so they get the same height. */
+.say-bar textarea.input, textarea#say-ru { resize: vertical; min-height: 62px; }
+/* The form that actually fits the phrase, so the eye finds it first. */
+.gen-item.fits { border-left: 3px solid var(--good); margin-left: -13px; padding-left: 10px; }
+.gen-item.fits .gen-label { color: var(--good); }
+/* Which tense the phrase actually needs, above the translation itself. */
+.say-verdict {
+  margin-bottom: 4px; padding: 12px 14px;
+  border-radius: 12px; background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+}
+/* The phrase needs a tense other than the one being studied — worth noticing,
+   but not an error, so it is set apart rather than marked red. */
+.say-verdict.other { background: var(--surface-2); border-left-color: var(--muted); }
+.say-verdict.other .gen-label { color: var(--muted); }
+.say-tense { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; font-size: 17px; }
+.say-signal { margin-top: 6px; font-size: 13.5px; color: var(--muted); }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .chip {
   padding: 4px 10px; border-radius: 999px; font-size: 12.5px; cursor: pointer;
@@ -428,6 +462,8 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
   .rc-body { padding: 14px 16px 16px; }
 
   .modes { grid-template-columns: 1fr 1fr; }
+  /* An odd last button stretches instead of sitting half-width on its own row. */
+  .modes > :last-child:nth-child(odd) { grid-column: 1 / -1; }
   table.summary { font-size: 13px; }
   table.summary th, table.summary td { padding: 8px 10px; }
 }
@@ -737,3 +773,12 @@ body:has(.install-bar) .app { padding-bottom: calc(150px + env(safe-area-inset-b
   letter-spacing: .3px; line-height: 1.5;
 }
 .rv-word .level { font-size: 13px; vertical-align: 6px; }
+
+/* CEFR verdict on a checked set of exercises. */
+.ex-level {
+  margin-top: 18px; padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2);
+}
+.ex-level-head { display: flex; align-items: center; font-size: 14.5px; font-weight: 550; }
+.ex-level .level { font-size: 13px; }
+.ex-level .gen-why { margin-top: 6px; }

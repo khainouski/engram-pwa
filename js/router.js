@@ -41,6 +41,47 @@ async function route() {
   window.scrollTo(0, 0);
 }
 
+/* ── Back button ───────────────────────────────────────────── */
+/*
+ * Launched from the home screen there is no address bar, so the back link in
+ * `crumbs()` is the only way out of a topic — and it should behave like the
+ * browser's arrow: return to where the user came from, not to the parent in
+ * the tree, which may be a screen the user never opened.
+ *
+ * Whether going back stays inside the app is answered by numbering our own
+ * history entries. A hash link creates an entry with no state, so it gets the
+ * next number; walking back and forth restores the number that was stamped on
+ * it. Position 0 is where this tab entered the app: from there the back link
+ * follows its own href instead, or the whole app would be left behind.
+ */
+let position = 0;
+
+function trackPosition({ initial = false } = {}) {
+  const stamped = history.state?.engram;
+  if (typeof stamped === 'number') {
+    position = stamped;
+    return;
+  }
+  position = initial ? 0 : position + 1;
+  history.replaceState({ ...history.state, engram: position }, '');
+}
+
+// A reload keeps the entry's own number — history state survives it — so the
+// back link still goes back afterwards instead of falling to its href. An
+// entry with no number is where this tab entered the app: position 0.
+trackPosition({ initial: true });
+
+const canGoBack = () => position > 0;
+
+app.addEventListener('click', (e) => {
+  const back = e.target.closest('a[data-back]');
+  // Modified clicks belong to the browser: open in a new tab, etc.
+  if (!back || e.defaultPrevented || !canGoBack()) return;
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+  e.preventDefault();
+  history.back();
+});
+
 /* ── Search across topics, rules and examples ──────────────── */
 const topbar = document.querySelector('.topbar');
 const searchWrap = document.querySelector('.search-wrap');
@@ -174,10 +215,11 @@ document.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   const typing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
   if (e.key === '/' && !typing) { e.preventDefault(); openSearch(); }
-  if (e.key === 'Escape' && !typing && location.hash && location.hash !== '#/') history.back();
+  if (e.key === 'Escape' && !typing && canGoBack()) history.back();
 });
 
 window.addEventListener('hashchange', async () => {
+  trackPosition();
   await route();
   refreshWordIndex();
 });

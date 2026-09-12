@@ -1,4 +1,4 @@
-import { store, MODELS } from '../storage.js';
+import { store, MODELS, CONTEXTS } from '../storage.js';
 import { testKey } from '../gemini.js';
 import { crumbs, esc, toast } from '../ui.js';
 import { icon } from '../icons.js';
@@ -25,9 +25,20 @@ const keyHelp = (hasKey) => `
 const option = ({ id, label }, selected) =>
   `<option value="${esc(id)}"${selected ? ' selected' : ''}>${esc(label ? `${id} — ${label}` : id)}</option>`;
 
+/** Checkbox per context; at least one has to stay on, see the change handler. */
+const contextBoxes = (chosen) => CONTEXTS.map((c) => `
+  <label class="check">
+    <input type="checkbox" name="context" value="${esc(c.id)}"${chosen.includes(c.id) ? ' checked' : ''}>
+    <span class="check-text">
+      <span class="check-title">${esc(c.label)}</span>
+      <span class="check-sub">${esc(c.hint)}</span>
+    </span>
+  </label>`).join('');
+
 export async function renderSettings(root) {
   const key = await store.getApiKey();
   const model = await store.getModel();
+  const contexts = await store.getContexts();
   const words = await store.getWords();
 
   const installBlock = canOfferInstall() ? `
@@ -59,6 +70,18 @@ export async function renderSettings(root) {
         <select id="model" class="input">
           ${MODELS.map((m) => option(m, m.id === model)).join('')}
         </select>
+      </div>
+
+      <div>
+        <div style="font-weight:550">Темы примеров</div>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 10px">
+          О чём AI пишет примеры, упражнения и ситуации. Выбери хотя бы одну.
+        </p>
+        <div class="actions" style="margin-bottom:10px">
+          <button id="ctx-all" class="btn small" type="button">Выбрать все</button>
+          <button id="ctx-default" class="btn small" type="button">Только IT</button>
+        </div>
+        <div class="checks" id="contexts">${contextBoxes(contexts)}</div>
       </div>
 
       <div class="actions">
@@ -93,9 +116,29 @@ export async function renderSettings(root) {
   const select = root.querySelector('#model');
   const status = root.querySelector('#status');
 
+  const boxes = [...root.querySelectorAll('input[name="context"]')];
+  const checked = () => boxes.filter((b) => b.checked).map((b) => b.value);
+
+  /** Unchecking the last one would silently fall back to IT, so it is refused. */
+  root.querySelector('#contexts').addEventListener('change', (e) => {
+    if (!checked().length) {
+      e.target.checked = true;
+      toast('Нужна хотя бы одна тема.');
+    }
+  });
+
+  root.querySelector('#ctx-all').addEventListener('click', () => {
+    boxes.forEach((b) => { b.checked = true; });
+  });
+  // Back to the default, not "none": an empty choice is refused above.
+  root.querySelector('#ctx-default').addEventListener('click', () => {
+    boxes.forEach((b) => { b.checked = b.value === 'it'; });
+  });
+
   const save = async () => {
     await store.setApiKey(input.value);
     await store.setModel(select.value);
+    await store.setContexts(checked());
   };
 
   root.querySelector('#save').addEventListener('click', async () => {

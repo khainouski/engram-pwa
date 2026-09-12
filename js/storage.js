@@ -14,6 +14,25 @@ export const MODELS = [
 const DEFAULT_MODEL = 'gemini-3.5-flash-lite';
 
 /**
+ * Situations the AI is allowed to put examples in, chosen in Settings.
+ * `en` and `hint` go into the model's system instruction, so the wording here
+ * is what actually steers the sentences; `label` is only what the checkbox says.
+ */
+export const CONTEXTS = [
+  { id: 'it', label: 'Работа в IT', en: 'software development', hint: 'deploy, release, pull request, sprint, bug, standup' },
+  { id: 'office', label: 'Офис и деловое общение', en: 'office and business', hint: 'meetings, emails, deadlines, clients, reports' },
+  { id: 'daily', label: 'Повседневная жизнь', en: 'everyday life', hint: 'home, food, shopping, chores, weather, family' },
+  { id: 'travel', label: 'Путешествия', en: 'travel', hint: 'airport, hotel, tickets, directions, sightseeing' },
+  { id: 'social', label: 'Друзья и общение', en: 'friends and small talk', hint: 'plans, invitations, hobbies, news, weekends' },
+  { id: 'health', label: 'Здоровье и спорт', en: 'health and sport', hint: 'doctor, gym, running, sleep, habits' },
+  { id: 'study', label: 'Учёба и саморазвитие', en: 'study and self-development', hint: 'courses, books, exams, languages, skills' },
+  { id: 'money', label: 'Деньги и покупки', en: 'money and shopping', hint: 'bank, prices, rent, bills, savings' },
+];
+
+/** What the app did before the setting existed. */
+const DEFAULT_CONTEXTS = ['it'];
+
+/**
  * Spaced repetition, Leitner style: every correct answer moves the word to the
  * next interval, a wrong one drops it back to the start. Days, not hours —
  * the whole point is that the gaps grow.
@@ -26,7 +45,9 @@ const DAY = 24 * 60 * 60 * 1000;
 const RETRY_MS = 10 * 60 * 1000;
 
 const PREFIX = 'engram:';
-const KEYS = { apiKey: 'apiKey', model: 'model', lastWord: 'lastWord', words: 'myWords' };
+const KEYS = {
+  apiKey: 'apiKey', model: 'model', lastWord: 'lastWord', words: 'myWords', contexts: 'contexts',
+};
 
 /** Safari private mode can throw on write; the app must keep running. */
 function readRaw(key) {
@@ -57,6 +78,20 @@ export const store = {
     return MODELS.some((m) => m.id === id) ? id : DEFAULT_MODEL;
   },
   setModel: (v) => set(KEYS.model, String(v || '').trim()),
+
+  /**
+   * Ids dropped from CONTEXTS are filtered out, and an empty choice means the
+   * setting says nothing — better the old IT default than examples about
+   * nothing in particular.
+   */
+  async getContexts() {
+    const ids = await get(KEYS.contexts, null);
+    const valid = Array.isArray(ids) ? ids.filter((id) => CONTEXTS.some((c) => c.id === id)) : [];
+    return valid.length ? valid : [...DEFAULT_CONTEXTS];
+  },
+  setContexts: (ids) => set(KEYS.contexts, (Array.isArray(ids) ? ids : []).filter(
+    (id) => CONTEXTS.some((c) => c.id === id),
+  )),
 
   getWords: () => get(KEYS.words, []),
 

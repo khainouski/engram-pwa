@@ -85,6 +85,8 @@ Do NOT include answers. "question" for a "translate" item is the Russian sentenc
 export const checkSchema = {
   type: 'object',
   properties: {
+    level: { type: 'string', enum: ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] },
+    levelNote: { type: 'string' },
     items: {
       type: 'array',
       items: {
@@ -98,7 +100,7 @@ export const checkSchema = {
       },
     },
   },
-  required: ['items'],
+  required: ['level', 'levelNote', 'items'],
 };
 
 export function checkPrompt(topicId, items, answers) {
@@ -115,7 +117,12 @@ Task: check every answer, in the same order, one result per exercise.
 "correct": true only if the answer is grammatically right for this topic (ignore letter case, punctuation and obvious typos; accept contractions and any valid synonym).
 "expected": the full correct sentence in English.
 "explanation": in Russian — if correct, one short confirming remark; if wrong, explain the mistake and the rule briefly.
-An empty answer counts as incorrect.`;
+An empty answer counts as incorrect.
+
+Then judge the English the learner actually wrote, across all the answers together:
+"level": their CEFR level — A1, A2, B1, B2, C1 or C2. Judge what the answers show: accuracy with this construction, word choice, word order, articles and prepositions.
+Be honest, not polite: a level is worth nothing if it is given away. Empty and copied answers count against it; short answers that a gap-fill cannot show more of are not held against it.
+"levelNote": in Russian, 1-2 sentences — what in these answers points to that level, and the one thing to fix to reach the next one.`;
 }
 
 /* ─────────────────────────── USE IT ─────────────────────────── */
@@ -132,8 +139,8 @@ export const situationSchema = {
 export function situationPrompt(topicId, word) {
   return `${topicBrief(topicId)}
 
-Task: give the learner ONE realistic work situation (2-3 sentences, English) where this exact construction is required —
-a standup, a code review, a client call, a retro, a chat with a teammate.
+Task: give the learner ONE realistic situation (2-3 sentences, English) where this exact construction is required.
+Take the setting from the contexts in your instructions.
 "task": the question or request the learner must answer in English, using this grammar.
 "hint": in Russian — a short reminder of which structure to use.
 Do not provide the answer.${withWord(word)}`;
@@ -161,7 +168,7 @@ Task: evaluate the answer for BOTH grammatical correctness and naturalness.
 "verdict": "correct" (no issues), "almost" (understandable but not fully natural or a small slip), "wrong" (the required construction is missing or misused).
 "corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
 "notes": in Russian — what exactly is wrong or unnatural and why, referring to the rule. If everything is fine, say what was done well.
-"natural": one alternative phrasing a native speaker would use at work, in English.`;
+"natural": one alternative phrasing a native speaker would use, in English.`;
 }
 
 /* ─────────────────────────── COMPARE ─────────────────────────── */
@@ -236,6 +243,86 @@ Keep the same subject and context across all sentences, so that only the constru
 "summary": in Russian — 1-2 sentences on how to choose between these constructions.`;
 }
 
+/* ─────────────────── SAY IT: Russian in, English out ─────────────────── */
+export const saySchema = {
+  type: 'object',
+  properties: {
+    tense: { type: 'string' },
+    fitsTopic: { type: 'boolean' },
+    en: { type: 'string' },
+    why: { type: 'string' },
+    signal: { type: 'string' },
+    natural: { type: 'string' },
+    literal: { type: 'string' },
+  },
+  required: ['tense', 'fitsTopic', 'en', 'why', 'signal', 'natural', 'literal'],
+};
+
+/**
+ * The learner writes what they mean in Russian and gets it said properly.
+ * The topic is the starting point, not the verdict: the phrase may well call
+ * for another tense, and then saying so is the whole value of the answer.
+ */
+export function sayPrompt(topicId, russian) {
+  return `${topicBrief(topicId)}
+
+The learner wants to say this in English: "${russian}"
+
+Task: say it in natural English and name the tense it actually requires.
+"tense": the English name of the tense or construction that is correct HERE, e.g. "Present Perfect", "Past Simple", "be going to". Name the one the sentence really needs, even when that is not the topic above.
+"fitsTopic": true if that is the topic's own construction, false if the sentence needs a different one.
+"en": the English sentence in that tense, natural, with the construction wrapped in **double asterisks**.
+"why": in Russian, 1-3 sentences — why this tense and not a neighbouring one. Compare it with the tense the learner would most likely pick by mistake, and say what would change in the meaning. When fitsTopic is false, start by saying plainly that the topic's construction does not work here and why.
+"signal": in Russian, one short line — the signal in the sentence that gives the tense away (a time marker, the result, a completed action, a schedule…). Empty string if there is no clear signal.
+"natural": one more way a native speaker could say the same thing, in English (may use another tense).
+"literal": in Russian — the mistake a Russian speaker usually makes translating this sentence word by word, and what it would sound like. Empty string if there is no typical trap.`;
+}
+
+export const sayMixSchema = {
+  type: 'object',
+  properties: {
+    best: { type: 'string' },
+    summary: { type: 'string' },
+    items: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          label: { type: 'string' },
+          en: { type: 'string' },
+          fits: { type: 'boolean' },
+          why: { type: 'string' },
+        },
+        required: ['label', 'en', 'fits', 'why'],
+      },
+    },
+  },
+  required: ['best', 'summary', 'items'],
+};
+
+/** The same Russian phrase in every form of the group, plus the verdict. */
+export function sayMixPrompt(topicIds, groupTitle, russian) {
+  const forms = topicIds
+    .map((id) => (TOPICS[id] ? `- ${TOPICS[id].title}: ${TOPICS[id].formula}` : null))
+    .filter(Boolean)
+    .join('\n');
+
+  return `GROUP: ${groupTitle}
+FORMS FROM THE LEARNER'S NOTES:
+${forms}
+
+The learner wants to say this in English: "${russian}"
+
+Task: say it in EVERY form above, one entry per form, in the order given.
+"label": the name of the form, exactly as written above.
+"en": the learner's sentence in that form, natural English, the construction wrapped in **double asterisks**.
+Keep the meaning as close to the Russian as that form allows; if a form twists the meaning, still write the sentence and say so in "why".
+"fits": true only for the forms that are actually correct for what the learner means.
+"why": in Russian — one short sentence: what this version actually means, or why it is wrong here.
+"best": the label of the single form the learner should use.
+"summary": in Russian — 1-2 sentences: which tense to use here and by which signal it is recognised.`;
+}
+
 /* ─────────────────── VOCABULARY (an expression, not a topic) ─────────────────── */
 function vocabBrief(item, sectionTitle) {
   return [
@@ -251,7 +338,7 @@ export function vocabExamplesPrompt(item, sectionTitle) {
 
 Task: generate 4 NEW example sentences with this exact expression (do not repeat the example from the notes).
 Keep the expression's meaning exactly as the notes define it.
-Vary the sentences: different tenses, one negative and at least one question; a work context is preferred.
+Vary the sentences: different tenses, one negative and at least one question; use the contexts from your instructions.
 Wrap the expression itself in **double asterisks** inside "en".
 "ru" = natural Russian translation. "why" = one short remark in Russian about the shade of meaning or a collocation worth remembering.`;
 }
@@ -259,7 +346,8 @@ Wrap the expression itself in **double asterisks** inside "en".
 export function vocabUsePrompt(item, sectionTitle) {
   return `${vocabBrief(item, sectionTitle)}
 
-Task: give the learner ONE realistic work situation (2-3 sentences, English) where this exact expression is the natural thing to say.
+Task: give the learner ONE realistic situation (2-3 sentences, English), set in the contexts from your instructions,
+where this exact expression is the natural thing to say.
 "task": the question or request the learner must answer in English, using the expression.
 "hint": in Russian — a short reminder of the expression and its meaning.
 Do not provide the answer.`;
@@ -276,7 +364,7 @@ Task: evaluate the answer for BOTH grammatical correctness and natural use of th
 "verdict": "correct" (the expression is used correctly and naturally), "almost" (understandable but slightly off), "wrong" (the expression is missing or misused).
 "corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
 "notes": in Russian — what is wrong or unnatural and why; if everything is fine, say what was done well.
-"natural": one alternative phrasing a native speaker would use at work, in English.`;
+"natural": one alternative phrasing a native speaker would use, in English.`;
 }
 
 /* ─────────────────── MY WORDS: translate on add ─────────────────── */
@@ -301,7 +389,7 @@ Task: prepare a short dictionary entry for a Russian-speaking developer.
 "pos": part of speech in Russian, one word (глагол, существительное, прилагательное, фраза, фразовый глагол…).
 "cefr": the CEFR level of the word, one of A1, A2, B1, B2, C1, C2.
 "forms": for a verb — its three forms and the -ing form, e.g. "deploy · deployed · deployed · deploying". For anything else — an empty string.
-"example": one natural English sentence with this word, preferably a work context.
+"example": one natural English sentence with this word, set in one of the contexts from your instructions.
 "exampleRu": the Russian translation of that sentence.`;
 }
 
@@ -339,7 +427,7 @@ export function suggestPrompt({ level, count, topic = '', known = [] }) {
   return `Task: pick ${count} English words or short expressions to learn.
 
 CEFR level: ${level}. Words must be typical for this level — not easier, not harder.
-Theme: ${topic || 'general vocabulary a developer meets at work and in daily life'}.${skip}
+Theme: ${topic || 'general vocabulary the learner meets in the contexts from your instructions'}.${skip}
 
 For every entry:
 "text": the word or expression in English, lowercase, no article.
@@ -379,7 +467,7 @@ ${forms}
 Rules:
 - 3 paragraphs, 2-3 sentences each. A single connected story, not separate examples.
 - About 30% shorter than the sample: keep every form, drop the padding.
-- Context: a software team at work — releases, bugs, reviews, deadlines, clients.
+- Context: take it from your instructions and keep one consistent setting through the whole story.
 - After every verb that demonstrates one of the forms, put its Russian translation
   in parentheses, exactly as in the sample below.
 - When two forms share the same Russian translation, add a hint after a dash,

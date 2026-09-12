@@ -1,4 +1,4 @@
-import { store } from './storage.js';
+import { store, CONTEXTS } from './storage.js';
 
 const API_ROOT = 'https://generativelanguage.googleapis.com/v1beta';
 const REQUEST_TIMEOUT_MS = 45000;
@@ -25,13 +25,30 @@ function thinkingConfigFor(model) {
   return { thinkingLevel: 'low' };
 }
 
-const SYSTEM = `You are a personal English grammar tutor for a Russian-speaking software developer (level B1+/B2).
+/**
+ * The contexts chosen in Settings, as one instruction. This is the only place
+ * the subject matter of examples is decided — the prompts in prompts.js defer
+ * to it rather than naming a setting of their own.
+ */
+function contextLine(ids) {
+  const picked = CONTEXTS.filter((c) => ids.includes(c.id));
+  const list = picked.map((c) => `${c.en} (${c.hint})`).join('; ');
+  const vary = picked.length > 1
+    ? ' Spread the sentences across these rather than staying in one of them.'
+    : '';
+  return `Set every example, exercise and situation in these contexts: ${list}.${vary}
+The learner's own word comes first: if it does not fit any of them, use the context it naturally belongs to.`;
+}
+
+function systemFor(contexts) {
+  return `You are a personal English grammar tutor for a Russian speaker (level B1+/B2).
 You work strictly with the grammar topic and the rules given to you: they come from the learner's own notes.
 Never replace the learner's rules with your own theory and never teach a different construction than the one requested.
-Write example sentences in natural English; prefer a professional/IT context (deploy, release, PR, sprint, meeting, bug)
-similar to the learner's notes, unless the learner's own word suggests another context.
+Write example sentences in natural English.
+${contextLine(contexts)}
 All explanations, corrections and error analysis must be written in Russian, clear and short.
 Return only JSON matching the requested schema. No markdown fences, no extra commentary.`;
+}
 
 function describeHttpError(status, payload, model) {
   const detail = payload?.error?.message || '';
@@ -126,9 +143,10 @@ export async function callGemini(prompt, schema, { temperature = 0.8 } = {}) {
   const key = await store.getApiKey();
   if (!key) throw new NoKeyError();
   const model = await store.getModel();
+  const contexts = await store.getContexts();
 
   const body = {
-    systemInstruction: { parts: [{ text: SYSTEM }] },
+    systemInstruction: { parts: [{ text: systemFor(contexts) }] },
     contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: {
       temperature,

@@ -18,8 +18,13 @@ export function mdLite(s) {
 
 /**
  * Back link to the parent screen, the way a phone app does it: one large
- * target naming where it leads. The trail is still passed in full, so deeper
- * screens can also show the path above it on wide viewports.
+ * target naming where it leads. Shown at every width — launched from the home
+ * screen there is no address bar, so this is the only way back. The trail is
+ * still passed in full, so wide screens show the path next to it.
+ *
+ * The href is the parent, but router.js turns a click into history.back()
+ * whenever the user actually came from somewhere inside the app, so the button
+ * behaves like the browser's own arrow and never loses the previous screen.
  *
  * @param {{title: string, href?: string}[]} items root → current
  */
@@ -33,7 +38,7 @@ export function crumbs(items) {
 
   return `
     <div class="crumbs">
-      <a class="back" href="${parent.href}">
+      <a class="back" href="${parent.href}" data-back aria-label="Назад: ${esc(parent.title)}">
         <span class="back-chevron" aria-hidden="true">‹</span>${esc(parent.title)}
       </a>
       ${items.length > 2 ? `<span class="crumbs-path">${path}</span>` : ''}

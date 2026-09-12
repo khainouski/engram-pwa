@@ -24,6 +24,7 @@ export function mountPractice(slot, ctx) {
           <button class="btn" data-mode="exercises">Exercises</button>
           <button class="btn" data-mode="use">Use It</button>
           <button class="btn" data-mode="compare">Compare</button>
+          <button class="btn" data-mode="say">Как сказать</button>
         </div>`}
       <div class="word-bar">
         <div class="actions">
@@ -34,6 +35,13 @@ export function mountPractice(slot, ctx) {
         </div>
         <div class="chips" id="p-chips"></div>
       </div>
+      ${isMix ? `
+        <div class="say-bar">
+          <div class="gen-label">Как сказать это по-английски</div>
+          <textarea class="input" id="p-say" rows="2"
+                    placeholder="Напиши по-русски, напр. «Я работаю над этой задачей со вторника»"></textarea>
+          <div class="actions"><button id="p-run-say" class="btn primary">Перевести во все формы</button></div>
+        </div>` : ''}
       <div class="result" id="p-result"></div>
     </div>`;
 
@@ -105,6 +113,7 @@ export function mountPractice(slot, ctx) {
             <input class="input ex-answer" placeholder="Твой ответ">
             <div class="ex-verdict"></div>
           </div>`).join('')}
+        <div id="ex-level"></div>
         <div class="actions" style="margin-top:16px">
           <button class="btn primary" id="ex-check">Проверить</button>
           <button class="btn" id="ex-new">Новые задания</button>
@@ -129,8 +138,10 @@ export function mountPractice(slot, ctx) {
         const inputs = [...result.querySelectorAll('.ex-answer')];
         const answers = inputs.map((i) => i.value.trim());
         const btn = result.querySelector('#ex-check');
+        const levelBox = result.querySelector('#ex-level');
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner"></span> проверяю…';
+        levelBox.innerHTML = '';
         try {
           const res = await callGemini(P.checkPrompt(ctx.topicId, items, answers), P.checkSchema, { temperature: 0.2 });
           (res.items || []).forEach((r, i) => {
@@ -144,13 +155,25 @@ export function mountPractice(slot, ctx) {
               </div>`;
           });
           const right = (res.items || []).filter((r) => r.correct).length;
+
+          // The score says how this round went; the level says where the
+          // learner stands, which is the thing worth coming back for.
+          if (res.level) {
+            levelBox.innerHTML = `
+              <div class="ex-level">
+                <div class="ex-level-head">Твой уровень по этим ответам<span class="level">${esc(res.level)}</span></div>
+                ${res.levelNote ? `<div class="gen-why">${esc(res.levelNote)}</div>` : ''}
+              </div>`;
+          }
+
           btn.disabled = false;
           btn.textContent = `Проверить ещё раз (${right} из ${items.length})`;
         } catch (err) {
           btn.disabled = false;
           btn.textContent = 'Проверить';
-          const holder = result.querySelector('.row');
-          holder.insertAdjacentHTML('afterend', `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`);
+          // Under the answers, where the verdicts would have been: the panel
+          // has no .row of its own, and the error must not be swallowed.
+          levelBox.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;
         }
       });
     }, { text: 'Составляю упражнения…' });
@@ -261,6 +284,108 @@ export function mountPractice(slot, ctx) {
     }, { text: 'Сравниваю…' });
   }
 
+  /* ─────────────────── SAY IT ─────────────────── */
+  /**
+   * Result of a translation. The tense comes first and is named: the sentence
+   * is what was asked for, but knowing which tense it needed is the lesson.
+   * When the phrase needs something other than the topic being studied, that
+   * is called out rather than quietly bent into the topic's construction.
+   */
+  function sayCard(out) {
+    return `
+      <div class="say-verdict${out.fitsTopic === false ? ' other' : ''}">
+        <div class="say-tense">
+          <span class="gen-label">Здесь нужно</span>
+          <b>${esc(out.tense)}</b>
+        </div>
+        ${out.fitsTopic === false
+          ? `<div class="gen-why">Это не ${esc(topic.title)} — разбор ниже.</div>` : ''}
+        ${out.signal ? `<div class="say-signal">Подсказка в самой фразе: ${esc(out.signal)}</div>` : ''}
+      </div>
+      <div class="gen-item">
+        <div class="gen-en">${mdLite(out.en)}</div>
+        <div class="gen-why">${esc(out.why)}</div>
+      </div>
+      <div class="gen-item">
+        <div class="gen-label">Можно и так</div>
+        <div class="gen-en">${mdLite(out.natural)}</div>
+      </div>
+      ${out.literal ? `
+        <div class="gen-item">
+          <div class="gen-label">Ловушка дословного перевода</div>
+          <div class="gen-why">${esc(out.literal)}</div>
+        </div>` : ''}`;
+  }
+
+  /** The panel stays on screen: the learner asks about phrase after phrase. */
+  function modeSay() {
+    // Re-entering the mode — the word field's Enter also lands here — must not
+    // throw away a phrase the learner is in the middle of writing.
+    const previous = result.querySelector('#say-ru')?.value || '';
+    card(`
+      <div class="gen-label">Напиши по-русски — переведу этой конструкцией</div>
+      <textarea class="input" id="say-ru" rows="2" style="margin-top:8px"
+                placeholder="Напр. «Я уже отправил пул-реквест»">${esc(previous)}</textarea>
+      <div class="actions" style="margin-top:12px">
+        <button class="btn primary" id="say-go">Перевести</button>
+        <span class="muted" style="font-size:13px">⌘/Ctrl + Enter</span>
+      </div>
+      <div id="say-out"></div>`);
+
+    const ta = result.querySelector('#say-ru');
+    const out = result.querySelector('#say-out');
+    const go = result.querySelector('#say-go');
+    ta.focus();
+
+    ta.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); go.click(); }
+    });
+
+    go.addEventListener('click', async () => {
+      const ru = ta.value.trim();
+      if (!ru) { out.innerHTML = '<div class="verdict no" style="margin-top:14px">Сначала напиши фразу по-русски.</div>'; return; }
+      go.disabled = true;
+      go.innerHTML = '<span class="spinner"></span> перевожу…';
+      out.innerHTML = '';
+      try {
+        const res = await callGemini(P.sayPrompt(ctx.topicId, ru), P.saySchema, { temperature: 0.4 });
+        out.innerHTML = `<div style="margin-top:14px">${sayCard(res)}</div>`;
+      } catch (err) {
+        out.innerHTML = `<div style="margin-top:12px">${errorBox(err.message, err instanceof NoKeyError)}</div>`;
+      }
+      go.disabled = false;
+      go.textContent = 'Перевести';
+    });
+  }
+
+  /** The same phrase in every form of the group, with the one to actually use. */
+  async function modeSayMix() {
+    const ta = slot.querySelector('#p-say');
+    const ru = ta.value.trim();
+    if (!ru) {
+      card('<p class="muted">Напиши фразу по-русски — покажу её во всех формах группы.</p>');
+      ta.focus();
+      return;
+    }
+    await run(async () => {
+      const out = await callGemini(P.sayMixPrompt(ctx.topicIds, ctx.title, ru), P.sayMixSchema, { temperature: 0.4 });
+      card(`
+        <div class="say-verdict">
+          <div class="say-tense">
+            <span class="gen-label">Здесь нужно</span>
+            <b>${esc(out.best)}</b>
+          </div>
+        </div>
+        <p style="margin:12px 0 16px">${esc(out.summary)}</p>
+        ${(out.items || []).map((it) => `
+          <div class="gen-item${it.fits ? ' fits' : ''}">
+            <div class="gen-label">${it.fits ? '✓ ' : ''}${esc(it.label)}</div>
+            <div class="gen-en">${mdLite(it.en)}</div>
+            <div class="gen-why">${esc(it.why)}</div>
+          </div>`).join('')}`);
+    }, { text: 'Перевожу во все формы…' });
+  }
+
   /* ─────────────────── MIX ─────────────────── */
   async function modeMix() {
     const w = word();
@@ -287,8 +412,16 @@ export function mountPractice(slot, ctx) {
   if (isMix) {
     slot.querySelector('#p-run-mix').addEventListener('click', modeMix);
     wordInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') modeMix(); });
+
+    const say = slot.querySelector('#p-say');
+    slot.querySelector('#p-run-say').addEventListener('click', modeSayMix);
+    say.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); modeSayMix(); }
+    });
   } else {
-    const handlers = { examples: modeExamples, exercises: modeExercises, use: modeUse, compare: modeCompare };
+    const handlers = {
+      examples: modeExamples, exercises: modeExercises, use: modeUse, compare: modeCompare, say: modeSay,
+    };
     slot.querySelectorAll('[data-mode]').forEach((btn) => {
       btn.addEventListener('click', () => {
         slot.querySelectorAll('[data-mode]').forEach((b) => b.classList.toggle('active', b === btn));
