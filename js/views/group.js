@@ -43,6 +43,19 @@ function mountStory(root, { title, topicIds, sample }) {
   });
 }
 
+function storySection(story) {
+  if (!story) return '';
+  return `
+    <div class="section-title story-title">
+      ${esc(story.title)}
+      <span class="story-actions">
+        <button id="story-back" class="btn small" hidden>Исходная</button>
+        <button id="story-new" class="btn small">Новый вариант</button>
+      </span>
+    </div>
+    <div class="story" id="story-box">${storyHtml(story.text.split('\n'))}</div>`;
+}
+
 function topicRows(ids) {
   return rowList(ids.filter((id) => TOPICS[id]).map((id) => ({
     href: `#/t/${id}`,
@@ -77,7 +90,13 @@ export async function renderGroup(root, groupId) {
       </div>` : ''}
     ${body}
     ${g.table ? `<div class="section-title">Summary Table</div>${summaryTable(g.table)}` : ''}
+    ${g.subgroups ? '' : storySection(g.story)}
     <div id="practice-slot"></div>`;
+
+  // A group without subgroups is its own subgroup page: same table, story and mix.
+  if (g.story && !g.subgroups) {
+    mountStory(root, { title: g.title, topicIds: g.topics || [], sample: g.story.text });
+  }
 
   if (g.mix) {
     mountPractice(root.querySelector('#practice-slot'), {
@@ -97,15 +116,7 @@ export async function renderSubgroup(root, groupId, subId) {
     <p class="page-sub">${s.topics.length} конструкции из конспекта</p>
     ${topicRows(s.topics)}
     ${s.table ? `<div class="section-title">Summary Table</div>${summaryTable(s.table)}` : ''}
-    ${s.story ? `
-      <div class="section-title story-title">
-        ${esc(s.story.title)}
-        <span class="story-actions">
-          <button id="story-back" class="btn small" hidden>Исходная</button>
-          <button id="story-new" class="btn small">Новый вариант</button>
-        </span>
-      </div>
-      <div class="story" id="story-box">${storyHtml(s.story.text.split('\n'))}</div>` : ''}
+    ${storySection(s.story)}
     <div id="practice-slot"></div>`;
 
   if (s.story) {

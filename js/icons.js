@@ -14,6 +14,7 @@ const PATHS = {
   'sentence-structure': '<path d="M4 7h16"/><path d="M4 12h10.5"/><path d="M4 17h6.5"/>',
   passive: '<path d="M5 9h13"/><path d="M15.4 6 18.4 9l-3 3"/><path d="M19 15H6"/><path d="M8.6 12 5.6 15l3 3"/>',
   'reported-speech': '<path d="M4.5 6.2a1.7 1.7 0 0 1 1.7-1.7h11.6a1.7 1.7 0 0 1 1.7 1.7v7.6a1.7 1.7 0 0 1-1.7 1.7H10l-5.5 4z"/><path d="M9.2 8.2v1.4c0 .9-.5 1.5-1.3 1.8"/><path d="M14 8.2v1.4c0 .9-.5 1.5-1.3 1.8"/>',
+  'useful-constructions': '<rect x="4" y="4" width="7" height="7" rx="1.6"/><rect x="13" y="4" width="7" height="7" rx="1.6"/><rect x="4" y="13" width="7" height="7" rx="1.6"/><path d="M16.5 13.5v6"/><path d="M13.5 16.5h6"/>',
 
   // Vocabulary sections
   vocabulary: '<path d="M5.5 5.2a1.7 1.7 0 0 1 1.7-1.7H19v14.5H7.2a1.7 1.7 0 0 0-1.7 1.7z"/><path d="M5.5 18a1.7 1.7 0 0 1 1.7-1.7H19"/>',

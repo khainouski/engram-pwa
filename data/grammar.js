@@ -132,6 +132,28 @@ export const GROUPS = [
     icon: '💬',
     topics: ['reported-statements', 'reported-questions', 'reported-commands', 'reported-real-life', 'reported-phrases'],
   },
+  {
+    id: 'useful-constructions',
+    title: 'Useful Constructions',
+    subtitle: 'used to · not to · every other · on my own · try not to',
+    icon: '🧩',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to'],
+    mix: 'used to / not to + verb / every other / on my own / try not to',
+    table: {
+      head: ['Construction', "When it's used", 'Structure', 'Example'],
+      rows: [
+        ['used to / didn’t use to', 'Past habits and situations that have changed', 'used to + V · didn’t use to + V', 'I used to work with PHP. ❓ Did you use to work with Go?'],
+        ['decide / agree / promise not to', 'Decided, agreed or promised not to do something', 'decide / agree / promise + not to + V', 'We agreed not to change the architecture. ❓ Why did you decide not to hire him?'],
+        ['every other', 'Every second day, week, month or year', 'every other + noun', 'We have this meeting every other week. ❓ Do you go running every other day?'],
+        ['on my own', 'By yourself, without help', 'on + possessive + own', 'I learned English on my own. ❓ Did you do it on your own?'],
+        ['try not to', 'Trying to avoid doing something', 'try not to + V', 'I’m trying not to stay up late. ❓ Are you trying not to eat too much?'],
+      ],
+    },
+    story: {
+      title: 'Story example',
+      text: 'I didn’t use to conduct (раньше не проводил) interviews, but I do now. I used to work (раньше работал) with PHP, and I learned Go on my own (сам).\nThis week we decided not to hire (решили не нанимать) the candidate, and we agreed not to change (договорились не менять) the architecture before the release.\nWe have a sync with the architect every other week (раз в две недели). I’m trying not to be (стараюсь не опаздывать) late, and I promised not to make (пообещал не вносить) changes without the team.',
+    },
+  },
 ];
 
 export const TOPICS = {
@@ -904,6 +926,103 @@ He works → He doesn't work → Does he work?`,
       { en: 'She mentioned that QA will test it tomorrow.' },
     ],
     compare: ['reported-statements', 'reported-commands'],
+  },
+
+  // ────────────────────────── USEFUL CONSTRUCTIONS ──────────────────────────
+  'used-to': {
+    title: 'used to / didn’t use to',
+    formula: 'I used to + verb · I didn’t use to + verb',
+    detail: 'Раньше делал, а сейчас уже нет — ситуация изменилась. Привычки и ситуации в прошлом.',
+    markers: ['used to', 'didn’t use to', 'but I do now'],
+    use: [
+      { en: 'Утверждение: I used to + verb', ru: 'Раньше делал, а сейчас уже нет.', ex: 'I used to work with PHP. — Раньше я работал с PHP.' },
+      { en: 'Отрицание: I didn’t use to + verb', ru: 'Раньше не делал, а сейчас делаю.', ex: 'I didn’t use to work with Go, but I do now. — Раньше я не работал с Go, а сейчас работаю.' },
+    ],
+    notes: [{ en: 'После didn’t → use to, не used to.', ru: 'Обрати внимание: didn’t уже показывает прошлое, поэтому -d пропадает.' }],
+    examples: [
+      { en: 'I used to work with PHP.', ru: 'Раньше я работал с PHP.' },
+      { en: 'I didn’t use to solve such problems, but I do now.' },
+      { en: 'I didn’t use to work with Go, but I do now.', ru: 'Раньше я не работал с Go, а сейчас работаю.' },
+      { en: 'I didn’t use to conduct interviews, but I do now.' },
+    ],
+    compare: ['related-constructions', 'every-other'],
+  },
+  'decide-not-to': {
+    title: 'decide / agree / promise + not to',
+    formula: 'decide / agree / promise + not to + verb',
+    detail: 'Решил / пообещал / договорились не делать. Главное правило: not ставим перед to.',
+    markers: ['decided not to', 'agreed not to', 'promised not to'],
+    use: [
+      { en: 'decide not to do', ru: 'решить не делать', ex: 'I decided not to ask. — Я решил не спрашивать.' },
+      { en: 'agree not to do', ru: 'договориться не делать', ex: 'We agreed not to change the architecture.' },
+      { en: 'promise not to do', ru: 'пообещать не делать', ex: 'I promised not to make any changes without discussing them with the team.' },
+    ],
+    examples: [
+      { en: 'I decided not to ask the architect about it.' },
+      { en: 'We decided not to deploy the service today.' },
+      { en: 'I decided not to hire this candidate.' },
+      { en: 'We agreed not to change the architecture.' },
+      { en: 'I promised not to make any changes without discussing them with the team.' },
+      { en: 'We agreed not to use WebSockets for this feature.' },
+    ],
+    compare: ['try-not-to', 'reported-commands'],
+  },
+  'every-other': {
+    title: 'every other + noun',
+    formula: 'every other + day / week / month / year',
+    detail: 'Через один: every other day — через день.',
+    markers: ['every other day', 'every other week', 'every other month', 'every other year'],
+    use: [
+      { en: 'every other day', ru: 'через день' },
+      { en: 'every other week', ru: 'раз в две недели / через неделю', ex: 'We have this meeting every other week. — У нас эта встреча раз в две недели.' },
+      { en: 'every other month', ru: 'раз в два месяца' },
+      { en: 'every other year', ru: 'раз в два года' },
+    ],
+    examples: [
+      { en: 'I used to go running every other day.', ru: 'Раньше я бегал через день.' },
+      { en: 'She goes to the gym every other day.' },
+      { en: 'I wash my hair every other day.' },
+      { en: 'We have this meeting every other week.', ru: 'У нас эта встреча раз в две недели.' },
+    ],
+    compare: ['used-to'],
+  },
+  'on-my-own': {
+    title: 'on my own',
+    formula: 'on + possessive + own',
+    detail: 'Сам / самостоятельно / один. Меняем только местоимение.',
+    markers: ['on my own', 'on your own', 'on their own'],
+    use: [
+      { en: 'on my own', ru: 'сам' },
+      { en: 'on your own', ru: 'сам' },
+      { en: 'on his own', ru: 'сам' },
+      { en: 'on her own', ru: 'сама' },
+      { en: 'on our own', ru: 'сами' },
+      { en: 'on their own', ru: 'сами' },
+    ],
+    examples: [
+      { en: 'I went there on my own.', ru: 'Я пошёл туда один / сам.' },
+      { en: 'I did it on my own.', ru: 'Я сделал это сам.' },
+      { en: 'I learned English on my own.', ru: 'Я самостоятельно выучил английский.' },
+    ],
+    compare: ['used-to'],
+  },
+  'try-not-to': {
+    title: 'try not to + verb',
+    formula: 'try not to + verb',
+    detail: 'Стараться чего-то не делать. Похоже на decide not to — здесь тоже not to + verb, но смысл другой.',
+    markers: ['I’m trying not to', 'try not to'],
+    use: [
+      { en: 'I decided not to do it.', ru: 'Я решил этого не делать.' },
+      { en: 'I’m trying not to do it.', ru: 'Я стараюсь этого не делать.' },
+    ],
+    notes: [{ en: 'Темы decide not to и try not to можно объединить в большую тему NOT TO + VERB: decide not to, agree not to, promise not to, try not to.', ru: 'Конструкция одна, меняется только глагол перед not to.' }],
+    examples: [
+      { en: 'I’m trying not to eat too much.' },
+      { en: 'I’m trying not to be late.' },
+      { en: 'I’m trying not to spend too much money.' },
+      { en: 'I’m trying not to stay up late.' },
+    ],
+    compare: ['decide-not-to', 'gerund-vs-infinitive'],
   },
 };
 
