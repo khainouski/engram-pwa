@@ -135,10 +135,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to'],
-    mix: 'used to / not to + verb / every other / on my own / try not to',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective',
     table: {
       head: ['Construction', "When it's used", 'Structure', 'Example'],
       rows: [
@@ -147,11 +147,12 @@ export const GROUPS = [
         ['every other', 'Every second day, week, month or year', 'every other + noun', 'We have this meeting every other week. ❓ Do you go running every other day?'],
         ['on my own', 'By yourself, without help', 'on + possessive + own', 'I learned English on my own. ❓ Did you do it on your own?'],
         ['try not to', 'Trying to avoid doing something', 'try not to + V', 'I’m trying not to stay up late. ❓ Are you trying not to eat too much?'],
+        ['to be + adjective', 'States and feelings: what someone is like right now', 'subject + to be + adjective', 'He is afraid of dogs. ❓ Are you afraid to ask?'],
       ],
     },
     story: {
       title: 'Story example',
-      text: 'I didn’t use to conduct (раньше не проводил) interviews, but I do now. I used to work (раньше работал) with PHP, and I learned Go on my own (сам).\nThis week we decided not to hire (решили не нанимать) the candidate, and we agreed not to change (договорились не менять) the architecture before the release.\nWe have a sync with the architect every other week (раз в две недели). I’m trying not to be (стараюсь не опаздывать) late, and I promised not to make (пообещал не вносить) changes without the team.',
+      text: 'I didn’t use to conduct (раньше не проводил) interviews, but I do now. I used to work (раньше работал) with PHP, and I learned Go on my own (сам).\nThis week we decided not to hire (решили не нанимать) the candidate, and we agreed not to change (договорились не менять) the architecture before the release.\nWe have a sync with the architect every other week (раз в две недели). I’m trying not to be (стараюсь не опаздывать) late, and I promised not to make (пообещал не вносить) changes without the team.\nI’m tired (устал) after the release, but I’m not afraid of (не боюсь) a big refactoring — I’m only afraid to start (боюсь начинать) it on a Friday.',
     },
   },
 ];
@@ -1023,6 +1024,33 @@ He works → He doesn't work → Does he work?`,
       { en: 'I’m trying not to stay up late.' },
     ],
     compare: ['decide-not-to', 'gerund-vs-infinitive'],
+  },
+  'be-adjective': {
+    title: 'to be + adjective',
+    formula: 'subject + to be + adjective',
+    detail: `Когда мы описываем, какой человек или в каком он состоянии, англичанин часто берёт не глагол, а to be + прилагательное.
+Русское «он боится» превращается в буквальное «он есть испуганный»: He is afraid.
+afraid — прилагательное, а не глагол, поэтому ❌ He afraid. Нужен to be → He is afraid. После be, seem, become и похожих глаголов — тоже прилагательное: He seems afraid.`,
+    markers: ['am', 'is', 'are', 'afraid', 'tired', 'angry', 'ready'],
+    use: [
+      { en: 'He is afraid.', ru: 'Он боится.' },
+      { en: 'I am afraid.', ru: 'Я боюсь.' },
+      { en: 'She is tired.', ru: 'Она устала.' },
+      { en: 'He is angry.', ru: 'Он злится / злой.' },
+      { en: 'They are ready.', ru: 'Они готовы.' },
+    ],
+    notes: [
+      { en: 'be afraid of + noun / V-ing', ru: 'Боится чего-то или что-то делать вообще: He is afraid of dogs. He is afraid of flying.' },
+      { en: 'be afraid to + verb', ru: 'Боится сделать что-то конкретное: He is afraid to ask.' },
+    ],
+    examples: [
+      { en: 'He is afraid of dogs.', ru: 'Он боится собак.' },
+      { en: 'He is afraid of flying.', ru: 'Он боится летать.' },
+      { en: 'He is afraid to ask.', ru: 'Он боится спросить.' },
+      { en: 'She is tired after the release.', ru: 'Она устала после релиза.' },
+      { en: 'They are ready for the demo.', ru: 'Они готовы к демо.' },
+    ],
+    compare: ['try-not-to', 'gerund-vs-infinitive'],
   },
 };
 
