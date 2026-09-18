@@ -135,21 +135,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right?',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective',
-    table: {
-      head: ['Construction', "When it's used", 'Structure', 'Example'],
-      rows: [
-        ['used to / didn’t use to', 'Past habits and situations that have changed', 'used to + V · didn’t use to + V', 'I used to work with PHP. ❓ Did you use to work with Go?'],
-        ['decide / agree / promise not to', 'Decided, agreed or promised not to do something', 'decide / agree / promise + not to + V', 'We agreed not to change the architecture. ❓ Why did you decide not to hire him?'],
-        ['every other', 'Every second day, week, month or year', 'every other + noun', 'We have this meeting every other week. ❓ Do you go running every other day?'],
-        ['on my own', 'By yourself, without help', 'on + possessive + own', 'I learned English on my own. ❓ Did you do it on your own?'],
-        ['try not to', 'Trying to avoid doing something', 'try not to + V', 'I’m trying not to stay up late. ❓ Are you trying not to eat too much?'],
-        ['to be + adjective', 'States and feelings: what someone is like right now', 'subject + to be + adjective', 'He is afraid of dogs. ❓ Are you afraid to ask?'],
-      ],
-    },
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right?',
     story: {
       title: 'Story example',
       text: 'I didn’t use to conduct (раньше не проводил) interviews, but I do now. I used to work (раньше работал) with PHP, and I learned Go on my own (сам).\nThis week we decided not to hire (решили не нанимать) the candidate, and we agreed not to change (договорились не менять) the architecture before the release.\nWe have a sync with the architect every other week (раз в две недели). I’m trying not to be (стараюсь не опаздывать) late, and I promised not to make (пообещал не вносить) changes without the team.\nI’m tired (устал) after the release, but I’m not afraid of (не боюсь) a big refactoring — I’m only afraid to start (боюсь начинать) it on a Friday.',
@@ -1051,6 +1040,51 @@ afraid — прилагательное, а не глагол, поэтому �
       { en: 'They are ready for the demo.', ru: 'Они готовы к демо.' },
     ],
     compare: ['try-not-to', 'gerund-vs-infinitive'],
+  },
+  'downplay-exaggerate': {
+    title: 'downplay / exaggerate',
+    formula: 'exaggerate · downplay + noun',
+    use: [
+      { en: 'exaggerate', ru: 'преувеличивать' },
+      { en: 'downplay', ru: 'преуменьшать, принижать значение' },
+    ],
+    markers: ['exaggerating', 'downplaying', 'let’s not downplay'],
+    examples: [
+      { en: 'I’m not exaggerating — I’m actually downplaying it.', ru: 'Я не преувеличиваю — я на самом деле преуменьшаю.' },
+      { en: 'Let’s not downplay the importance of learning.', ru: 'Давай не будем преуменьшать важность обучения.' },
+      { en: 'Don’t exaggerate — it’s just a small bug.', ru: 'Не преувеличивай — это просто маленький баг.' },
+      { en: 'He always downplays his role in the project.', ru: 'Он всегда преуменьшает свою роль в проекте.' },
+      { en: 'I think you’re exaggerating the risks.', ru: 'Думаю, ты преувеличиваешь риски.' },
+    ],
+    compare: ['actually'],
+  },
+  'actually': {
+    title: 'actually',
+    formula: 'Actually, … · … actually + verb / adjective',
+    use: [{ en: 'actually', ru: 'вообще-то / на самом деле' }],
+    markers: ['Actually,', 'actually'],
+    examples: [
+      { en: 'Actually, I agree with you.', ru: 'Вообще-то, я с тобой согласен.' },
+      { en: 'It’s actually quite easy.', ru: 'На самом деле это довольно легко.' },
+      { en: 'I actually like it.', ru: 'Мне на самом деле это нравится.' },
+      { en: 'Actually, it is not that easy.', ru: 'Вообще-то, это не так просто.' },
+      { en: 'Actually, I’m even here speaking as a middle class white man.' },
+    ],
+    compare: ['downplay-exaggerate', 'am-i-right'],
+  },
+  'am-i-right': {
+    title: 'Am I right?',
+    formula: 'statement + am I right?',
+    use: [{ en: '…, am I right?', ru: 'в конце фразы: я правильно понимаю? / верно?' }],
+    markers: ['am I right?'],
+    examples: [
+      { en: 'You need to complete this task by the end of the week, am I right?', ru: 'Тебе нужно закончить эту задачу до конца недели, верно?', q: true },
+      { en: 'We’re releasing on Friday, am I right?', ru: 'Мы релизимся в пятницу, верно?', q: true },
+      { en: 'You worked with Go before, am I right?', ru: 'Ты раньше работал с Go, верно?', q: true },
+      { en: 'The meeting was moved to Tuesday, am I right?', ru: 'Встречу перенесли на вторник, верно?', q: true },
+      { en: 'So the bug is in the payment service, am I right?', ru: 'Значит, баг в платёжном сервисе, верно?', q: true },
+    ],
+    compare: ['actually'],
   },
 };
 
