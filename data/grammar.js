@@ -135,14 +135,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right?',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · полезные фразы',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right?',
-    story: {
-      title: 'Story example',
-      text: 'I didn’t use to conduct (раньше не проводил) interviews, but I do now. I used to work (раньше работал) with PHP, and I learned Go on my own (сам).\nThis week we decided not to hire (решили не нанимать) the candidate, and we agreed not to change (договорились не менять) the architecture before the release.\nWe have a sync with the architect every other week (раз в две недели). I’m trying not to be (стараюсь не опаздывать) late, and I promised not to make (пообещал не вносить) changes without the team.\nI’m tired (устал) after the release, but I’m not afraid of (не боюсь) a big refactoring — I’m only afraid to start (боюсь начинать) it on a Friday.',
-    },
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'useful-phrases'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / полезные фразы (связь, созвоны, темп работы)',
   },
 ];
 
@@ -1085,6 +1081,353 @@ afraid — прилагательное, а не глагол, поэтому �
       { en: 'So the bug is in the payment service, am I right?', ru: 'Значит, баг в платёжном сервисе, верно?', q: true },
     ],
     compare: ['actually'],
+  },
+  'sacrifice': {
+    title: 'sacrifice',
+    formula: 'sacrifice + noun (+ for + noun / to + verb)',
+    detail: `Пожертвовать чем-то ради чего-то. В английском sacrifice — переходный глагол: сразу после него идёт то, чем жертвуем, без предлога — не «sacrifice by time», а sacrifice time.
+Ради чего — два варианта: for + существительное (for his career) или to + глагол (to finish the project).
+На работе это главное слово про trade-off: чем мы платим за решение.`,
+    markers: ['sacrifice', 'sacrificed', 'sacrificing', 'for', 'to'],
+    use: [
+      { en: 'sacrifice + noun', ru: 'пожертвовать чем-то', ex: 'He sacrificed his free time. — Он пожертвовал свободным временем.' },
+      { en: 'sacrifice + noun + for + noun', ru: 'пожертвовать чем-то ради чего-то', ex: 'He sacrificed his free time for his career. — Он пожертвовал свободным временем ради карьеры.' },
+      { en: 'sacrifice + noun + to + verb', ru: 'пожертвовать чем-то, чтобы что-то сделать', ex: 'Alex sacrificed his weekends to finish the project. — Алекс пожертвовал выходными, чтобы закончить проект.' },
+      { en: 'have to sacrifice', ru: 'пришлось / придётся пожертвовать', ex: 'He had to sacrifice time with his family for work. — Ему пришлось пожертвовать временем с семьёй ради работы.' },
+    ],
+    notes: [
+      { en: 'sacrifice X for Y', ru: 'Жертвуем X ради Y: сначала то, что теряем, потом то, что получаем — sacrifice performance for simplicity.' },
+      { en: 'sacrifice + noun, не sacrifice + V-ing', ru: 'После sacrifice стоит существительное (quality, speed, flexibility, maintainability), а цель уже выражаем через to + verb.' },
+    ],
+    examples: [
+      { en: 'Alex sacrificed a lot for his job.', ru: 'Алекс многим пожертвовал ради своей работы.' },
+      { en: 'He sacrificed his free time for his career.', ru: 'Он пожертвовал свободным временем ради карьеры.' },
+      { en: 'He had to sacrifice time with his family for work.', ru: 'Ему пришлось пожертвовать временем с семьёй ради работы.' },
+      { en: 'Alex sacrificed his weekends to finish the project.', ru: 'Алекс пожертвовал выходными, чтобы закончить проект.' },
+      { en: 'We may have to sacrifice some features to meet the deadline.' },
+      { en: 'We shouldn’t sacrifice quality just to deliver faster.' },
+      { en: 'We can sacrifice some flexibility to keep the solution simple.' },
+      { en: 'I don’t think we should sacrifice performance for simplicity.' },
+      { en: 'We might need to sacrifice one of these requirements.' },
+      { en: 'We’re sacrificing maintainability for speed.' },
+      { en: 'If we choose this approach, what are we sacrificing?', ru: 'Если мы выберем этот подход, чем мы жертвуем?', q: true },
+    ],
+    compare: ['downplay-exaggerate', 'be-adjective'],
+  },
+  'in-my-opinion': {
+    title: 'from my point of view / in my opinion',
+    formula: 'From my point of view, … · In my opinion, …',
+    detail: `Два способа сказать «по-моему» и сразу показать, что дальше — личное мнение, а не факт.
+Оба оборота чаще всего стоят в начале фразы и отделяются запятой, а дальше идёт обычное предложение.
+Меняется только местоимение: from his point of view, in her opinion.`,
+    markers: ['from my point of view', 'in my opinion', 'to me'],
+    use: [
+      { en: 'From my point of view, …', ru: 'с моей точки зрения', ex: 'From my point of view, Go is a good fit for this project. — С моей точки зрения, Go хорошо подходит для этого проекта.' },
+      { en: 'In my opinion, …', ru: 'по моему мнению / по-моему', ex: 'In my opinion, this approach is more efficient. — По-моему, этот подход эффективнее.' },
+    ],
+    notes: [
+      { en: 'in my opinion, не «to my opinion»', ru: 'С opinion нужен предлог in, а с point of view — from.' },
+      { en: 'point of view — целиком', ru: 'Нельзя сократить до «from my point»: нужна вся фраза point of view.' },
+    ],
+    examples: [
+      { en: 'From my point of view, Go is a good fit for this project.', ru: 'С моей точки зрения, Go хорошо подходит для этого проекта.' },
+      { en: 'In my opinion, this approach is more efficient.', ru: 'По-моему, этот подход эффективнее.' },
+      { en: 'From my point of view, we should split this task.' },
+      { en: 'In my opinion, we’re sacrificing too much for speed.' },
+      { en: 'From his point of view, the deadline is realistic.' },
+      { en: 'What’s the problem from your point of view?', q: true },
+    ],
+    compare: ['actually', 'am-i-right'],
+  },
+  'ahead-vs-in-front': {
+    title: 'ahead of me / in front of me',
+    formula: 'ahead of + кого · in front of + кого',
+    detail: `Два «впереди», но разные.
+ahead of me — впереди меня в движении или в прогрессе: мы оба куда-то идём, и ты дальше по пути.
+in front of me — передо мной физически, просто место в пространстве, без движения.
+Отсюда разница: walking ahead of me (идёшь впереди, в ту же сторону) и standing in front of me (стоишь передо мной).`,
+    markers: ['ahead of me', 'in front of me', 'way ahead of', 'two chapters ahead'],
+    use: [
+      { en: 'ahead of me — процесс, движение, прогресс', ru: 'впереди меня', ex: 'You’re walking ahead of me. — Ты идёшь впереди меня.' },
+      { en: 'in front of me — физическое место', ru: 'передо мной', ex: 'You’re standing in front of me. — Ты стоишь передо мной.' },
+      { en: 'ahead of me — в успехах', ru: 'обошёл меня, дальше продвинулся', ex: 'He’s ahead of me at work. — На работе он впереди меня.' },
+    ],
+    notes: [
+      { en: 'three places / two chapters / way ahead of me', ru: 'Перед ahead можно поставить меру: three places ahead of me, two chapters ahead of me, way ahead of me (сильно впереди). С in front of так не говорят.' },
+      { en: 'Go ahead of me.', ru: '«Проходи вперед» — уступаем место в очереди. А Sit in front of me — просто сядь передо мной.' },
+    ],
+    examples: [
+      { en: 'You’re walking ahead of me.', ru: 'Ты идёшь впереди меня.' },
+      { en: 'You’re running ahead of me.' },
+      { en: 'He’s driving ahead of me.' },
+      { en: 'Go ahead of me.', ru: 'Проходи вперёд / иди передо мной.' },
+      { en: 'She’s three places ahead of me.' },
+      { en: 'You’re way ahead of me.', ru: 'Ты далеко впереди меня.' },
+      { en: 'He’s ahead of me at work.' },
+      { en: 'You’re two chapters ahead of me.' },
+      { en: 'You’re standing in front of me.', ru: 'Ты стоишь передо мной.' },
+      { en: 'Sit in front of me.' },
+      { en: 'There’s a car in front of me.' },
+      { en: 'He’s waiting in front of me.' },
+      { en: 'She was sitting in front of me.' },
+      { en: 'Don’t walk in front of me.' },
+      { en: 'Someone is standing in front of me.' },
+      { en: 'There’s a long line in front of me.', ru: 'Передо мной длинная очередь.' },
+    ],
+    compare: ['on-my-own', 'in-my-opinion'],
+  },
+  'meet-up-reschedule': {
+    title: 'meet up / reschedule',
+    formula: 'meet up with + кем · reschedule (+ что) (+ with + кем)',
+    detail: `Два слова про встречи: договориться увидеться и перенести встречу.
+meet up with — встретиться с кем-то по договорённости. Обязателен предлог with: ✘ meet up a colleague.
+То же слово без пробела — существительное: a meet-up (сама встреча).
+reschedule — перенести на другое время. Можно сказать reschedule with my friend (перенести с ним встречу) или назвать само событие: reschedule my meet-up.`,
+    markers: ['meet up with', 'a meet-up', 'reschedule', 'move', 'after work'],
+    use: [
+      { en: 'meet up with + кем', ru: 'встретиться с кем-то', ex: 'I’m meeting up with a colleague after work. — Я встречаюсь с коллегой после работы.' },
+      { en: 'a meet-up', ru: 'встреча (существительное)', ex: 'I need to reschedule my meet-up with my friend. — Мне нужно перенести встречу с другом.' },
+      { en: 'reschedule with + кем', ru: 'перенести встречу с кем-то', ex: 'I need to reschedule with my friend. — Мне нужно перенести встречу с другом.' },
+    ],
+    notes: [
+      { en: 'meet up with, не «meet up somebody»', ru: 'С человеком всегда через with. Без up предлог не нужен: I’m meeting a colleague.' },
+      { en: 'reschedule уже содержит «пере-»', ru: 'Не нужно «reschedule again to another time» — достаточно reschedule it, а новое время даём через for / to: reschedule it for Friday.' },
+    ],
+    examples: [
+      { en: 'I need to reschedule with my friend.', ru: 'Мне нужно перенести встречу с другом.' },
+      { en: 'I’m meeting up with a colleague after work.', ru: 'Я встречаюсь с коллегой после работы.' },
+      { en: 'I need to reschedule my meet-up with my friend.', ru: 'Мне нужно перенести встречу с другом.' },
+      { en: 'Can we reschedule our call for tomorrow?', q: true },
+      { en: 'Let’s meet up with the team before the demo.' },
+      { en: 'I had to reschedule the interview twice.' },
+    ],
+    compare: ['running-late', 'every-other'],
+  },
+  'running-late': {
+    title: 'late / behind schedule',
+    formula: 'be (running / going to be) late for + чего · be behind / ahead of / on schedule',
+    detail: `Про себя и опоздание — late for. Всё строится на to be + прилагательное, а оттенок даёт время:
+I’m late — уже опоздал. I’m running late — ещё в пути, но не успеваю. I’m going to be late — точно опоздаю, предупреждаю заранее.
+Про работу и проект — schedule: behind schedule (отстаём), ahead of schedule (с опережением), on schedule (точно по плану).`,
+    markers: ['late for', 'running late', 'going to be late', 'behind schedule', 'ahead of schedule', 'on schedule'],
+    use: [
+      { en: 'I’m late for …', ru: 'Я опаздываю / опоздал', ex: 'I’m late for work. — Я опаздываю на работу.' },
+      { en: 'I’m running late for …', ru: 'Я задерживаюсь / немного опаздываю', ex: 'I’m running late for work. — Я задерживаюсь на работу.' },
+      { en: 'I’m going to be (5 minutes) late for …', ru: 'Я опоздаю (на 5 минут)', ex: 'I’m going to be 5 minutes late for work. — Я опоздаю на работу на 5 минут.' },
+      { en: 'behind schedule', ru: 'отстаём от графика', ex: 'We’re behind schedule. — Мы отстаём от графика.' },
+      { en: 'ahead of schedule', ru: 'с опережением графика', ex: 'We’re running ahead of schedule. — Мы идём с опережением графика.' },
+      { en: 'right on schedule', ru: 'точно по графику', ex: 'We’re right on schedule. — Мы идём точно по графику.' },
+    ],
+    notes: [
+      { en: 'late for — куда опаздываем', ru: 'После late всегда for: late for work, late for the meeting. ✘ late to work.' },
+      { en: 'running late и falling behind', ru: 'running — процесс уже идёт (отстаю прямо сейчас), falling — только начинаю отставать: I’m falling behind schedule.' },
+      { en: 'ahead of schedule — тот же ahead of', ru: 'Тот же оборот, что и в ahead of me: впереди по движению, только относительно графика.' },
+    ],
+    examples: [
+      { en: 'I’m late for work.', ru: 'Я опаздываю / опоздал на работу.' },
+      { en: 'I’m running late for work.', ru: 'Я задерживаюсь / немного опаздываю на работу.' },
+      { en: 'I’m going to be late for work.', ru: 'Я опоздаю на работу.' },
+      { en: 'I’m going to be 5 minutes late for work.', ru: 'Я опоздаю на работу на 5 минут.' },
+      { en: 'I’m running behind schedule.', ru: 'Я отстаю / выбиваюсь из графика.' },
+      { en: 'I’m falling behind schedule.', ru: 'Я начинаю отставать от графика.' },
+      { en: 'We’re behind schedule.', ru: 'Мы отстаём от графика.' },
+      { en: 'We’re running ahead of schedule.', ru: 'Мы идём с опережением графика.' },
+      { en: 'We’re right on schedule.', ru: 'Мы идём точно по графику.' },
+    ],
+    compare: ['meet-up-reschedule', 'ahead-vs-in-front'],
+  },
+  'lets-face-it': {
+    title: 'Let’s face it',
+    formula: 'Let’s face it, + предложение · face + noun',
+    detail: `«Давай признаем / посмотрим правде в глаза». Ставится в начале фразы, через запятую, а дальше — обычное предложение с неудобной правдой.
+Сам глагол face — столкнуться с чем-то неприятным и принять это. Он переходный, без предлога: face the consequences, а не «face with the consequences».`,
+    markers: ['Let’s face it', 'face the consequences', 'face the fact'],
+    use: [
+      { en: 'Let’s face it, …', ru: 'давай признаем / посмотрим правде в глаза', ex: 'Let’s face it, it’s a complicated task. — Давай признаем: это сложная задача.' },
+      { en: 'face + noun', ru: 'столкнуться с чем-то', ex: 'Now we’re facing the consequences of not allocating enough time for these tasks. — Теперь мы сталкиваемся с последствиями того, что не выделили достаточно времени на эти задачи.' },
+    ],
+    notes: [
+      { en: 'face — без предлога', ru: '✘ face with the problem. Предлог появляется только в пассиве: we are faced with a problem.' },
+      { en: 'Let’s face it — цельная фраза', ru: 'it здесь ни на что не указывает и не меняется — не «let’s face them».' },
+    ],
+    examples: [
+      { en: 'Let’s face it, there isn’t enough time for this task.', ru: 'Давай признаем: на эту задачу недостаточно времени.' },
+      { en: 'Let’s face it, there isn’t enough time to complete this ticket.', ru: 'Давай посмотрим правде в глаза: у нас недостаточно времени, чтобы выполнить эту задачу.' },
+      { en: 'Let’s face it, it’s a complicated task.', ru: 'Давай признаем: это сложная задача.' },
+      { en: 'Let’s face it, this is a task with a lot of uncertainties.', ru: 'Давай признаем: в этой задаче много неопределённостей.' },
+      { en: 'Let’s face it, there are still a lot of unknowns in this task.', ru: 'Давай признаем: в этой задаче всё ещё много неизвестного.' },
+      { en: 'Now we’re facing the consequences of not allocating enough time for these tasks.', ru: 'Теперь мы сталкиваемся с последствиями того, что не выделили достаточно времени на эти задачи.' },
+    ],
+    compare: ['in-my-opinion', 'downplay-exaggerate'],
+  },
+  'this-these': {
+    title: 'this is / these are',
+    formula: 'This is + ед. число · These are + мн. число',
+    detail: `Когда представляем или показываем что-то рядом: один предмет или человек — this is, два и больше — these are.
+В русском мы говорим «это» в обоих случаях («это мои ключи»), поэтому легко сказать ✘ this is my keys. Меняется и слово this, и глагол be — оба сразу.`,
+    markers: ['this is', 'these are'],
+    use: [
+      { en: 'This is + one thing / person', ru: 'один предмет или человек', ex: 'This is my phone. — Это мой телефон.' },
+      { en: 'These are + two or more things / people', ru: 'два и больше', ex: 'These are my keys. — Это мои ключи.' },
+    ],
+    notes: [
+      { en: '✘ This is my keys.', ru: 'Слова типа keys, shoes, jeans, towels всегда множественные → только These are.' },
+      { en: 'That is my seat. Those are my friends.', ru: 'Та же логика, но про то, что не рядом: That is my seat. Those are my friends.' },
+    ],
+    examples: [
+      { en: 'This is my phone.', ru: 'Это мой телефон.' },
+      { en: 'This is my new jacket.' },
+      { en: 'This is my daughter.', ru: 'Это моя дочь.' },
+      { en: 'This is my favorite book.' },
+      { en: 'This is a good idea.' },
+      { en: 'This is my seat.' },
+      { en: 'This is our classroom.' },
+      { en: 'This is your coffee.' },
+      { en: 'This is my husband’s laptop.' },
+      { en: 'This is a really nice place.' },
+      { en: 'These are my shoes.', ru: 'Это мои туфли / кроссовки.' },
+      { en: 'These are my keys.', ru: 'Это мои ключи.' },
+      { en: 'These are my friends.' },
+      { en: 'These are my new jeans.' },
+      { en: 'These are your books.' },
+      { en: 'These are my daughter’s toys.' },
+      { en: 'These are our neighbors.' },
+      { en: 'These are clean towels.' },
+      { en: 'These are my favorite pictures.' },
+      { en: 'These are the documents you need.', ru: 'Это документы, которые тебе нужны.' },
+    ],
+    compare: ['be-adjective'],
+  },
+  'in-vain': {
+    title: 'in vain',
+    formula: 'be in vain · all for nothing',
+    detail: `In vain — напрасно / тщетно / зря. Говорят про усилия, жертвы или попытки, которые не дали результата.
+Почти всегда с глаголом be: our efforts were in vain. Подлежащее — именно усилие (work, efforts, sacrifices), а не человек.`,
+    markers: ['in vain', 'not in vain', 'wasn’t in vain', 'all in vain'],
+    use: [
+      { en: 'be in vain', ru: 'быть напрасным', ex: 'All our efforts were in vain. — Все наши усилия были напрасны.' },
+      { en: 'not be in vain', ru: 'не быть напрасным', ex: 'You need to make sure that all those sacrifices were not in vain. — Тебе нужно убедиться, что все эти жертвы были не напрасны.' },
+      { en: 'it was all in vain', ru: 'всё оказалось зря', ex: 'We spent weeks preparing, but it was all in vain. — Мы готовились неделями, но всё оказалось зря.' },
+    ],
+    notes: [
+      { en: 'in vain — всегда с in', ru: 'Без предлога vain — совсем другое слово («тщеславный»): a vain man — тщеславный человек.' },
+      { en: 'sacrifices that were not in vain', ru: 'Две темы хорошо работают вместе: сначала чем пожертвовали, потом — было ли это не напрасно.' },
+    ],
+    examples: [
+      { en: 'You need to make sure that all those sacrifices were not in vain.', ru: 'Тебе нужно убедиться, что все эти жертвы были не напрасны.' },
+      { en: 'I hope all our hard work wasn’t in vain.', ru: 'Надеюсь, вся наша тяжёлая работа была не напрасной.' },
+      { en: 'All our efforts were in vain.', ru: 'Все наши усилия были напрасны.' },
+      { en: 'We tried to fix the issue, but our efforts were in vain.', ru: 'Мы пытались исправить проблему, но наши усилия оказались напрасными.' },
+      { en: 'I don’t want all this work to be in vain.', ru: 'Я не хочу, чтобы вся эта работа была напрасной.' },
+      { en: 'We spent weeks preparing, but it was all in vain.', ru: 'Мы готовились неделями, но всё оказалось зря.' },
+    ],
+    compare: ['sacrifice', 'lets-face-it'],
+  },
+  'make-it': {
+    title: 'make it',
+    formula: 'can / can’t make it (+ to + место) (+ время)',
+    detail: `Make it — смочь прийти / успеть / добраться. Идеально для договорённостей и отмен: не нужно называть ни глагол движения, ни причину.
+Почти всегда с can / can’t / will be able to. it не меняется — это часть выражения.
+Время добавляем так: around 6 (примерно), by 5 (к пяти), место — через to: make it to the meeting.`,
+    markers: ['can make it', 'can’t make it', 'make it to', 'by', 'around'],
+    use: [
+      { en: 'can’t make it', ru: 'не смогу прийти / не получится', ex: 'She can’t make it on Sunday. — Она не сможет прийти в воскресенье.' },
+      { en: 'can make it + время', ru: 'смогу / успею', ex: 'I can make it around 6. — Я смогу примерно в 6.' },
+      { en: 'make it by + время', ru: 'успеть к какому-то часу', ex: 'Can you make it by 5? — Ты сможешь быть там к пяти?' },
+      { en: 'make it to + место / событие', ru: 'добраться / попасть куда-то', ex: 'Do you think you can make it to the meeting? — Думаешь, сможешь прийти на встречу?' },
+    ],
+    notes: [
+      { en: 'make it to the meeting, not ✘ make the meeting it', ru: '✘ I can’t make the meeting it. Событие добавляется только через to: make it to the meeting.' },
+      { en: 'Sorry, I can’t make it tonight. Can we reschedule?', ru: 'Sorry, I can’t make it tonight — готовая фраза, чтобы отменить встречу; дальше удобно сказать Can we reschedule?' },
+    ],
+    examples: [
+      { en: 'She can’t make it on Sunday.', ru: 'Она не сможет прийти в воскресенье.' },
+      { en: 'I won’t be able to make it tomorrow.', ru: 'Я не смогу прийти завтра.' },
+      { en: 'I can make it around 6.', ru: 'Я смогу примерно в 6.' },
+      { en: 'Can you make it by 5?', ru: 'Ты сможешь быть там к пяти?', q: true },
+      { en: 'I don’t think I can make it by 8.', ru: 'Не думаю, что успею к восьми.' },
+      { en: 'What time can you make it?', ru: 'Во сколько ты сможешь?', q: true },
+      { en: 'I can make it after work.', ru: 'Я смогу после работы.' },
+      { en: 'Sorry, I can’t make it tonight.', ru: 'Извини, сегодня вечером не получится.' },
+      { en: 'Do you think you can make it to the meeting?', ru: 'Думаешь, сможешь прийти на встречу?', q: true },
+    ],
+    compare: ['meet-up-reschedule', 'running-late'],
+  },
+  'could-you-tell-me': {
+    title: 'Could you tell me what…?',
+    formula: 'Can / Could you tell / show / explain + (to me) + what + подлежащее + глагол (+ предлог)',
+    detail: `Сначала главное про me. С глаголами explain и describe me сразу не идёт — нужен предлог to, и он ставится в конец:
+✘ Explain me this. → ☑ Explain this to me.
+✘ Describe me the situation. → ☑ Describe the situation to me.
+А вот tell и show берут me сразу: tell me, show me.
+Второе правило — после what вопрос уже не строим: порядок слов обычный, без do/does.
+✘ Can you tell me what does this service do? → ☑ Can you tell me what this service does?
+Третье — предлог остаётся в конце, где и стоял: used for, depends on, caused by, related to, referring to.`,
+    markers: ['Could you tell me', 'Can you show me', 'Do you know what', 'used for', 'depends on', 'caused by'],
+    use: [
+      { en: 'Can / Could you tell me what …', ru: 'Можешь сказать, что / за что …', ex: 'Can you tell me what this service is responsible for? — Можешь сказать, за что отвечает этот сервис?' },
+      { en: 'Can / Could you show me what …', ru: 'Можешь показать, …', ex: 'Could you show me what you’re working on? — Можешь показать, над чем ты работаешь?' },
+      { en: 'Could you explain what …', ru: 'Можешь объяснить, …', ex: 'Could you explain what this configuration is used for? — Можешь объяснить, для чего используется эта конфигурация?' },
+      { en: 'Do you know what …', ru: 'Ты знаешь, …', ex: 'Do you know what this value is used for? — Ты знаешь, для чего используется это значение?' },
+    ],
+    notes: [
+      { en: '✘ Explain me this. ☑ Explain this to me.', ru: 'explain и describe — только через to me, и после самого дела.' },
+      { en: '✘ Describe me the situation. ☑ Describe the situation to me.', ru: 'То же самое. А tell и show — наоборот: tell me the news, show me the code.' },
+      { en: 'what this depends on / what this error is caused by', ru: 'В таких вопросах предлог не убегает вперёд: what this depends on, what this error is caused by. По-русски он в начале («от чего»), в английском — в конце.' },
+      { en: 'Could you …? is softer than Can you …?', ru: 'Смысл один, но Could you …? мягче — удобно с незнакомыми коллегами.' },
+    ],
+    examples: [
+      { en: 'Could you show me what you’re working on?', ru: 'Можешь показать, над чем ты работаешь?', q: true },
+      { en: 'Can you tell me what this service is responsible for?', ru: 'Можешь сказать, за что отвечает этот сервис?', q: true },
+      { en: 'Could you explain what this configuration is used for?', ru: 'Можешь объяснить, для чего используется эта конфигурация?', q: true },
+      { en: 'Do you know what this value is used for?', ru: 'Ты знаешь, для чего используется это значение?', q: true },
+      { en: 'Can you show me what you’re looking at?', ru: 'Можешь показать, на что ты смотришь?', q: true },
+      { en: 'Could you tell me what this depends on?', ru: 'Можешь сказать, от чего это зависит?', q: true },
+      { en: 'Do you know what this issue is related to?', ru: 'Ты знаешь, с чем связана эта проблема?', q: true },
+      { en: 'Can you explain what this error is caused by?', ru: 'Можешь объяснить, чем вызвана эта ошибка?', q: true },
+      { en: 'Could you show me what repository you’re referring to?', ru: 'Можешь показать, о каком репозитории ты говоришь?', q: true },
+      { en: 'Explain this to me.', ru: 'Объясни мне это.' },
+      { en: 'Describe the situation to me.', ru: 'Опиши мне ситуацию.' },
+    ],
+    compare: ['reported-questions', 'in-my-opinion'],
+  },
+  'useful-phrases': {
+    title: 'Useful phrases',
+    formula: 'готовые фразы — берём целиком',
+    detail: `Общая копилка для отдельных фраз, которым не нужен свой раздел. Пополняется по ходу дела.
+Здесь нет одного правила — фразы учим целиком, как шаблон, меняя только лицо и время.`,
+    markers: ['I changed my mind', 'you froze', 'you’re breaking up', 'a good fit for', 'slowing us down', 'meet a deadline'],
+    use: [
+      { en: 'I changed my mind.', ru: 'Я передумал.', ex: 'I changed my mind — let’s keep the old approach.' },
+      { en: 'You froze. / You’re breaking up.', ru: 'Ты завис. / Тебя плохо слышно — про связь на созвоне.', ex: 'You froze for a second. I think the connection is bad.' },
+      { en: 'I hate to break the news, but…', ru: 'Не хочется расстраивать, но… — плохая новость команде.', ex: 'I hate to break the news, but we’re running behind schedule.' },
+      { en: 'a deadline that we need to meet', ru: 'дедлайн, в который нужно уложиться', ex: 'We have a strict deadline that we need to meet.' },
+      { en: 'slow somebody down', ru: 'тормозить кого-то', ex: 'What is slowing us down? — Что нас тормозит?' },
+      { en: 'be a good fit for', ru: 'хорошо подходит для', ex: 'Go is a good fit for this use case.' },
+    ],
+    notes: [
+      { en: 'slowing us down, not ✘ slowing down us', ru: 'Местоимение всегда внутри: slowing us down, не «slowing down us». Существительное можно и так, и так: slowing the project down / slowing down the project.' },
+      { en: 'break the news ≠ be breaking up', ru: 'Два разных break: break the news — сообщить новость (часто плохую), be breaking up — прерываться на связи.' },
+      { en: 'meet a deadline, not ✘ do / keep a deadline', ru: 'Срок не «do» и не «keep», а meet: a strict deadline that we need to meet.' },
+      { en: 'suggestions on how we can …', ru: 'После suggestions идёт on: suggestions on how we can improve our process.' },
+    ],
+    examples: [
+      { en: 'I changed my mind.', ru: 'Я передумал.' },
+      { en: 'I won’t tell this.', ru: 'Я этого не скажу.' },
+      { en: 'I want to find myself at a high-paying job that I love.', ru: 'Хочу оказаться на высокооплачиваемой работе, которую люблю.' },
+      { en: 'Because the service needs to handle a high load, Go is a good fit for this use case.', ru: 'Поскольку сервису нужно держать большую нагрузку, Go хорошо подходит для этого случая.' },
+      { en: 'You froze. The connection is bad.', ru: 'Ты завис. Связь плохая.' },
+      { en: 'You froze for a second. I think the connection is bad.', ru: 'Ты на секунду завис. Кажется, связь плохая.' },
+      { en: 'You’re breaking up.', ru: 'Ты прерываешься / тебя плохо слышно из-за связи.' },
+      { en: 'Guys, I hate to break the news, but we’re running behind schedule, and we have a strict deadline that we need to meet.', ru: 'Ребята, не хочется расстраивать, но мы отстаём от графика, а у нас жёсткий дедлайн, в который нужно уложиться.' },
+      { en: 'Does anyone have any suggestions on how we can improve our process and speed things up?', ru: 'Есть у кого-нибудь идеи, как улучшить процесс и ускориться?', q: true },
+      { en: 'What is slowing us down?', ru: 'Что нас тормозит?', q: true },
+      { en: 'We need to figure out what’s slowing us down.', ru: 'Нужно понять, что нас тормозит.' },
+      { en: 'Is anything slowing you down?', ru: 'Тебя что-то тормозит?', q: true },
+      { en: 'This issue is slowing us down.', ru: 'Эта проблема нас тормозит.' },
+      { en: 'What’s slowing the project down?', ru: 'Что тормозит проект?', q: true },
+    ],
+    compare: ['running-late', 'could-you-tell-me'],
   },
 };
 
