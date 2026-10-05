@@ -1,5 +1,5 @@
 import { TOPICS, TOPIC_INDEX, findGroup, findSubgroup } from '../../data/grammar.js';
-import { crumbs, esc, formulaSchema, markPattern, patternOf } from '../ui.js';
+import { crumbs, esc, formulaSchema, markerChip, markPattern, patternOf } from '../ui.js';
 import { mountPractice } from './practice.js';
 
 export async function renderTopic(root, topicId) {
@@ -46,7 +46,7 @@ export async function renderTopic(root, topicId) {
           ${t.markers?.length ? `
             <div class="markers">
               <span class="markers-label">Маркеры</span>
-              ${t.markers.map((w) => `<span class="marker">${esc(w)}</span>`).join('')}
+              ${t.markers.map((w) => markerChip(w)).join('')}
             </div>` : ''}
         </div>`}
     </section>

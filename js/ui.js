@@ -142,3 +142,17 @@ export function toast(message, ms = 4000) {
     setTimeout(() => node.remove(), 250);
   }, ms);
 }
+
+/**
+ * Маркеры — слова, которые надо услышать, а не только прочитать: каждый ведёт
+ * на YouGlish с живыми примерами из видео. В конспекте маркеры записаны как
+ * подсказки («How long…?», «if… had»), поэтому многоточия и знаки препинания
+ * из запроса убираются; если после чистки ничего не осталось, ссылки нет.
+ */
+export function markerChip(word) {
+  const q = String(word).replace(/[….?!,;:]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!q) return `<span class="marker">${esc(word)}</span>`;
+  const href = `https://youglish.com/pronounce/${encodeURIComponent(q)}/english/us`;
+  return `<a class="marker" href="${esc(href)}" target="_blank" rel="noopener noreferrer"
+    title="Послушать на YouGlish">${esc(word)}</a>`;
+}
