@@ -1,12 +1,13 @@
 ---
-name: git-commit
-description: Safely prepare and create a Git commit in this repository. Use when the user asks to commit changes, commit my changes, create a commit, "закоммить изменения", or "сделай коммит". Always inspects the working tree, proposes a Conventional Commits message, and waits for explicit approval before staging or committing. Pushes only after a separate explicit yes, and only a clean fast-forward.
+name: git-commit-push
+description: Safely prepare a Git commit in this repository and then offer to push it. Use when the user asks to commit changes, commit my changes, create a commit, push the changes, "закоммить изменения", "сделай коммит" or "запушь". Always inspects the working tree, proposes a Conventional Commits message, and waits for explicit approval before staging or committing; the push is a separate question, and it pulls with a rebase first.
 ---
 
-# git-commit
+# git-commit-push
 
-Prepare and create a Git commit safely. The confirmation step is a **hard requirement** —
-never stage files and never create a commit before the user explicitly approves the proposal.
+Prepare and create a Git commit safely, then offer to push it. The confirmation step is a
+**hard requirement** — never stage files and never create a commit before the user explicitly
+approves the proposal, and never push before a separate explicit yes.
 
 ## Phase 1 — Inspect (always, before anything else)
 
@@ -72,30 +73,24 @@ Omit the "Excluded / unrelated files" block only when there is nothing to exclud
 
 ## Phase 4 — Ask about pushing (never push silently)
 
-After the commit, check how the branch stands against its remote and ask the user whether to
-push. The push itself always needs a separate explicit `yes`.
+After the commit, ask the user whether to push. The push always needs a separate explicit
+`yes` — reporting the commit is not approval to push.
 
-1. `git fetch` the branch's remote, then
-   `git rev-list --left-right --count @{upstream}...HEAD` to get `behind  ahead`.
-2. Report the state in one line, for example: `main: ahead 2, behind 0 (origin/main)`.
-3. A push is safe to offer only when **all** of these hold:
-   - the branch is `main` (or whatever branch the user is already working on — never switch);
-   - it has an upstream;
-   - `ahead` is a small number (one or a couple of commits), and `behind` is `0`, so the push
-     is a plain fast-forward with nothing to merge and no conflicts.
-   Then ask:
+1. Ask, naming the branch and how many commits are not on the remote
+   (`git rev-list --count @{upstream}..HEAD`, or "unpushed" when there is no upstream):
 
    ```
    Push <n> commit(s) to <remote>/<branch>?
    ```
 
-   On an explicit `yes`, run `git push` (no flags) and report its output.
-4. When `behind` is not `0`, the history has diverged: do **not** push and do **not** rebase,
-   merge or pull on your own. Say the remote moved ahead by `behind` commits and that the
-   branch needs a `git pull --rebase` first — and let the user decide.
-5. When `ahead` is larger than a couple of commits, or there is no upstream, do not offer the
-   push: report the state and let the user push by hand.
-6. If the user declines, say nothing more about it and stop.
+2. On an explicit `yes`, first bring the remote work in: `git pull --rebase`.
+   - Clean pull (or nothing to pull) → run `git push` (no flags) and report its output.
+   - Conflicts, a stopped rebase, or any other failure → stop. Do **not** push, do **not**
+     resolve the conflicts and do **not** `git rebase --abort` on your own: report what git
+     said and let the user decide.
+3. Never push a branch that has no upstream without the user saying where to push it; report
+   the state instead of guessing a remote.
+4. If the user declines, say nothing more about it and stop.
 
 ## Commit message rules
 
@@ -123,8 +118,8 @@ Rules:
 
 - **Never** run `git push` without the explicit `yes` from Phase 4 — not even on `main`, and
   not as part of the commit step.
-- **Never** push a diverged branch (`behind` ≠ 0), and never pull, rebase or merge to make a
-  push possible.
+- Before a push, `git pull --rebase` is allowed (Phase 4) — but if it stops on a conflict,
+  leave the tree as git left it and report; never resolve, abort or force your way through.
 - **Never** create a new branch or switch branches as part of this workflow.
 - **Never** use `git push --force` or `git push -f`.
 - `--force-with-lease` may be used only after a rebase, and only when the user explicitly

@@ -50,9 +50,9 @@ The subject matter of everything the model writes is decided in exactly one plac
 ## Git
 
 `main` is the working branch: commits go straight to it, and new branches are not created
-for this repository. A push happens only after you ask and the answer is yes, and only when
-`main` is a couple of commits ahead of its remote with nothing to merge back (`behind` is 0);
-otherwise the push stays manual. See the `git-commit` skill for the exact check.
+for this repository. A push happens only after you ask and the answer is yes; then `git pull
+--rebase` comes first, and the push follows only if that pull was clean. See the
+`git-commit-push` skill.
 
 Commit messages in this repository never carry a `Co-Authored-By` trailer for Claude or any
 other AI assistant, and never mention Claude, AI or automation. This overrides any default
