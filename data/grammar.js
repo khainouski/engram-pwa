@@ -151,10 +151,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what…',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what…',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few',
   },
 ];
 
@@ -1312,7 +1312,7 @@ I’m late — уже опоздал. I’m running late — ещё в пути,
       { en: 'These are my favorite pictures.' },
       { en: 'These are the documents you need.', ru: 'Это документы, которые тебе нужны.' },
     ],
-    compare: ['be-adjective'],
+    compare: ['be-adjective', 'little-few'],
   },
   'in-vain': {
     title: 'in vain',
@@ -1406,6 +1406,40 @@ I’m late — уже опоздал. I’m running late — ещё в пути,
       { en: 'Describe the situation to me.', ru: 'Опиши мне ситуацию.' },
     ],
     compare: ['reported-questions', 'in-my-opinion'],
+  },
+  'little-few': {
+    title: 'little / a little · few / a few',
+    formula: 'little / a little + uncountable · few / a few + countable plural',
+    detail: `little / a little — с неисчисляемыми: time, money, water, patience, experience.
+few / a few — с исчисляемыми во множественном числе: friends, books, days, problems.
+Всё решает артикль a: без него — мало, недостаточно, почти нет; с ним — немного / несколько, но есть.`,
+    markers: ['little', 'a little', 'few', 'a few'],
+    use: [
+      { en: 'little + uncountable', ru: 'мало, недостаточно', ex: 'I have little time. — У меня мало времени.' },
+      { en: 'a little + uncountable', ru: 'немного', ex: 'I have a little time. — У меня есть немного времени.' },
+      { en: 'few + countable plural', ru: 'мало, почти нет', ex: 'I have few friends here. — У меня здесь мало друзей.' },
+      { en: 'a few + countable plural', ru: 'несколько', ex: 'I have a few friends here. — У меня здесь есть несколько друзей.' },
+    ],
+    notes: [
+      { en: 'little = мало, a little = немного', ru: 'Артикль меняет смысл: little time — времени мало (не хватает), a little time — немного времени есть.' },
+      { en: 'few = мало, почти нет; a few = несколько', ru: 'few friends — друзей почти нет; a few friends — несколько друзей есть.' },
+      { en: 'little / a little — uncountable, few / a few — countable', ru: 'Выбор пары зависит от слова: time, money, water — little; friends, books, days — few.' },
+    ],
+    examples: [
+      { en: 'I have little time.', ru: 'У меня мало времени.' },
+      { en: 'We have little money left.', ru: 'У нас осталось мало денег.' },
+      { en: 'I have little patience today.', ru: 'У меня сегодня мало терпения.' },
+      { en: 'I have a little time.', ru: 'У меня есть немного времени.' },
+      { en: 'I speak a little Spanish.', ru: 'Я немного говорю по-испански.' },
+      { en: 'Add a little water.', ru: 'Добавь немного воды.' },
+      { en: 'I have few friends here.', ru: 'У меня здесь мало друзей.' },
+      { en: 'Few people came.', ru: 'Пришло мало людей.' },
+      { en: 'We have few options.', ru: 'У нас мало вариантов.' },
+      { en: 'I have a few friends here.', ru: 'У меня здесь есть несколько друзей.' },
+      { en: 'Give me a few minutes.', ru: 'Дай мне несколько минут.' },
+      { en: 'I have a few questions.', ru: 'У меня есть несколько вопросов.' },
+    ],
+    compare: ['this-these', 'running-late'],
   },
   'time-prepositions': {
     title: 'Prepositions of Time (18 prepositions)',
