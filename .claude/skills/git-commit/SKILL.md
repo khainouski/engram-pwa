@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Safely prepare and create a Git commit in this repository. Use when the user asks to commit changes, commit my changes, create a commit, "закоммить изменения", or "сделай коммит". Always inspects the working tree, proposes a Conventional Commits message, and waits for explicit approval before staging or committing. Never pushes.
+description: Safely prepare and create a Git commit in this repository. Use when the user asks to commit changes, commit my changes, create a commit, "закоммить изменения", or "сделай коммит". Always inspects the working tree, proposes a Conventional Commits message, and waits for explicit approval before staging or committing. Pushes only after a separate explicit yes, and only a clean fast-forward.
 ---
 
 # git-commit
@@ -68,9 +68,34 @@ Omit the "Excluded / unrelated files" block only when there is nothing to exclud
    looks off). If the staged set does not match the approved list, stop and report.
 3. Create the commit with the approved message, using a heredoc for the message body.
 4. Report the resulting commit hash and the final commit message (`git log -1 --stat`).
-5. Stop.
+5. Continue with Phase 4 — the push question. Do nothing else.
 
-Do **not** push. Do not continue with any further Git operation.
+## Phase 4 — Ask about pushing (never push silently)
+
+After the commit, check how the branch stands against its remote and ask the user whether to
+push. The push itself always needs a separate explicit `yes`.
+
+1. `git fetch` the branch's remote, then
+   `git rev-list --left-right --count @{upstream}...HEAD` to get `behind  ahead`.
+2. Report the state in one line, for example: `main: ahead 2, behind 0 (origin/main)`.
+3. A push is safe to offer only when **all** of these hold:
+   - the branch is `main` (or whatever branch the user is already working on — never switch);
+   - it has an upstream;
+   - `ahead` is a small number (one or a couple of commits), and `behind` is `0`, so the push
+     is a plain fast-forward with nothing to merge and no conflicts.
+   Then ask:
+
+   ```
+   Push <n> commit(s) to <remote>/<branch>?
+   ```
+
+   On an explicit `yes`, run `git push` (no flags) and report its output.
+4. When `behind` is not `0`, the history has diverged: do **not** push and do **not** rebase,
+   merge or pull on your own. Say the remote moved ahead by `behind` commits and that the
+   branch needs a `git pull --rebase` first — and let the user decide.
+5. When `ahead` is larger than a couple of commits, or there is no upstream, do not offer the
+   push: report the state and let the user push by hand.
+6. If the user declines, say nothing more about it and stop.
 
 ## Commit message rules
 
@@ -96,7 +121,10 @@ Rules:
 
 ## Git safety rules (mandatory)
 
-- **Never** run `git push` automatically — not even on `main`. The user pushes manually.
+- **Never** run `git push` without the explicit `yes` from Phase 4 — not even on `main`, and
+  not as part of the commit step.
+- **Never** push a diverged branch (`behind` ≠ 0), and never pull, rebase or merge to make a
+  push possible.
 - **Never** create a new branch or switch branches as part of this workflow.
 - **Never** use `git push --force` or `git push -f`.
 - `--force-with-lease` may be used only after a rebase, and only when the user explicitly
