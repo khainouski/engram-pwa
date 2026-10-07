@@ -33,6 +33,10 @@ Ask with a single question, three options, in this order:
 Ask even when the answer looks obvious from the notes; the learner decides where their own
 page belongs. Say in one line which one the notes look like, then wait for the choice.
 
+**Useful phrases is never a new page.** That section is one shared collection — the
+`useful-phrases` topic — and phrases are appended to it. Do not offer a new page there and do
+not ask about it: on that choice, skip to Phase 4b.
+
 ## Phase 3 — Study the section before writing
 
 Read the chosen group in `GROUPS` and **two or three** of its topics in `TOPICS` end to end.
@@ -72,6 +76,23 @@ the same way Russian is used. If the section's pages carry `markers`, the new on
 5. **Bump `VERSION` in `sw.js`** (`v64` → `v65`). `data/grammar.js` is already in `SHELL`, so
    nothing is added there — but without the bump installed apps keep the old page list.
 
+## Phase 4b — Append to Useful phrases instead (that section only)
+
+Nothing new is created: the `useful-phrases` topic grows. Keep its field order and its style,
+and append to the end of each list so the page reads in order of addition:
+
+1. `markers` — the new English trigger words.
+2. `use` — one `{ en, ru, ex }` per phrase group: `en` is the form (`be caused by …`), `ru` the
+   meaning, `ex` one of the note's own sentences.
+3. `notes` — only what the note itself shows (two wordings of the same thing, a `text` vs
+   `message` distinction). Do not invent traps.
+4. `examples` — every sentence from the note, in the note's order. When the note gives no
+   Russian, translate each one faithfully; the page's examples all carry `ru`.
+5. The group's `subtitle` and `mix` — append the new themes in Russian, in the existing style.
+6. Bump `VERSION` in `sw.js`.
+
+The group's `topics` array does not change, and neither does `compare`.
+
 ## Phase 5 — Verify and report
 
 1. Check the file still parses and the page is wired up:
@@ -81,6 +102,8 @@ the same way Russian is used. If the section's pages carry `markers`, the new on
    ```
 
 2. Report the new id, its URL (`#/t/<id>`), the section it landed in, and the new `VERSION`.
+   For an append (Phase 4b), report what grew instead: how many `use`, `notes` and `examples`
+   entries the `useful-phrases` page now has, and the new `VERSION`.
 3. Do **not** commit. Committing is the `git-commit-push` skill, and only when the user asks.
 
 ## Content rules (mandatory)
