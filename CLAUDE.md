@@ -39,6 +39,12 @@ Hash router → view modules → shared UI helpers → storage/Gemini.
 
 The subject matter of everything the model writes is decided in exactly one place: `CONTEXTS` in `js/storage.js`, chosen by the user in Settings and turned into an instruction by `systemFor()`/`contextLine()` in `js/gemini.js`. Prompts in `js/prompts.js` must defer to it ("the contexts from your instructions") and must never name a setting of their own — a hardcoded "a work context is preferred" silently overrides the user's choice. The default is `['it']`, which is what the app did before the setting existed.
 
+## Skills
+
+- `add-grammar-page` — turns a pasted block of the learner's notes into a new topic page: asks
+  which section it belongs to, then follows the shape of that section's existing topics.
+- `git-commit-push` — commit, and then the push question.
+
 ## Conventions
 
 - UI copy, errors and comments-about-content are in Russian; code comments explain *why*, in the prose style already in the files.
