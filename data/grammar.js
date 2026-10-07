@@ -133,12 +133,28 @@ export const GROUPS = [
     topics: ['reported-statements', 'reported-questions', 'reported-commands', 'reported-real-life', 'reported-phrases'],
   },
   {
+    id: 'useful-grammar',
+    title: 'Useful Grammar',
+    subtitle: 'Prepositions of Time',
+    icon: '📐',
+    topics: ['time-prepositions'],
+    mix: 'at · in · on · by · until · from · since · for · during · within · after · before · around · past · to · throughout · ago · between',
+  },
+  {
+    id: 'phrases',
+    title: 'Useful phrases',
+    subtitle: 'готовые фразы — связь, созвоны, темп работы',
+    icon: '💬',
+    topics: ['useful-phrases'],
+    mix: 'полезные фразы (связь, созвоны, темп работы)',
+  },
+  {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · предлоги времени · полезные фразы',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what…',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'time-prepositions', 'useful-phrases'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / at · in · on · by · until · from · since · for · during · within · after · before · around · past · to · throughout · ago · between / полезные фразы (связь, созвоны, темп работы)',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what…',
   },
 ];
 
@@ -1392,7 +1408,7 @@ I’m late — уже опоздал. I’m running late — ещё в пути,
     compare: ['reported-questions', 'in-my-opinion'],
   },
   'time-prepositions': {
-    title: 'Prepositions of Time (18 предлогов)',
+    title: 'Prepositions of Time (18 prepositions)',
     formula: 'at · in · on · by · until · from · since · for · during · within · after · before · around · past · to · throughout · ago · between',
     intro: 'Восемнадцать предлогов времени: каждый отвечает на свой вопрос — когда, с каких пор, как долго, к какому сроку.',
     patterns: [
