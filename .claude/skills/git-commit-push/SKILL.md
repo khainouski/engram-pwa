@@ -73,8 +73,14 @@ Omit the "Excluded / unrelated files" block only when there is nothing to exclud
 
 ## Phase 4 — Ask about pushing (never push silently)
 
-After the commit, ask the user whether to push. The push always needs a separate explicit
-`yes` — reporting the commit is not approval to push.
+Every commit ends with this question — never skip it and never push on your own. The user
+often stacks a few commits and pushes them together, so "no" is a normal answer: the commits
+simply stay local, and the next `yes` pushes all of them at once.
+
+The only time the question is not asked is when that same request already said to push
+("закоммить и запушь") — the answer is already there. A request to push with nothing to commit
+(`git status` clean, "запушь") starts here too: skip Phases 1–3 and push what is already
+committed.
 
 1. Ask, naming the branch and how many commits are not on the remote
    (`git rev-list --count @{upstream}..HEAD`, or "unpushed" when there is no upstream):
@@ -90,7 +96,8 @@ After the commit, ask the user whether to push. The push always needs a separate
      said and let the user decide.
 3. Never push a branch that has no upstream without the user saying where to push it; report
    the state instead of guessing a remote.
-4. If the user declines, say nothing more about it and stop.
+4. If the user declines, stop without a word about it: the commits wait for the next push, and
+   the question comes back after the next commit.
 
 ## Commit message rules
 
