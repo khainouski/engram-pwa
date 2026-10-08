@@ -7,7 +7,7 @@
  * Gemini API → not touched at all.
  */
 
-const VERSION = 'v69';
+const VERSION = 'v72';
 const CACHE = `engram-${VERSION}`;
 
 /** App shell. Cached separately, see install. */
