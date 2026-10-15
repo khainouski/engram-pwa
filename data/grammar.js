@@ -151,10 +151,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing · figure out · fall',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing · figure out · fall · miss / skip',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall', 'miss-skip'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on / miss · skip',
   },
 ];
 
@@ -1250,7 +1250,7 @@ I’m late — уже опоздал. I’m running late — ещё в пути,
       { en: 'We’re running ahead of schedule.', ru: 'Мы идём с опережением графика.' },
       { en: 'We’re right on schedule.', ru: 'Мы идём точно по графику.' },
     ],
-    compare: ['meet-up-reschedule', 'ahead-vs-in-front', 'fall'],
+    compare: ['meet-up-reschedule', 'ahead-vs-in-front', 'fall', 'miss-skip'],
   },
   'lets-face-it': {
     title: 'Let’s face it',
@@ -1633,7 +1633,39 @@ Let’s keep working on it — давай продолжим. Keep me posted —
       { en: 'If the new solution doesn’t work, we can fall back on the old one.', ru: 'Если новое решение не сработает, мы можем вернуться к старому.' },
       { en: 'Once we understood the architecture, everything started to fall into place.', ru: 'Как только мы разобрались в архитектуре, всё начало становиться на свои места.' },
     ],
-    compare: ['running-late', 'figure-out'],
+    compare: ['running-late', 'figure-out', 'miss-skip'],
+  },
+  'miss-skip': {
+    title: 'miss / skip',
+    formula: 'miss + noun · skip + noun',
+    detail: `Miss — пропустить что-то случайно, не успеть, упустить возможность (а ещё — скучать).
+Skip — намеренно пропустить что-то, не делать, перейти к следующему.
+Разница только в намерении: I missed the meeting — забыл или не успел; I decided to skip the meeting — решил не идти.`,
+    markers: ['miss the meeting', 'miss your call', 'miss the bus', 'miss an opportunity', 'skip this part', 'skip breakfast'],
+    use: [
+      { en: 'miss + noun', ru: 'пропустить случайно, не успеть', ex: 'I missed the meeting. — Я пропустил встречу.' },
+      { en: 'miss an opportunity', ru: 'упустить возможность', ex: 'I don’t want to miss this opportunity. — Я не хочу упустить эту возможность.' },
+      { en: 'miss a detail', ru: 'упустить деталь, не заметить', ex: 'You missed an important detail. — Ты упустил важную деталь.' },
+      { en: 'skip + noun', ru: 'намеренно пропустить, не делать', ex: 'I decided to skip the meeting. — Я решил не идти на встречу.' },
+      { en: 'Let’s skip … / Can we skip …?', ru: 'давай пропустим — перейти к следующему', ex: 'Let’s skip this part. — Давай пропустим эту часть.' },
+    ],
+    notes: [
+      { en: 'I missed the meeting ≠ I skipped the meeting', ru: 'miss — случайно (забыл, не успел), skip — намеренно (решил не идти).' },
+      { en: 'I missed the bus.', ru: 'Про транспорт — miss: опоздал на автобус, не успел на него.' },
+    ],
+    examples: [
+      { en: 'I missed the meeting.', ru: 'Я пропустил встречу (например, забыл или не успел).' },
+      { en: 'I missed your call.', ru: 'Я пропустил твой звонок.' },
+      { en: 'I missed the bus.', ru: 'Я опоздал на автобус.' },
+      { en: 'I don’t want to miss this opportunity.', ru: 'Я не хочу упустить эту возможность.' },
+      { en: 'You missed an important detail.', ru: 'Ты упустил важную деталь.' },
+      { en: 'Let’s skip this part.', ru: 'Давай пропустим эту часть.' },
+      { en: 'I decided to skip the meeting.', ru: 'Я решил не идти на встречу.' },
+      { en: 'Don’t skip breakfast.', ru: 'Не пропускай завтрак.' },
+      { en: 'Can we skip this question?', ru: 'Можем пропустить этот вопрос?', q: true },
+      { en: 'I skipped the gym yesterday.', ru: 'Я вчера не пошёл в спортзал (решил пропустить тренировку).' },
+    ],
+    compare: ['running-late', 'fall'],
   },
   'time-prepositions': {
     title: 'Prepositions of Time (18 prepositions)',
