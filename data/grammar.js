@@ -151,10 +151,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing · figure out',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out',
   },
 ];
 
@@ -1514,7 +1514,7 @@ It’s worth + глагол с -ing — стоит сделать: worth checkin
       { en: 'It’s worth considering this option.', ru: 'Стоит рассмотреть этот вариант.' },
       { en: 'Was it worth doing?', ru: 'Стоило ли это делать?', q: true },
     ],
-    compare: ['make-it', 'the-least-the-most', 'keep-ing'],
+    compare: ['make-it', 'the-least-the-most', 'keep-ing', 'figure-out'],
   },
   'keep-ing': {
     title: 'keep + V-ing / keep me posted',
@@ -1553,7 +1553,34 @@ Let’s keep working on it — давай продолжим. Keep me posted —
       { en: 'Keep me posted on any changes.', ru: 'Держи меня в курсе любых изменений.' },
       { en: 'Keep me posted on how it goes.', ru: 'Держи меня в курсе, как пойдёт.' },
     ],
-    compare: ['manage-to-worth', 'try-not-to'],
+    compare: ['manage-to-worth', 'try-not-to', 'figure-out'],
+  },
+  'figure-out': {
+    title: 'figure out',
+    formula: 'figure out + how / what / why · figure it out',
+    detail: `figure out — разобраться, выяснить, понять: своим умом дойти до того, как что-то работает или что произошло.
+Чаще всего идёт с вопросительным словом: figure out how it works, figure out what happened, figure out why it doesn’t work, figure out how to fix it.
+Если то, в чём надо разобраться, уже понятно из контекста, говорят просто figure it out — местоимение встаёт между figure и out.
+В речи звучит слитно — «фигари даут».`,
+    markers: ['figure out', 'figure it out', 'I’ll figure it out', 'haven’t figured it out yet'],
+    use: [
+      { en: 'figure out how / what / why …', ru: 'разобраться, как / выяснить, что / понять, почему', ex: 'I need to figure out how it works. — Мне нужно разобраться, как это работает.' },
+      { en: 'figure out how to + verb', ru: 'понять, как что-то сделать', ex: 'I need to figure out how to fix it. — Мне нужно понять, как это исправить.' },
+      { en: 'figure it out', ru: 'разобраться с этим — когда предмет уже понятен из контекста', ex: 'I’ll figure it out. — Я разберусь.' },
+    ],
+    notes: [
+      { en: 'figure it out, not ✘ figure out it', ru: 'Местоимение всегда внутри: figure it out, figure this out. Существительное может стоять и после out.' },
+      { en: 'I haven’t figured it out yet.', ru: 'Про «пока не разобралась» — Present Perfect с yet: haven’t figured it out yet.' },
+    ],
+    examples: [
+      { en: 'I need to figure out how it works.', ru: 'Мне нужно разобраться, как это работает.' },
+      { en: 'I need to figure out what happened.', ru: 'Мне нужно выяснить, что произошло.' },
+      { en: 'I need to figure out why it doesn’t work.', ru: 'Мне нужно разобраться, почему это не работает.' },
+      { en: 'I need to figure out how to fix it.', ru: 'Мне нужно понять, как это исправить.' },
+      { en: 'I haven’t figured it out yet.', ru: 'Я ещё не разобралась.' },
+      { en: 'I’ll figure it out.', ru: 'Я разберусь.' },
+    ],
+    compare: ['manage-to-worth', 'keep-ing'],
   },
   'time-prepositions': {
     title: 'Prepositions of Time (18 prepositions)',
