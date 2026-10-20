@@ -151,10 +151,10 @@ export const GROUPS = [
   {
     id: 'useful-constructions',
     title: 'Useful Constructions',
-    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing · figure out · fall · miss / skip',
+    subtitle: 'used to · not to · every other · on my own · try not to · to be + adjective · downplay / exaggerate · actually · am I right? · sacrifice · in my opinion · ahead of / in front of · meet up / reschedule · late & schedule · let’s face it · this is / these are · in vain · make it · could you tell me what… · little / few · the least / the most · manage to / it’s worth · keep + V-ing · figure out · fall · miss / skip · come up with / end up / run into',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall', 'miss-skip'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on / miss · skip',
+    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall', 'miss-skip', 'phrasal-verbs-core'],
+    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on / miss · skip / figure out · come up with · end up · look forward to · bring up · run into · bump into',
   },
 ];
 
@@ -1666,6 +1666,51 @@ Skip — намеренно пропустить что-то, не делать,
       { en: 'I skipped the gym yesterday.', ru: 'Я вчера не пошёл в спортзал (решил пропустить тренировку).' },
     ],
     compare: ['running-late', 'fall'],
+  },
+  'phrasal-verbs-core': {
+    title: 'come up with · end up · bring up · run into',
+    formula: 'come up with + идея · end up + V-ing · look forward to + V-ing · bring up + тема · run into / bump into + кто-то',
+    detail: `Семь оборотов, которые в речи встречаются каждый день. У всех есть русский однословный перевод, и выучивать их проще целиком, вместе с предлогом.
+figure out — разобраться, дойти своим умом (у него есть отдельная страница).
+come up with — придумать, предложить: не просто «подумать», а выдать идею или решение.
+end up — в итоге оказаться, закончить тем, что…; после end up идёт -ing или существительное: ended up working late.
+look forward to — с нетерпением ждать; to здесь предлог, поэтому дальше -ing, а не инфинитив: looking forward to meeting you.
+bring up — поднять тему, завести разговор о чём-то (а ещё — растить детей).
+run into — случайно столкнуться: и с человеком, и с проблемой. bump into — то же самое про людей, чуть более разговорное; про проблемы говорят run into, не bump into.`,
+    markers: ['come up with', 'ended up', 'look forward to', 'bring up', 'run into', 'bump into', 'figure out'],
+    use: [
+      { en: 'figure out + how / what / why', ru: 'разобраться, выяснить — своим умом', ex: 'I need to figure out how it works. — Мне нужно разобраться, как это работает.' },
+      { en: 'come up with + idea / solution', ru: 'придумать, предложить', ex: 'I came up with a faster caching solution. — Я придумал более быстрое решение с кэшем.' },
+      { en: 'end up + V-ing / + noun', ru: 'в итоге оказаться, закончить тем, что…', ex: 'I ended up working late. — В итоге я задержался на работе.' },
+      { en: 'look forward to + V-ing', ru: 'с нетерпением ждать', ex: 'I’m looking forward to working with you. — С нетерпением жду работы с вами.' },
+      { en: 'bring up + тема', ru: 'поднять тему, завести разговор', ex: 'I’ll bring it up at the meeting. — Я подниму это на встрече.' },
+      { en: 'run into + человек / проблема', ru: 'случайно встретить · наткнуться на проблему', ex: 'We ran into a problem with the deployment. — Мы наткнулись на проблему с деплоем.' },
+      { en: 'bump into + человек', ru: 'случайно столкнуться с кем-то', ex: 'I bumped into an old colleague yesterday. — Я вчера случайно встретил бывшего коллегу.' },
+    ],
+    notes: [
+      { en: 'look forward to meeting you, not ✘ to meet you', ru: 'to здесь предлог, а не частица инфинитива — после него всегда -ing.' },
+      { en: 'I’m looking forward to … / I look forward to …', ru: 'Continuous — обычная живая речь, Simple — вежливее и формальнее, для писем.' },
+      { en: 'run into a problem, but ✘ bump into a problem', ru: 'С проблемами идёт только run into. bump into — про людей.' },
+      { en: 'bring it up, not ✘ bring up it', ru: 'Местоимение встаёт внутрь: bring it up, bring this up. Существительное может стоять и после up: bring up the topic.' },
+      { en: 'end up + V-ing', ru: 'После end up — -ing или существительное: ended up staying, ended up in a long discussion. ✘ ended up to stay.' },
+    ],
+    examples: [
+      { en: 'I need to figure out what happened.', ru: 'Мне нужно выяснить, что произошло.' },
+      { en: 'I’ll figure it out.', ru: 'Я разберусь.' },
+      { en: 'We came up with a new approach.', ru: 'Мы придумали новый подход.' },
+      { en: 'Can you come up with a better name for it?', ru: 'Можешь придумать название получше?', q: true },
+      { en: 'We ended up rewriting the whole module.', ru: 'В итоге мы переписали весь модуль.' },
+      { en: 'The meeting ended up lasting two hours.', ru: 'Встреча в итоге затянулась на два часа.' },
+      { en: 'I’m looking forward to the release.', ru: 'С нетерпением жду релиза.' },
+      { en: 'I look forward to hearing from you.', ru: 'Буду ждать вашего ответа.' },
+      { en: 'I want to bring up one more thing.', ru: 'Хочу поднять ещё один вопрос.' },
+      { en: 'Nobody brought up the deadline.', ru: 'Никто не поднял тему дедлайна.' },
+      { en: 'We ran into a problem with the deployment.', ru: 'Мы столкнулись с проблемой при деплое.' },
+      { en: 'I ran into my manager in the kitchen.', ru: 'Я случайно встретил своего менеджера на кухне.' },
+      { en: 'I bumped into an old friend at the airport.', ru: 'Я случайно столкнулся со старым другом в аэропорту.' },
+      { en: 'If you bump into her, say hi from me.', ru: 'Если случайно её встретишь, передай привет от меня.' },
+    ],
+    compare: ['figure-out', 'keep-ing', 'miss-skip'],
   },
   'time-prepositions': {
     title: 'Prepositions of Time (18 prepositions)',
