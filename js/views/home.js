@@ -4,7 +4,7 @@ import { rowList } from '../ui.js';
 import { icon } from '../icons.js';
 
 // То, что разбирается на занятиях, — своим блоком и в своём порядке.
-const LESSONS = ['useful-constructions', 'phrases', 'useful-grammar'];
+const LESSONS = ['useful-constructions', 'phrases'];
 
 // Глаголы — свой блок на главной: это не грамматика, а списки слов.
 const VERBS = 'verbs';

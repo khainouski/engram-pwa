@@ -124,11 +124,11 @@ export const GROUPS = [
   {
     id: 'speaking-grammar',
     title: 'Speaking',
-    subtitle: 'реакции в диалоге · артикли · связки · wish · causative · сравнения',
+    subtitle: 'реакции · артикли · связки · предлоги · wish · causative · сравнения',
     icon: '🗣️',
-    topics: ['speaking-toolkit', 'questions', 'gerund-infinitive', 'articles', 'relative-clauses', 'linking-words', 'wish', 'causative', 'comparisons', 'countable', 'there-is-it-is', 'adverbs', 'be-used-to', 'place-prepositions', 'adj-prepositions'],
+    topics: ['speaking-toolkit', 'questions', 'gerund-infinitive', 'articles', 'relative-clauses', 'linking-words', 'wish', 'causative', 'comparisons', 'countable', 'there-is-it-is', 'adverbs', 'be-used-to', 'time-prepositions', 'place-prepositions', 'adj-prepositions', 'ing-ed-adjectives'],
     expand: true,
-    mix: 'артикли / relative clauses / связки / wish / causative / сравнения / countable',
+    mix: 'артикли / relative clauses / связки / предлоги времени и места / wish / causative / сравнения / countable',
   },
   {
     id: 'verbs',
@@ -136,13 +136,6 @@ export const GROUPS = [
     subtitle: 'глаголы · неправильные · фразовые · прилагательные · коллокации · существительные',
     icon: '🔤',
     topics: ['common-verbs', 'irregular-verbs', 'phrasal-verbs', 'adjectives', 'collocations', 'nouns'],
-  },
-  {
-    id: 'useful-grammar',
-    title: 'Useful Grammar',
-    icon: '📐',
-    topics: ['time-prepositions', 'ing-ed-adjectives'],
-    mix: 'at · in · on · by · until · from · since · for · during · within · after · before · around · past · to · throughout · ago · between / boring — bored (-ing · -ed)',
   },
   {
     id: 'phrases',
