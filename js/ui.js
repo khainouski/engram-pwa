@@ -225,7 +225,7 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
           <div class="rule-grid">
             ${t.use.map((u) => `
               <div class="rule-row">
-                <div class="rr-en">${esc(u.en)}</div>
+                <div class="rr-en">${esc(u.en)}${u.key ? '<span class="rr-key">оборот</span>' : ''}</div>
                 <div class="rr-body">
                   ${u.ru ? `<div class="rr-ru">${esc(u.ru)}</div>` : ''}
                   ${u.ex ? `<div class="rr-ex">${markPattern(u.ex, pattern)}</div>` : ''}

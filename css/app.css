@@ -253,7 +253,7 @@ h1.rc-title-name { font-size: clamp(20px, 2.4vw, 25px); }
 .fx-sep { color: var(--muted); opacity: .6; font-weight: 400; }
 
 .rule + .rule { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
-.rule-en { font-size: 15.5px; line-height: 1.5; }
+.rule-en { font-size: 15.5px; line-height: 1.5; overflow-wrap: anywhere; }
 .rule-ru { color: var(--muted); font-size: 14.5px; margin-top: 3px; }
 
 /* The Russian wording leads; the English original sits below it. */
@@ -368,17 +368,36 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .rule-row:first-child { border-top: none; padding-top: 0; }
 .rr-en {
   font-family: var(--mono); font-size: 12.5px; font-weight: 650;
-  color: var(--accent); line-height: 1.45;
+  color: var(--accent); line-height: 1.45; overflow-wrap: anywhere;
 }
 .rr-ru { font-size: 14.5px; line-height: 1.45; }
 .rr-ex { font-size: 14px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+/* Готовый оборот: берём целиком, поэтому помечен — чтобы не потерялся среди правил. */
+.rr-key {
+  display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 5px;
+  font-family: var(--font); font-size: 10px; font-weight: 650; letter-spacing: .6px;
+  text-transform: uppercase; color: var(--accent); background: var(--accent-soft);
+  vertical-align: 2px;
+}
+
 /* Нюансы и ошибки — та же таблица, только отделена от правил. */
 .note-grid { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
 .note-grid .markers-label { display: block; margin-bottom: 10px; }
 .note-grid .rule-row:first-of-type { border-top: none; padding-top: 0; }
 
+/*
+ * Телефон: правило читается сверху вниз — схема, смысл, пример. Пример
+ * отбит полоской: это то, что проговариваешь вслух, он не должен теряться.
+ */
 @media (max-width: 720px) {
-  .rule-row { grid-template-columns: 1fr; gap: 2px; }
+  .rule-row { grid-template-columns: 1fr; gap: 3px; padding: 12px 0; }
+  .rr-en { font-size: 13px; }
+  .rr-ru { font-size: 15px; }
+  .rr-ex {
+    margin-top: 5px; padding-left: 10px; color: var(--text);
+    border-left: 2px solid var(--accent-soft); font-size: 14px;
+  }
+  .note-grid .rr-ru { font-size: 14px; }
 }
 
 /*
