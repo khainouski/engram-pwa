@@ -381,6 +381,23 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
   .rule-row { grid-template-columns: 1fr; gap: 2px; }
 }
 
+/*
+ * Телефон: длинное имя темы и длинная формула не влезают в одну строку, а
+ * формула ещё и уезжала за край. Ставим их друг под другом, формуле разрешаем
+ * переноситься по словам и чуть уменьшаем кегль.
+ */
+@media (max-width: 720px) {
+  .rc-head-row { display: block; }
+  .rc-head-row .rc-title-name { margin: 0 0 8px; }
+  h1.rc-title-name { font-size: 19px; line-height: 1.25; }
+  .rc-title-name { font-size: 16px; line-height: 1.3; }
+  .fx { flex-wrap: wrap; overflow-x: visible; }
+  .fx-part, .fx-sep { white-space: normal; }
+  .fx-single, .rc-head-row .fx-single { font-size: 15.5px; }
+  .fx-multi, .rc-head-row .fx-multi, .rc-head-stack .fx-multi { font-size: 13px; }
+  .fx-multi .fx-part { padding: 5px 9px; }
+}
+
 .tp-hint { margin: -4px 0 12px; }
 .tp-switch { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
 .tp-switch .btn {
