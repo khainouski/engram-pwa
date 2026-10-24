@@ -180,36 +180,49 @@ export const compareSchema = {
   type: 'object',
   properties: {
     summary: { type: 'string' },
-    pairs: {
+    rows: {
       type: 'array',
       items: {
         type: 'object',
         properties: {
-          a_label: { type: 'string' },
-          a_sentence: { type: 'string' },
-          b_label: { type: 'string' },
-          b_sentence: { type: 'string' },
+          situation: { type: 'string' },
+          variants: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: { label: { type: 'string' }, sentence: { type: 'string' } },
+              required: ['label', 'sentence'],
+            },
+          },
           difference: { type: 'string' },
         },
-        required: ['a_label', 'a_sentence', 'b_label', 'b_sentence', 'difference'],
+        required: ['situation', 'variants', 'difference'],
       },
     },
   },
-  required: ['summary', 'pairs'],
+  required: ['summary', 'rows'],
 };
 
-export function comparePrompt(topicA, topicB, word) {
-  return `Construction A:
-${topicBrief(topicA, { maxExamples: 3 })}
+/**
+ * Сравнение двух и более конструкций: одна ситуация — по одному предложению на
+ * каждую, в том же порядке, в каком они перечислены. Так видно, что меняется.
+ */
+export function comparePrompt(topicA, otherIds, word) {
+  const ids = [topicA, ...(Array.isArray(otherIds) ? otherIds : [otherIds])];
+  const list = ids
+    .map((id, i) => `${String.fromCharCode(65 + i)}) ${TOPICS[id] ? TOPICS[id].title : id}\n${topicBrief(id, { maxExamples: 3 })}`)
+    .join('\n\n');
 
-Construction B:
-${topicBrief(topicB, { maxExamples: 3 })}
+  return `Constructions (${ids.length}):
+${list}
 
-Task: compare A and B for the learner.
+Task: show the learner what changes between these ${ids.length} constructions.
 "summary": in Russian — the core difference in 1-2 sentences.
-"pairs": 4 pairs. In each pair use THE SAME situation and the same vocabulary, expressed once with A and once with B,
-so the learner sees what changes. "a_label"/"b_label" = the construction names.
-"difference": in Russian — what exactly changes in meaning between these two sentences.${withWord(word)}`;
+"rows": 3 rows. Each row is ONE situation with the same vocabulary, said once with every construction.
+"situation": in Russian — the situation in a few words.
+"variants": exactly ${ids.length} items, in the same order as the constructions above.
+"label" = the construction name as given above, "sentence" = that situation said with it.
+"difference": in Russian — what exactly changes in meaning between these sentences.${withWord(word)}`;
 }
 
 /* ─────────────────────────── MIX ─────────────────────────── */

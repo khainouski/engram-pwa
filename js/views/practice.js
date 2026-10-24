@@ -2,7 +2,7 @@ import { TOPICS, TOPIC_INDEX, findGroup, findSubgroup, topicTitle } from '../../
 import { callGemini, NoKeyError } from '../gemini.js';
 import * as P from '../prompts.js';
 import { store } from '../storage.js';
-import { errorBox, esc, loading, mdLite } from '../ui.js';
+import { errorBox, esc, loading, mdLite, toast } from '../ui.js';
 
 /**
  * Practice panel.
@@ -235,42 +235,72 @@ export function mountPractice(slot, ctx) {
     return { curated, rest };
   }
 
-  function modeCompare() {
+  /*
+   * Выбор пары — отмечаем галочками: сравнить можно и две конструкции, и три.
+   * Сам запрос уходит только по кнопке, а не по первому же нажатию чипа.
+   */
+  function modeCompare(picked = new Set()) {
     const { curated, rest } = comparePartners();
     if (!curated.length && !rest.length) { card('<p class="muted">Нет парных конструкций для сравнения.</p>'); return; }
-    const buttons = (ids, primary) => ids
-      .map((id) => `<button class="btn small${primary ? ' primary' : ''}" data-cmp="${esc(id)}">${esc(topicTitle(id))}</button>`)
-      .join('');
+
+    const chip = (id) => `
+      <button class="btn small cmp-chip${picked.has(id) ? ' primary' : ''}" data-cmp="${esc(id)}">${esc(topicTitle(id))}</button>`;
+
     card(`
-      <p style="margin:0 0 12px">С чем сравнить <b>${esc(topic.title)}</b>?</p>
-      ${curated.length ? `<div class="actions">${buttons(curated, true)}</div>` : ''}
+      <p style="margin:0 0 12px">С чем сравнить <b>${esc(topic.title)}</b>? Отметь одну или несколько.</p>
+      ${curated.length ? `<div class="actions">${curated.map(chip).join('')}</div>` : ''}
       ${rest.length ? `
         <div class="cmp-more">
           <div class="cmp-label">Ещё конструкции</div>
-          <div class="actions">${buttons(rest, false)}</div>
-        </div>` : ''}`);
+          <div class="actions">${rest.map(chip).join('')}</div>
+        </div>` : ''}
+      <div class="actions cmp-run">
+        <button class="btn primary" id="cmp-run">Сравнить</button>
+        <span class="cmp-count" id="cmp-count"></span>
+      </div>`);
+
+    const runBtn = result.querySelector('#cmp-run');
+    const count = result.querySelector('#cmp-count');
+    const sync = () => {
+      runBtn.disabled = !picked.size;
+      count.textContent = picked.size ? `выбрано: ${picked.size}` : 'ничего не выбрано';
+    };
+
     result.querySelectorAll('[data-cmp]').forEach((b) => {
-      b.addEventListener('click', () => runCompare(b.dataset.cmp));
+      b.addEventListener('click', () => {
+        const id = b.dataset.cmp;
+        if (picked.has(id)) picked.delete(id);
+        else if (picked.size >= 3) { toast('За раз сравниваем не больше трёх'); return; }
+        else picked.add(id);
+        b.classList.toggle('primary', picked.has(id));
+        sync();
+      });
     });
+
+    runBtn.addEventListener('click', () => runCompare([...picked]));
+    sync();
   }
 
-  async function runCompare(otherId) {
+  async function runCompare(ids) {
     const w = word();
     await run(async () => {
-      const out = await callGemini(P.comparePrompt(ctx.topicId, otherId, w), P.compareSchema, { temperature: 0.6 });
+      const out = await callGemini(P.comparePrompt(ctx.topicId, ids, w), P.compareSchema, { temperature: 0.6 });
       card(`
-        <div class="gen-label">${esc(topic.title)} vs ${esc(topicTitle(otherId))}</div>
+        <div class="gen-label">${esc([topic.title, ...ids.map(topicTitle)].join('  vs  '))}</div>
         <p style="margin:8px 0 16px">${esc(out.summary)}</p>
-        ${(out.pairs || []).map((p) => `
+        ${(out.rows || []).map((r) => `
           <div class="gen-item">
-            <div class="gen-en"><span class="gen-label">${esc(p.a_label)}</span><br>${mdLite(p.a_sentence)}</div>
-            <div class="gen-en" style="margin-top:8px"><span class="gen-label">${esc(p.b_label)}</span><br>${mdLite(p.b_sentence)}</div>
-            <div class="gen-why">${esc(p.difference)}</div>
+            ${r.situation ? `<div class="cmp-situation">${esc(r.situation)}</div>` : ''}
+            ${(r.variants || []).map((v) => `
+              <div class="gen-en cmp-variant">
+                <span class="gen-label">${esc(v.label)}</span><br>${mdLite(v.sentence)}
+              </div>`).join('')}
+            <div class="gen-why">${esc(r.difference)}</div>
           </div>`).join('')}
         <div class="actions" style="margin-top:16px">
-          <button class="btn" id="cmp-back">← Выбрать другую пару</button>
+          <button class="btn" id="cmp-back">← Выбрать другие</button>
         </div>`);
-      result.querySelector('#cmp-back').addEventListener('click', modeCompare);
+      result.querySelector('#cmp-back').addEventListener('click', () => modeCompare(new Set(ids)));
     }, { text: 'Сравниваю…' });
   }
 
