@@ -141,6 +141,7 @@ function topicPracticeBlock(ids, hasMix) {
       ${list.map((id, i) => `
         <button class="btn small" data-topic="${id}">${esc(labels[i])}</button>`).join('')}
     </div>
+    <div class="tp-now" id="tp-now"></div>
     <div id="tp-slot"></div>`;
 }
 
@@ -156,9 +157,15 @@ function mountTopicPractice(root, ids, mixCtx) {
   const first = ids.find((id) => TOPICS[id]);
   let current = null;
 
+  // Подпись отделяет кнопки выбора темы от самой панели и говорит, что выбрано.
+  const now = root.querySelector('#tp-now');
+
   const show = (key) => {
     current = key;
     for (const b of bar.querySelectorAll('button')) b.classList.toggle('primary', b.dataset.topic === key);
+    if (now) now.textContent = key && TOPICS[key]
+      ? `Тренируем: ${TOPICS[key].title}`
+      : 'Тренируем: все конструкции раздела';
     mountPractice(slot, key ? { kind: 'topic', topicId: key } : mixCtx);
   };
 
