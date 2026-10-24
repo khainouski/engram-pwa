@@ -164,7 +164,7 @@ export function plural(n, one, few, many) {
  * каждую превращают карточку в простыню, поэтому такие идут таблицей
  * «схема — смысл — пример». Правила-предложения остаются как были.
  */
-const scheme = (u) => !/[.!?]$/.test(u.en) && (u.ex || u.exs || u.en.includes('\u2192') || u.en.length <= 48);
+const scheme = (u) => !/[.!]$/.test(u.en) && (u.ex || u.exs || u.en.includes('\u2192') || u.en.length <= 48);
 const compactRules = (use) => Array.isArray(use) && use.length > 1
   && (use.every((u) => u.en && u.en.length <= 60 && (u.ex || u.exs))
     || use.every((u) => u.en && u.en.length <= 80 && scheme(u)));
@@ -177,6 +177,184 @@ function detailHtml(text) {
   const lines = String(text).split('\n').map((x) => x.trim()).filter(Boolean);
   if (lines.length < 2) return `<p class="rc-detail">${esc(lines[0] || '')}</p>`;
   return `<ul class="rc-detail rc-detail-list">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>`;
+}
+
+/*
+ * Частотные глаголы: строка — глагол, перевод и один пример из работы.
+ * Сам глагол ведёт на YouGlish, чтобы сразу услышать, как он звучит.
+ */
+function wordSections(words) {
+  const groups = [];
+  for (const w of words) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === w.group) last.items.push(w);
+    else groups.push({ title: w.group || '', items: [w] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)} <span class="sec-count">${g.items.length}</span></div>
+    <div class="words">
+      ${g.items.map((w) => `
+        <div class="word-row">
+          <div class="word-head">
+            <a class="verb-form" href="${soundHref(w.en)}" target="_blank" rel="noopener noreferrer"
+               title="Послушать на YouGlish">${esc(w.en)}</a>
+            <span class="verb-ru">${esc(w.ru)}</span>
+          </div>
+          <div class="word-ex">
+            <span class="ex-en">${esc(w.ex)}</span>
+            <span class="ex-ru">${esc(w.exRu)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Неправильные глаголы: строка — это три формы, смысл и один пример с V2
+ * или V3. Группы по модели изменения, потому что так они и запоминаются
+ * пачками: cut — cut — cut, buy — bought — bought, begin — began — begun.
+ */
+function verbSections(verbs) {
+  const groups = [];
+  for (const v of verbs) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === v.group) last.items.push(v);
+    else groups.push({ title: v.group || '', items: [v] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)} <span class="sec-count">${g.items.length}</span></div>
+    <div class="verbs">
+      ${g.items.map((v) => `
+        <div class="verb">
+          <div class="verb-forms">
+            ${[v.v1, v.v2, v.v3].map((f) => `
+              <a class="verb-form" href="${soundHref(f)}" target="_blank" rel="noopener noreferrer"
+                 title="Послушать на YouGlish">${esc(f)}</a>`).join('<span>—</span>')}
+            <span class="verb-ru">${esc(v.ru)}</span>
+          </div>
+          ${(v.ex || []).map((x, i) => `
+            <div class="verb-ex">
+              <span class="verb-tag">V${i + 1}</span>
+              <span class="ex-en">${esc(x.en)}</span>
+              <span class="ex-ru">${esc(x.ru)}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Карточка на предлог: крупное слово, короткий смысл и три сочетания —
+ * ровно то, что нужно выучить. Полные предложения из конспекта лежат под
+ * «примеры», чтобы не перегружать сетку.
+ */
+function cardSections(cards) {
+  const groups = [];
+  for (const c of cards) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === c.group) last.items.push(c);
+    else groups.push({ title: c.group || '', items: [c] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)}</div>
+    <div class="prep-grid">
+      ${g.items.map((c) => `
+        <div class="prep">
+          <div class="prep-head">
+            <code>${esc(c.word)}</code>
+            <span class="prep-ru">${esc(c.ru)}</span>
+          </div>
+          <ul class="prep-chips">
+            ${c.chips.map((x) => `<li>${esc(x)}</li>`).join('')}
+          </ul>
+          ${c.examples?.length ? `
+            <details class="prep-ex">
+              <summary>примеры</summary>
+              ${c.examples.map((x) => `
+                <div class="prep-ex-line">
+                  <span class="ex-en">${esc(x.en)}</span>
+                  <span class="ex-ru">${esc(x.ru)}</span>
+                </div>`).join('')}
+            </details>` : ''}
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Пары -ing / -ed: главное здесь — контраст «какая вещь» против «что я
+ * чувствую», поэтому они стоят рядом в двух колонках, а группы собраны по
+ * предлогу — он учится вместе со словом.
+ */
+function pairSections(pairs) {
+  const groups = [];
+  for (const p of pairs) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === p.group) last.items.push(p);
+    else groups.push({ title: p.group || '', items: [p] });
+  }
+
+  const line = (x, tag) => `
+    <div class="pair-line">
+      <span class="pair-tag">${tag}</span>
+      <span class="ex-en">${esc(x.en)}</span>
+      <span class="ex-ru">${esc(x.enRu)}</span>
+    </div>`;
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)}</div>
+    <div class="pairs">
+      ${g.items.map((p) => `
+        <div class="pair-row">
+          <div class="pair-head">
+            <code>${esc(p.ing.word)}</code><code>${esc(p.ed.word)}</code>
+            <span class="pair-ru">${esc(p.ing.ru)} / ${esc(p.ed.ru)}</span>
+          </div>
+          ${line(p.ing, 'вещь')}
+          ${line(p.ed, 'я')}
+          ${p.more?.length ? `
+            <details class="pair-more">
+              <summary>ещё ${p.more.length}</summary>
+              ${p.more.map((x) => `
+                <div class="pair-line">
+                  <span class="ex-en">${esc(x.en)}</span>
+                  <span class="ex-ru">${esc(x.ru)}</span>
+                </div>`).join('')}
+            </details>` : ''}
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Схемы идут группами по смыслу («Точка во времени», «Срок», …): так
+ * восемнадцать предлогов читаются как пять коротких списков, а не один
+ * длинный. Группы нет — выводим всё одним блоком, как раньше.
+ */
+function patternSections(patterns) {
+  const groups = [];
+  for (const p of patterns) {
+    const title = p.group || '';
+    const last = groups[groups.length - 1];
+    if (last && last.title === title) last.items.push(p);
+    else groups.push({ title, items: [p] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title || 'Схемы — каждая со своими примерами')}</div>
+    <div class="patterns">
+      ${g.items.map((p) => `
+        <div class="pattern">
+          <div class="pt-scheme"><code>${esc(p.scheme)}</code></div>
+          <div class="pt-body">
+            ${p.ru ? `<div class="pt-ru">${esc(p.ru)}</div>` : ''}
+            ${p.ru ? '' : (p.name ? `<div class="pt-name">${esc(p.name)}</div>` : '')}
+            <ul class="pt-examples">
+              ${p.examples.map((x) => `
+                <li><span class="ex-en">${esc(x.en)}</span>${x.ru ? `<span class="ex-ru">${esc(x.ru)}</span>` : ''}</li>`).join('')}
+            </ul>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
 }
 
 /**
@@ -244,7 +422,12 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
           <div class="rule">
             ${u.ru ? `<div class="rule-ru">${esc(u.ru)}</div>` : ''}
             <div class="rule-en">${esc(u.en)}</div>
-            ${u.ex ? `<div class="rule-ex">${markPattern(u.ex, pattern)}</div>` : ''}
+            ${(u.exs || []).map((x) => `
+              <div class="rule-ex">
+                <span class="ex-en">${markPattern(x.en, pattern)}</span>
+                <span class="ex-ru">${esc(x.ru)}</span>
+              </div>`).join('')}
+            ${u.ex ? `<div class="rule-ex"><span class="ex-en">${markPattern(u.ex, pattern)}</span></div>` : ''}
           </div>`).join('')}
         ${(t.notes || []).length ? `
           <div class="rule-grid note-grid">
@@ -270,7 +453,12 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
               ${x.ru ? `<span class="ex-ru">${esc(x.ru)}</span>` : ''}
             </li>`).join('')}
         </ul>`}
-    </section>`;
+    </section>
+    ${t.words ? wordSections(t.words) : ''}
+    ${t.verbs ? verbSections(t.verbs) : ''}
+    ${t.cards ? cardSections(t.cards) : ''}
+    ${t.pairs ? pairSections(t.pairs) : ''}
+    ${t.patterns ? patternSections(t.patterns) : ''}`;
 }
 
 /** Ссылка на YouGlish: слово можно не только прочитать, но и послушать. */

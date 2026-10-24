@@ -267,8 +267,10 @@ h1.rc-title-name { font-size: clamp(20px, 2.4vw, 25px); }
 .rule-ex {
   font-family: var(--mono); font-size: 13px; margin-top: 8px;
   padding: 6px 10px; background: var(--surface); border: 1px solid var(--line);
-  border-radius: 6px; display: inline-block;
+  border-radius: 6px; display: grid; gap: 2px;
 }
+.rule-ex .ex-en { font-family: var(--mono); font-size: 13px; }
+.rule-ex .ex-ru { font-family: var(--font); font-size: 12.5px; }
 /* Заметки звучат тише правил: приглушённый текст, никакой врезки. */
 .note-grid .rr-en { color: var(--muted); }
 .note-grid .rr-ru { font-size: 14px; color: var(--muted); }
