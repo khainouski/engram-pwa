@@ -464,6 +464,15 @@ export function storyPrompt({ title, topicIds, sample }) {
     .filter(Boolean)
     .join('\n');
 
+  // Подсказки в скобках просим только там, где они есть в образце.
+  const glosses = /\([^)]*[\u0430-\u044f]/i.test(String(sample))
+    ? `- After every verb that demonstrates one of the forms, put its Russian translation
+  in parentheses, exactly as in the sample below.
+- When two forms share the same Russian translation, add a hint after a dash,
+  e.g. "am meeting (встречаюсь — договорённость)".
+`
+    : '';
+
   return `Write a short story that uses every form of "${title}" at least once.
 
 FORMS THAT MUST ALL APPEAR:
@@ -473,11 +482,7 @@ Rules:
 - 3 paragraphs, 2-3 sentences each. A single connected story, not separate examples.
 - About 30% shorter than the sample: keep every form, drop the padding.
 - Context: take it from your instructions and keep one consistent setting through the whole story.
-- After every verb that demonstrates one of the forms, put its Russian translation
-  in parentheses, exactly as in the sample below.
-- When two forms share the same Russian translation, add a hint after a dash,
-  e.g. "am meeting (встречаюсь — договорённость)".
-- Plain text only, no markdown, no headings, no list of forms at the end.
+${glosses}- Plain text only, no markdown, no headings, no list of forms at the end.
 - A different plot from the sample.
 
 SAMPLE OF THE FORMAT:
