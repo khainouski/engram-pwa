@@ -66,7 +66,7 @@ export async function renderHome(root) {
     ${rowList(grammar)}
     <div class="list-label">Lessons with Ekaterina</div>
     ${rowList(lessons)}
-    <div class="list-label">Verbs</div>
+    <div class="list-label">Words</div>
     ${rowList(verbs)}
     <div class="list-label">Мои слова</div>
     ${rowList([

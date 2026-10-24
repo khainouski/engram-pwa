@@ -164,9 +164,9 @@ export function plural(n, one, few, many) {
  * каждую превращают карточку в простыню, поэтому такие идут таблицей
  * «схема — смысл — пример». Правила-предложения остаются как были.
  */
-const scheme = (u) => !/[.!?]$/.test(u.en) && (u.ex || u.en.includes('\u2192') || u.en.length <= 48);
+const scheme = (u) => !/[.!?]$/.test(u.en) && (u.ex || u.exs || u.en.includes('\u2192') || u.en.length <= 48);
 const compactRules = (use) => Array.isArray(use) && use.length > 1
-  && (use.every((u) => u.en && u.en.length <= 60 && u.ex)
+  && (use.every((u) => u.en && u.en.length <= 60 && (u.ex || u.exs))
     || use.every((u) => u.en && u.en.length <= 80 && scheme(u)));
 
 /*
@@ -200,6 +200,7 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
   for (const u of t.use || []) {
     shown.add(key(u.en));
     if (u.ex) shown.add(key(u.ex));
+    for (const x of u.exs || []) shown.add(key(x.en));
   }
   /*
    * На странице раздела у каждого правила уже есть свой пример, и общий
@@ -208,7 +209,7 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
    */
   // Если у каждого правила свой пример, общий список примеров под карточкой
   // пересказывает те же конструкции — на странице раздела он не нужен.
-  const ruled = (t.use || []).length > 1 && (t.use || []).every((u) => u.ex);
+  const ruled = (t.use || []).length > 1 && (t.use || []).every((u) => u.ex || u.exs);
 
   const examples = link || bare
     ? (ruled ? [] : (t.examples || []).filter((x) => !shown.has(key(x.en))))
@@ -231,7 +232,12 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
                 <div class="rr-en">${esc(u.en)}${u.key ? '<span class="rr-key">оборот</span>' : ''}</div>
                 <div class="rr-body">
                   ${u.ru ? `<div class="rr-ru">${esc(u.ru)}</div>` : ''}
-                  ${u.ex ? `<div class="rr-ex">${markPattern(u.ex, pattern)}</div>` : ''}
+                  ${(u.exs || []).map((x) => `
+                    <div class="rr-ex">
+                      <span class="ex-en">${markPattern(x.en, pattern)}</span>
+                      <span class="ex-ru">${esc(x.ru)}</span>
+                    </div>`).join('')}
+                  ${u.ex ? `<div class="rr-ex"><span class="ex-en">${markPattern(u.ex, pattern)}</span></div>` : ''}
                 </div>
               </div>`).join('')}
           </div>` : (t.use || []).map((u) => `

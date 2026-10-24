@@ -8,7 +8,7 @@ const CRUMB_WORDS = { title: 'Мои слова', href: '#/words' };
 const youglish = (text) =>
   `https://youglish.com/pronounce/${encodeURIComponent(text)}/english/us`;
 
-/** "через 3 дня" is more useful here than a date. */
+/** "через 3 дня" is more Еще раз проверь useful here than a date. */
 function nextIn(step) {
   const days = INTERVALS_DAYS[Math.min(step, INTERVALS_DAYS.length) - 1];
   if (!days) return '';

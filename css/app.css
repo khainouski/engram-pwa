@@ -372,6 +372,11 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
 }
 .rr-ru { font-size: 14.5px; line-height: 1.45; }
 .rr-ex { font-size: 14px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+/* Несколько примеров у одного правила: каждый со своим переводом строкой ниже. */
+.rr-ex { display: grid; gap: 1px; }
+.rr-ex + .rr-ex { margin-top: 8px; }
+.rr-ex .ex-en { font-size: 14px; color: var(--text); line-height: 1.45; }
+.rr-ex .ex-ru { font-size: 13px; color: var(--muted); line-height: 1.45; }
 /* Готовый оборот: берём целиком, поэтому помечен — чтобы не потерялся среди правил. */
 .rr-key {
   display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 5px;
