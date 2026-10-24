@@ -225,6 +225,51 @@ Task: show the learner what changes between these ${ids.length} constructions.
 "difference": in Russian — what exactly changes in meaning between these sentences.${withWord(word)}`;
 }
 
+/* ─────────────── SAVED WORDS (выражение, а не тема) ─────────────── */
+function vocabBrief(item, sectionTitle) {
+  return [
+    `EXPRESSION FROM THE LEARNER'S NOTES: ${item.term}`,
+    item.ru && `MEANING IN RUSSIAN (as written in the notes): ${item.ru}`,
+    item.example && `EXAMPLE FROM THE NOTES: ${item.example}`,
+    sectionTitle && `SECTION: ${sectionTitle}`,
+  ].filter(Boolean).join('\n');
+}
+
+export function vocabExamplesPrompt(item, sectionTitle) {
+  return `${vocabBrief(item, sectionTitle)}
+
+Task: generate 4 NEW example sentences with this exact expression (do not repeat the example from the notes).
+Keep the expression's meaning exactly as the notes define it.
+Vary the sentences: different tenses, one negative and at least one question; use the contexts from your instructions.
+Wrap the expression itself in **double asterisks** inside "en".
+"ru" = natural Russian translation. "why" = one short remark in Russian about the shade of meaning or a collocation worth remembering.`;
+}
+
+export function vocabUsePrompt(item, sectionTitle) {
+  return `${vocabBrief(item, sectionTitle)}
+
+Task: give the learner ONE realistic situation (2-3 sentences, English), set in the contexts from your instructions,
+where this exact expression is the natural thing to say.
+"task": the question or request the learner must answer in English, using the expression.
+"hint": in Russian — a short reminder of the expression and its meaning.
+Do not provide the answer.`;
+}
+
+export function vocabAnswerPrompt(item, situation, task, answer) {
+  return `${vocabBrief(item)}
+
+Situation: ${situation}
+Task given to the learner: ${task}
+Learner's answer: "${answer}"
+
+Task: evaluate the answer for BOTH grammatical correctness and natural use of the expression "${item.term}".
+"verdict": "correct" (the expression is used correctly and naturally), "almost" (understandable but slightly off), "wrong" (the expression is missing or misused).
+"corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
+"notes": in Russian — what is wrong or unnatural and why; if everything is fine, say what was done well.
+"natural": one alternative phrasing a native speaker would use, in English.
+${LEVEL_TASK}`;
+}
+
 /* ─────────────────────────── MIX ─────────────────────────── */
 export const mixSchema = {
   type: 'object',
@@ -338,51 +383,6 @@ Keep the meaning as close to the Russian as that form allows; if a form twists t
 "why": in Russian — one short sentence: what this version actually means, or why it is wrong here.
 "best": the label of the single form the learner should use.
 "summary": in Russian — 1-2 sentences: which tense to use here and by which signal it is recognised.`;
-}
-
-/* ─────────────────── VOCABULARY (an expression, not a topic) ─────────────────── */
-function vocabBrief(item, sectionTitle) {
-  return [
-    `EXPRESSION FROM THE LEARNER'S NOTES: ${item.term}`,
-    item.ru && `MEANING IN RUSSIAN (as written in the notes): ${item.ru}`,
-    item.example && `EXAMPLE FROM THE NOTES: ${item.example}`,
-    sectionTitle && `SECTION: ${sectionTitle}`,
-  ].filter(Boolean).join('\n');
-}
-
-export function vocabExamplesPrompt(item, sectionTitle) {
-  return `${vocabBrief(item, sectionTitle)}
-
-Task: generate 4 NEW example sentences with this exact expression (do not repeat the example from the notes).
-Keep the expression's meaning exactly as the notes define it.
-Vary the sentences: different tenses, one negative and at least one question; use the contexts from your instructions.
-Wrap the expression itself in **double asterisks** inside "en".
-"ru" = natural Russian translation. "why" = one short remark in Russian about the shade of meaning or a collocation worth remembering.`;
-}
-
-export function vocabUsePrompt(item, sectionTitle) {
-  return `${vocabBrief(item, sectionTitle)}
-
-Task: give the learner ONE realistic situation (2-3 sentences, English), set in the contexts from your instructions,
-where this exact expression is the natural thing to say.
-"task": the question or request the learner must answer in English, using the expression.
-"hint": in Russian — a short reminder of the expression and its meaning.
-Do not provide the answer.`;
-}
-
-export function vocabAnswerPrompt(item, situation, task, answer) {
-  return `${vocabBrief(item)}
-
-Situation: ${situation}
-Task given to the learner: ${task}
-Learner's answer: "${answer}"
-
-Task: evaluate the answer for BOTH grammatical correctness and natural use of the expression "${item.term}".
-"verdict": "correct" (the expression is used correctly and naturally), "almost" (understandable but slightly off), "wrong" (the expression is missing or misused).
-"corrected": the learner's sentence rewritten correctly (if it is already correct, repeat it unchanged).
-"notes": in Russian — what is wrong or unnatural and why; if everything is fine, say what was done well.
-"natural": one alternative phrasing a native speaker would use, in English.
-${LEVEL_TASK}`;
 }
 
 /* ─────────────────── MY WORDS: translate on add ─────────────────── */

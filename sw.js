@@ -7,7 +7,7 @@
  * Gemini API → not touched at all.
  */
 
-const VERSION = 'v174';
+const VERSION = 'v177';
 const CACHE = `engram-${VERSION}`;
 
 /** App shell. Cached separately, see install. */
@@ -28,13 +28,11 @@ const SHELL = [
   './js/views/home.js',
   './js/views/group.js',
   './js/views/topic.js',
-  './js/views/vocabulary.js',
   './js/views/words.js',
   './js/views/review.js',
   './js/views/practice.js',
   './js/views/settings.js',
   './data/grammar.js',
-  './data/vocabulary.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',

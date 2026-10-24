@@ -1,9 +1,7 @@
 import { GROUPS, TOPICS } from '../data/grammar.js';
-import { VOCAB, flatItems } from '../data/vocabulary.js';
 import { renderHome } from './views/home.js';
 import { renderGroup, renderSubgroup } from './views/group.js';
 import { renderTopic } from './views/topic.js';
-import { renderVocabulary } from './views/vocabulary.js';
 import { renderWords } from './views/words.js';
 import { renderReview } from './views/review.js';
 import { renderSettings } from './views/settings.js';
@@ -28,7 +26,6 @@ async function route() {
       case 'g': await renderGroup(app, a); break;
       case 's': await renderSubgroup(app, a, b); break;
       case 't': await renderTopic(app, a); break;
-      case 'vocab': await renderVocabulary(app, a, b); break;
       case 'words': await renderWords(app, a); break;
       case 'review': await renderReview(app); break;
       case 'settings': await renderSettings(app); break;
@@ -127,16 +124,6 @@ const STATIC_INDEX = (() => {
         items.push({ id, title: t.title, path, haystack });
       }
     }
-  }
-  for (const sec of VOCAB) {
-    flatItems(sec).forEach((it, idx) => {
-      items.push({
-        id: `vocab/${sec.id}/${idx}`,
-        title: it.term,
-        path: `Vocabulary › ${sec.title}`,
-        haystack: [it.term, it.ru, it.example].filter(Boolean).join(' ').toLowerCase(),
-      });
-    });
   }
   return items;
 })();
