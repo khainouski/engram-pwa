@@ -189,7 +189,9 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
   // Короткая формула встаёт рядом с именем темы, длинная из нескольких частей —
   // строкой ниже: иначе она жмётся и читается хуже.
   const stacked = /[\u2192\u00b7]/.test(String(t.formula || ''));
-  const asPatterns = Array.isArray(t.patterns);
+  // Темы-наборы (схемы, карточки предлогов, пары -ing / -ed) показывают intro:
+  // перечислять в шапке то, что и так лежит ниже карточками, незачем.
+  const asPatterns = Array.isArray(t.patterns) || Array.isArray(t.cards) || Array.isArray(t.pairs);
   // Примеры, которые уже стоят строками в таблице правил, второй раз не нужны.
   // Сравниваем по сути: регистр, знаки и русский хвост примера не в счёт.
   const key = (x) => String(x).split('\u2014')[0].toLowerCase()
@@ -218,9 +220,10 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
       ${bare && asPatterns ? '' : `
         <div class="rc-head ${stacked && !bare ? 'rc-head-stack' : 'rc-head-row'}">
           ${bare ? '' : `<${heading} class="rc-title rc-title-name">${name}</${heading}>`}
-          ${asPatterns ? '' : formulaSchema(t.formula)}
+          ${asPatterns || !t.formula ? '' : formulaSchema(t.formula)}
         </div>`}
       <div class="rc-body">
+        ${t.intro && asPatterns ? `<p class="rc-intro">${esc(t.intro)}</p>` : ''}
         ${compactRules(t.use) ? `
           <div class="rule-grid">
             ${t.use.map((u) => `
@@ -246,7 +249,6 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
                 <div class="rr-body">${n.ru ? `<div class="rr-ru">${esc(n.ru)}</div>` : ''}</div>
               </div>`).join('')}
           </div>` : ''}
-        ${t.intro && asPatterns ? `<p class="rc-intro">${esc(t.intro)}</p>` : ''}
         ${t.detail && !brief ? detailHtml(t.detail) : ''}
         ${t.markers?.length ? `
           <div class="markers">
@@ -263,6 +265,12 @@ export function topicCard(t, { id = '', heading = 'h2', link = false, brief = fa
             </li>`).join('')}
         </ul>`}
     </section>`;
+}
+
+/** Ссылка на YouGlish: слово можно не только прочитать, но и послушать. */
+export function soundHref(word) {
+  const q = String(word).replace(/[….?!,;:]/g, ' ').replace(/\s+/g, ' ').trim();
+  return `https://youglish.com/pronounce/${encodeURIComponent(q)}/english/us`;
 }
 
 export function markerChip(word) {

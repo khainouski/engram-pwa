@@ -1,6 +1,108 @@
 import { TOPICS, TOPIC_INDEX, findGroup, findSubgroup } from '../../data/grammar.js';
-import { crumbs, esc, topicCard } from '../ui.js';
+import { crumbs, esc, soundHref, topicCard } from '../ui.js';
 import { mountPractice } from './practice.js';
+
+/*
+ * Частотные глаголы: строка — глагол, перевод и один пример из работы.
+ * Сам глагол ведёт на YouGlish, чтобы сразу услышать, как он звучит.
+ */
+function wordSections(words) {
+  const groups = [];
+  for (const w of words) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === w.group) last.items.push(w);
+    else groups.push({ title: w.group || '', items: [w] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)} <span class="sec-count">${g.items.length}</span></div>
+    <div class="words">
+      ${g.items.map((w) => `
+        <div class="word-row">
+          <div class="word-head">
+            <a class="verb-form" href="${soundHref(w.en)}" target="_blank" rel="noopener noreferrer"
+               title="Послушать на YouGlish">${esc(w.en)}</a>
+            <span class="verb-ru">${esc(w.ru)}</span>
+          </div>
+          <div class="word-ex">
+            <span class="ex-en">${esc(w.ex)}</span>
+            <span class="ex-ru">${esc(w.exRu)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Неправильные глаголы: строка — это три формы, смысл и один пример с V2
+ * или V3. Группы по модели изменения, потому что так они и запоминаются
+ * пачками: cut — cut — cut, buy — bought — bought, begin — began — begun.
+ */
+function verbSections(verbs) {
+  const groups = [];
+  for (const v of verbs) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === v.group) last.items.push(v);
+    else groups.push({ title: v.group || '', items: [v] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)} <span class="sec-count">${g.items.length}</span></div>
+    <div class="verbs">
+      ${g.items.map((v) => `
+        <div class="verb">
+          <div class="verb-forms">
+            ${[v.v1, v.v2, v.v3].map((f) => `
+              <a class="verb-form" href="${soundHref(f)}" target="_blank" rel="noopener noreferrer"
+                 title="Послушать на YouGlish">${esc(f)}</a>`).join('<span>—</span>')}
+            <span class="verb-ru">${esc(v.ru)}</span>
+          </div>
+          ${(v.ex || []).map((x, i) => `
+            <div class="verb-ex">
+              <span class="verb-tag">V${i + 1}</span>
+              <span class="ex-en">${esc(x.en)}</span>
+              <span class="ex-ru">${esc(x.ru)}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+/*
+ * Карточка на предлог: крупное слово, короткий смысл и три сочетания —
+ * ровно то, что нужно выучить. Полные предложения из конспекта лежат под
+ * «примеры», чтобы не перегружать сетку.
+ */
+function cardSections(cards) {
+  const groups = [];
+  for (const c of cards) {
+    const last = groups[groups.length - 1];
+    if (last && last.title === c.group) last.items.push(c);
+    else groups.push({ title: c.group || '', items: [c] });
+  }
+
+  return groups.map((g) => `
+    <div class="section-title">${esc(g.title)}</div>
+    <div class="prep-grid">
+      ${g.items.map((c) => `
+        <div class="prep">
+          <div class="prep-head">
+            <code>${esc(c.word)}</code>
+            <span class="prep-ru">${esc(c.ru)}</span>
+          </div>
+          <ul class="prep-chips">
+            ${c.chips.map((x) => `<li>${esc(x)}</li>`).join('')}
+          </ul>
+          ${c.examples?.length ? `
+            <details class="prep-ex">
+              <summary>примеры</summary>
+              ${c.examples.map((x) => `
+                <div class="prep-ex-line">
+                  <span class="ex-en">${esc(x.en)}</span>
+                  <span class="ex-ru">${esc(x.ru)}</span>
+                </div>`).join('')}
+            </details>` : ''}
+        </div>`).join('')}
+    </div>`).join('');
+}
 
 /*
  * Пары -ing / -ed: главное здесь — контраст «какая вещь» против «что я
@@ -100,6 +202,9 @@ export async function renderTopic(root, topicId) {
 
     ${topicCard(t, { id: topicId, heading: 'h1' })}
 
+    ${t.words ? wordSections(t.words) : ''}
+    ${t.verbs ? verbSections(t.verbs) : ''}
+    ${t.cards ? cardSections(t.cards) : ''}
     ${t.pairs ? pairSections(t.pairs) : ''}
     ${asPatterns ? patternSections(t.patterns) : ''}
 
