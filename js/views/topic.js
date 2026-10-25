@@ -1,6 +1,7 @@
 import { TOPICS, TOPIC_INDEX, findGroup, findSubgroup } from '../../data/grammar.js';
 import { crumbs, topicCard } from '../ui.js';
 import { mountPractice } from './practice.js';
+import { mountLearn, learnableWords } from './learn.js';
 
 export async function renderTopic(root, topicId) {
   const t = TOPICS[topicId];
@@ -18,6 +19,7 @@ export async function renderTopic(root, topicId) {
   root.innerHTML = `
     ${crumbs(trail)}
     <div class="study-bar"><button class="btn small" id="hide-ru">Скрыть перевод</button></div>
+    <div id="learn-slot"></div>
 
     ${topicCard(t, { id: topicId, heading: 'h1' })}
 
@@ -29,6 +31,8 @@ export async function renderTopic(root, topicId) {
     hide.textContent = on ? 'Показать перевод' : 'Скрыть перевод';
     hide.classList.toggle('primary', on);
   });
+
+  mountLearn(root.querySelector('#learn-slot'), { topicId, topic: t });
 
   mountPractice(root.querySelector('#practice-slot'), { kind: 'topic', topicId });
 }

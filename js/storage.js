@@ -68,8 +68,32 @@ async function set(key, value) {
   writeRaw(key, JSON.stringify(value));
 }
 
+/**
+ * Прогресс прогона карточек по странице слов: какие слова уже отмечены
+ * «знаю». Хранится отдельно от «Моих слов» — это быстрый прогон списка,
+ * а не колода интервального повторения.
+ */
+const learnKey = (topicId) => `learn:${topicId}`;
+
 export const store = {
   getApiKey: () => get(KEYS.apiKey, ''),
+
+  /** Слова страницы, отмеченные «знаю». */
+  async getLearned(topicId) {
+    const list = await get(learnKey(topicId), []);
+    return Array.isArray(list) ? list : [];
+  },
+
+  async markLearned(topicId, word) {
+    const list = await store.getLearned(topicId);
+    if (!list.includes(word)) list.push(word);
+    await set(learnKey(topicId), list);
+    return list;
+  },
+
+  async resetLearned(topicId) {
+    await set(learnKey(topicId), []);
+  },
   setApiKey: (v) => set(KEYS.apiKey, String(v || '').trim()),
 
   /** A stored id dropped from MODELS falls back to the default, not a 404. */

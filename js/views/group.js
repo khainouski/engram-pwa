@@ -6,6 +6,7 @@ import {
   topicCard,
 } from '../ui.js';
 import { mountPractice } from './practice.js';
+import { mountLearn, learnableWords } from './learn.js';
 import { icon } from '../icons.js';
 
 /*
@@ -87,7 +88,22 @@ function topicCards(ids, brief) {
   const list = ids.filter((id) => TOPICS[id]);
   // Раздел из одной темы: её имя — это и есть заголовок страницы, второй раз не нужен.
   const bare = list.length === 1;
-  return list.map((id) => topicCard(TOPICS[id], { id, link: !bare, brief, bare })).join('');
+  return list.map((id) => {
+    const card = topicCard(TOPICS[id], { id, link: !bare, brief, bare });
+    // Список слов можно прогнать карточками прямо здесь, не заходя в тему.
+    const learn = learnableWords(TOPICS[id]).length >= 4
+      ? `<div class="learn-slot" data-learn="${id}"></div>`
+      : '';
+    return card + learn;
+  }).join('');
+}
+
+/** Режим карточек у каждой темы со словами на развёрнутой странице. */
+function mountLearnSlots(root) {
+  for (const slot of root.querySelectorAll('.learn-slot[data-learn]')) {
+    const id = slot.dataset.learn;
+    mountLearn(slot, { topicId: id, topic: TOPICS[id] });
+  }
 }
 
 function topicRows(ids) {
@@ -209,6 +225,8 @@ export async function renderGroup(root, groupId) {
     ? { kind: 'mix', title: g.title, mixLabel: g.mix, topicIds: g.topics || [] }
     : null;
 
+  mountLearnSlots(root);
+
   if (expand) mountTopicPractice(root, g.topics || [], gMix);
 
   // A group without subgroups is its own subgroup page: same table, story and mix.
@@ -240,6 +258,8 @@ export async function renderSubgroup(root, groupId, subId) {
   const sMix = s.mix
     ? { kind: 'mix', title: s.title, mixLabel: s.mix, topicIds: s.topics }
     : null;
+
+  mountLearnSlots(root);
 
   if (s.expand) mountTopicPractice(root, s.topics, sMix);
 
