@@ -2,8 +2,8 @@ import { store, INTERVALS_DAYS } from '../storage.js';
 import { crumbs, esc } from '../ui.js';
 import { icon } from '../icons.js';
 
-const CRUMB_ROOT = { title: 'Грамматика', href: '#/' };
-const CRUMB_WORDS = { title: 'Мои слова', href: '#/words' };
+const CRUMB_ROOT = { title: 'Главная', href: '#/' };
+const CRUMB_WORDS = { title: 'My Words', href: '#/words' };
 
 const youglish = (text) =>
   `https://youglish.com/pronounce/${encodeURIComponent(text)}/english/us`;
@@ -24,17 +24,17 @@ export async function renderReview(root) {
   if (!queue.length) {
     const all = await store.getWords();
     root.innerHTML = `
-      ${crumbs([CRUMB_ROOT, CRUMB_WORDS, { title: 'Повторение' }])}
-      <h1 class="page-title">${icon('repeat', 'title-icon')}Повторение</h1>
+      ${crumbs([CRUMB_ROOT, CRUMB_WORDS, { title: 'Review' }])}
+      <h1 class="page-title">${icon('repeat', 'title-icon')}Review</h1>
       <p class="empty">${all.length
         ? 'На сегодня всё повторено. Возвращайся завтра.'
-        : 'Сначала добавь слова — <a href="#/words">Мои слова</a>.'}</p>`;
+        : 'Сначала добавь слова — <a href="#/words">My Words</a>.'}</p>`;
     return;
   }
 
   root.innerHTML = `
-    ${crumbs([CRUMB_ROOT, CRUMB_WORDS, { title: 'Повторение' }])}
-    <h1 class="page-title">${icon('repeat', 'title-icon')}Повторение</h1>
+    ${crumbs([CRUMB_ROOT, CRUMB_WORDS, { title: 'Review' }])}
+    <h1 class="page-title">${icon('repeat', 'title-icon')}Review</h1>
     <p class="page-sub" id="rv-progress"></p>
     <div id="rv-card"></div>`;
 

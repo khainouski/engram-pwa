@@ -212,7 +212,7 @@ export async function renderGroup(root, groupId) {
     : (expand ? topicCards(g.topics || [], g.expand === 'brief') : topicRows(g.topics || []));
 
   root.innerHTML = `
-    ${crumbs([{ title: 'Грамматика', href: '#/' }, { title: g.title }])}
+    ${crumbs([{ title: 'Главная', href: '#/' }, { title: g.title }])}
     <h1 class="page-title">${icon(g.id, 'title-icon')}${esc(g.title)}</h1>
     ${g.subtitle ? `<p class="page-sub">${esc(g.subtitle)}</p>` : ''}
     ${body}
@@ -246,7 +246,7 @@ export async function renderSubgroup(root, groupId, subId) {
   const pattern = s.expand ? mergedPattern(s.topics) : null;
 
   root.innerHTML = `
-    ${crumbs([{ title: 'Грамматика', href: '#/' }, { title: g.title, href: `#/g/${g.id}` }, { title: s.title }])}
+    ${crumbs([{ title: 'Главная', href: '#/' }, { title: g.title, href: `#/g/${g.id}` }, { title: s.title }])}
     <h1 class="page-title">${esc(s.title)}</h1>
     <p class="page-sub">${s.topics.length} ${plural(s.topics.length, 'конструкция', 'конструкции', 'конструкций')} из конспекта</p>
     ${s.expand ? topicCards(s.topics, s.expand === 'brief') : topicRows(s.topics)}

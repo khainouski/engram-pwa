@@ -46,21 +46,21 @@ export async function renderHome(root) {
 
 
   root.innerHTML = `
-    <h1 class="page-title">Грамматика</h1>
-    <p class="page-sub">Личный конспект и практика с AI.</p>
-    <div class="list-label">Разделы</div>
+    <h1 class="page-title">Знания уровня B2</h1>
+    <p class="page-sub">Личный конспект, слова и практика с AI.</p>
+    <div class="list-label">Grammar</div>
     ${rowList(grammar)}
     <div class="list-label">Words</div>
     ${rowList(verbs)}
     <div class="list-label">Lessons with Ekaterina</div>
     ${rowList(lessons)}
-    <div class="list-label">Мои слова</div>
+    <div class="list-label">My Words</div>
     ${rowList([
-      { href: '#/words', icon: icon('words'), title: 'Мои слова', sub: 'Свои слова с переводом и практикой', meta: wordCount },
+      { href: '#/words', icon: icon('words'), title: 'My Words', sub: 'Свои слова с переводом и практикой', meta: wordCount },
       {
         href: '#/review',
         icon: icon('repeat'),
-        title: 'Повторение',
+        title: 'Review',
         sub: dueCount ? 'Карточки по расписанию' : 'На сегодня всё повторено',
         meta: dueCount ? String(dueCount) : '',
       },

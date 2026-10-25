@@ -53,7 +53,7 @@ export async function renderSettings(root) {
     </div>` : '';
 
   root.innerHTML = `
-    ${crumbs([{ title: 'Грамматика', href: '#/' }, { title: 'Settings' }])}
+    ${crumbs([{ title: 'Главная', href: '#/' }, { title: 'Settings' }])}
     <h1 class="page-title">${icon('settings', 'title-icon')}Settings</h1>
     <p class="page-sub">Ключ и слова хранятся только в этом браузере и никуда не отправляются, кроме Google Gemini.</p>
 
@@ -93,7 +93,7 @@ export async function renderSettings(root) {
 
     <div class="result-card stack" style="margin-top:16px">
       <div>
-        <div style="font-weight:550">Мои слова</div>
+        <div style="font-weight:550">My Words</div>
         <p class="muted" style="font-size:13.5px;margin:6px 0 0">
           Сохранено слов: ${words.length}. Экспорт — Markdown-список, его можно
           править руками и вернуть обратно.

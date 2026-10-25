@@ -11,7 +11,7 @@ export async function renderTopic(root, topicId) {
   const g = loc.groupId ? findGroup(loc.groupId) : null;
   const s = loc.subId ? findSubgroup(loc.groupId, loc.subId) : null;
 
-  const trail = [{ title: 'Грамматика', href: '#/' }];
+  const trail = [{ title: 'Главная', href: '#/' }];
   if (g) trail.push({ title: g.title, href: `#/g/${g.id}` });
   if (s) trail.push({ title: s.title, href: `#/s/${g.id}/${s.id}` });
   trail.push({ title: t.title });

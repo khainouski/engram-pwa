@@ -138,7 +138,7 @@ async function refreshWordIndex() {
     ...words.map((w) => ({
       id: `words/${encodeURIComponent(w.text)}`,
       title: w.text,
-      path: 'Мои слова',
+      path: 'My Words',
       haystack: [w.text, w.translation, w.example].filter(Boolean).join(' ').toLowerCase(),
     })),
   ];

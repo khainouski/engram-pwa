@@ -19,8 +19,8 @@ const THEMES = [
 const youglish = (text) =>
   `https://youglish.com/pronounce/${encodeURIComponent(text)}/english/us`;
 
-const CRUMB_ROOT = { title: 'Грамматика', href: '#/' };
-const CRUMB_WORDS = { title: 'Мои слова', href: '#/words' };
+const CRUMB_ROOT = { title: 'Главная', href: '#/' };
+const CRUMB_WORDS = { title: 'My Words', href: '#/words' };
 
 /** Groups and subgroups a word can be practised against (those with a mix). */
 const DRILLS = (() => {
@@ -41,8 +41,8 @@ export async function renderWords(root, term) {
   const words = await store.getWords();
   const dueCount = (await store.dueWords()).length;
   root.innerHTML = `
-    ${crumbs([CRUMB_ROOT, { title: 'Мои слова' }])}
-    <h1 class="page-title">${icon('words', 'title-icon')}Мои слова</h1>
+    ${crumbs([CRUMB_ROOT, { title: 'My Words' }])}
+    <h1 class="page-title">${icon('words', 'title-icon')}My Words</h1>
     <p class="page-sub">Введи слово по-английски — перевод подставится сам.</p>
     <div class="actions" style="margin-bottom:20px">
       <input id="w-text" class="input" style="flex:1;min-width:200px" placeholder="deploy, come up with, …" autocomplete="off" spellcheck="false">
@@ -52,7 +52,7 @@ export async function renderWords(root, term) {
 
     <div class="actions" style="margin-bottom:20px">
       <a class="btn primary" href="#/review">
-        ${dueCount ? `Повторить ${dueCount}` : 'Повторение'}
+        ${dueCount ? `Review ${dueCount}` : 'Review'}
       </a>
       <span class="muted" style="font-size:13.5px">
         ${dueCount ? 'карточек ждут сегодня' : 'на сегодня всё повторено'}
