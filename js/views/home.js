@@ -2,12 +2,19 @@ import { GROUPS, TOPICS } from '../../data/grammar.js';
 import { store } from '../storage.js';
 import { rowList } from '../ui.js';
 import { icon } from '../icons.js';
+import { learnableWords } from './learn.js';
 
 // То, что разбирается на занятиях, — своим блоком и в своём порядке.
 const LESSONS = ['useful-constructions', 'phrases'];
 
-// Глаголы — свой блок на главной: это не грамматика, а списки слов.
+// Словарь — свой блок на главной: это не грамматика, а списки, которые учат карточками.
 const VERBS = 'verbs';
+
+/*
+ * Один раздел, но на главной два заголовка: одиннадцать строк подряд читаются
+ * как стена. Здесь — то, что говорится готовым куском, а не отдельным словом.
+ */
+const PHRASES = ['speaking-toolkit', 'idioms', 'linking-words', 'adj-prepositions'];
 
 const byId = (id) => GROUPS.find((g) => g.id === id);
 
@@ -36,13 +43,17 @@ export async function renderHome(root) {
 
   const lessons = LESSONS.map(byId).filter(Boolean).map(groupRow);
 
-  // Страницы глаголов ведут прямо из главной: промежуточный список не нужен.
-  const verbs = (byId(VERBS)?.topics || []).filter((id) => TOPICS[id]).map((id) => ({
+  // Страницы словаря ведут прямо из главной: промежуточный список не нужен.
+  // Справа у строки — сколько карточек на странице: видно размер списка до захода.
+  const vocabRow = (id, glyph) => ({
     href: `#/t/${id}`,
-    icon: icon(VERBS),
+    icon: icon(glyph),
     title: TOPICS[id].title,
     sub: TOPICS[id].intro || '',
-  }));
+    meta: String(learnableWords(TOPICS[id]).length),
+  });
+  const vocab = (byId(VERBS)?.topics || []).filter((id) => TOPICS[id] && !PHRASES.includes(id));
+  const phrases = PHRASES.filter((id) => TOPICS[id]);
 
 
   root.innerHTML = `
@@ -50,8 +61,10 @@ export async function renderHome(root) {
     <p class="page-sub">Личный конспект, слова и практика с AI.</p>
     <div class="list-label">Grammar</div>
     ${rowList(grammar)}
-    <div class="list-label">Words</div>
-    ${rowList(verbs)}
+    <div class="list-label">Vocabulary</div>
+    ${rowList(vocab.map((id) => vocabRow(id, VERBS)))}
+    <div class="list-label">Phrases</div>
+    ${rowList(phrases.map((id) => vocabRow(id, 'phrases')))}
     <div class="list-label">Lessons with Ekaterina</div>
     ${rowList(lessons)}
     <div class="list-label">My Words</div>

@@ -115,29 +115,36 @@ export const GROUPS = [
   {
     id: 'speaking-grammar',
     title: 'Speaking',
-    subtitle: 'conversation · core grammar · prepositions · unreal · reported speech',
+    subtitle: 'nouns & articles · sentence building · verbs & describing · prepositions · unreal · reported speech',
     icon: '🗣️',
     subgroups: [
       {
-        id: 'talk',
-        title: 'Conversation',
-        topics: ['speaking-toolkit', 'idioms', 'questions', 'linking-words', 'there-is-it-is'],
+        id: 'nouns-articles',
+        title: 'Nouns & Articles',
+        topics: ['articles', 'countable', 'there-is-it-is'],
         expand: true,
-        mix: 'реакции в диалоге / идиомы / вопросы / связки / there is · it is',
+        mix: 'артикли / much · many · a few / there is · it is',
       },
       {
-        id: 'core',
-        title: 'Core Grammar',
-        topics: ['articles', 'relative-clauses', 'gerund-infinitive', 'countable', 'comparisons', 'adverbs', 'ing-ed-adjectives'],
+        id: 'sentence',
+        title: 'Sentence Building',
+        topics: ['questions', 'relative-clauses'],
         expand: true,
-        mix: 'артикли / relative clauses / -ing или to / much · many / сравнения / still · yet · already',
+        mix: 'вопросы всех видов / who · which · that',
+      },
+      {
+        id: 'describing',
+        title: 'Verbs & Describing',
+        topics: ['gerund-infinitive', 'adverbs', 'comparisons'],
+        expand: true,
+        mix: '-ing или to / still · yet · already / сравнения',
       },
       {
         id: 'prepositions',
         title: 'Prepositions',
-        topics: ['time-prepositions', 'place-prepositions', 'adj-prepositions'],
+        topics: ['time-prepositions', 'place-prepositions'],
         expand: true,
-        mix: 'предлоги времени / предлоги места и движения / прилагательное и глагол с предлогом',
+        mix: 'предлоги времени / предлоги места и движения',
       },
       {
         id: 'unreal',
@@ -157,10 +164,10 @@ export const GROUPS = [
   },
   {
     id: 'verbs',
-    title: 'Words',
-    subtitle: 'глаголы · неправильные · фразовые · прилагательные · коллокации · существительные',
+    title: 'Vocabulary',
+    subtitle: 'глаголы · неправильные · фразовые · прилагательные · существительные · коллокации · реакции в диалоге · идиомы · связки · предлоги при прилагательных',
     icon: '🔤',
-    topics: ['common-verbs', 'irregular-verbs', 'phrasal-verbs', 'adjectives', 'collocations', 'nouns'],
+    topics: ['common-verbs', 'irregular-verbs', 'phrasal-verbs', 'adjectives', 'ing-ed-adjectives', 'nouns', 'collocations', 'speaking-toolkit', 'idioms', 'linking-words', 'adj-prepositions'],
   },
   {
     id: 'phrases',
@@ -2040,7 +2047,7 @@ He works → He doesn't work → Does he work?`,
     compare: ['irregular-verbs', 'phrasal-verbs'],
   },
   'irregular-verbs': {
-    title: 'Irregular Verbs (80)',
+    title: 'Irregular Verbs',
     intro: 'Восемьдесят неправильных глаголов группами по модели: так они запоминаются пачками, а не по одному.',
     notes: [
       { en: 'read — read — read', ru: 'Пишется одинаково, читается по-разному: [riːd] — [red] — [red].' },
@@ -2887,7 +2894,7 @@ He works → He doesn't work → Does he work?`,
   },
 
   'adjectives': {
-    title: 'Adjectives (150)',
+    title: 'Adjectives',
     intro: '150 прилагательных уровня B1–B2 по темам: характер, эмоции, оценка вещей, количество и усилители.',
     notes: [
       { en: 'I’m bored ≠ It’s boring', ru: '-ed про человека, -ing про вещь. Подробнее — на странице -ing / -ed adjectives.' },
@@ -3049,7 +3056,7 @@ He works → He doesn't work → Does he work?`,
     compare: ['ing-ed-adjectives', 'collocations'],
   },
   'collocations': {
-    title: 'Collocations (100)',
+    title: 'Collocations',
     intro: '100 устойчивых сочетаний: именно по ним на B2 слышно, что человек говорит естественно, а не переводит с русского.',
     notes: [
       { en: 'make a decision, not ✘ take a decision', ru: 'Решение по-английски «делают». Самая заметная калька с русского.' },
@@ -3317,7 +3324,7 @@ He works → He doesn't work → Does he work?`,
     compare: ['reported-questions', 'speaking-toolkit'],
   },
   'nouns': {
-    title: 'Nouns by Topic (130)',
+    title: 'Nouns by Topic',
     intro: '130 существительных по темам: работа, деньги, здоровье, жильё, поездки, город, общение, учёба и время — то, о чём разговор идёт чаще всего.',
     notes: [
       { en: 'advice, knowledge, data, luggage, furniture', ru: 'Несчётные: без a и без -s. ✘ an advice, ✘ furnitures.' },
