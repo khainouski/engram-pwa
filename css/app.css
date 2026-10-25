@@ -717,6 +717,16 @@ textarea.input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .learn-done { text-align: center; }
 .learn-done .learn-actions { margin-top: 16px; }
 
+/* Телефон: карточка во всю ширину, кнопки крупные и в один ряд. */
+@media (max-width: 720px) {
+  .learn { padding: 14px 12px; }
+  .learn-card { padding: 28px 6px; -webkit-tap-highlight-color: transparent; }
+  .learn-card:active { background: var(--surface-2); border-radius: 12px; }
+  .learn-actions .btn { min-height: 48px; font-size: 15px; }
+  .learn-bar { gap: 8px; }
+  .learn-bar .btn { min-height: 44px; }
+}
+
 /* Повторение с телефона: прячем русский и проверяем себя. */
 .study-bar { display: flex; justify-content: flex-end; margin: -4px 0 10px; }
 .hide-ru .ex-ru, .hide-ru .pair-ru, .hide-ru .prep-ru, .hide-ru .verb-ru, .hide-ru .rr-ru { display: none; }
