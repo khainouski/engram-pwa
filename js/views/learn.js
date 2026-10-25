@@ -25,7 +25,15 @@ export function learnableWords(topic) {
   }
   for (const c of topic.cards || []) {
     const first = (c.examples || [])[0] || {};
-    out.push({ en: c.word, ru: `${c.ru} — ${(c.chips || []).join(' · ')}`, ex: first.en, exRu: first.ru });
+    // Одно и то же слово может стоять в двух группах (at во времени и в месте):
+    // ключ прогресса — группа со словом, иначе «знаю» гасит сразу обе карточки.
+    out.push({
+      key: c.group ? `${c.group} · ${c.word}` : c.word,
+      en: c.word,
+      ru: `${c.ru} — ${(c.chips || []).join(' · ')}`,
+      ex: first.en,
+      exRu: first.ru,
+    });
   }
   for (const p of topic.pairs || []) {
     out.push({
@@ -81,7 +89,7 @@ export function mountLearn(slot, { topicId, topic }) {
 
   async function start() {
     learned = await store.getLearned(topicId);
-    const rest = all.filter((w) => !learned.includes(w.en));
+    const rest = all.filter((w) => !learned.includes(w.key || w.en));
     if (!rest.length) {
       await store.resetLearned(topicId);
       learned = [];
@@ -146,7 +154,7 @@ export function mountLearn(slot, { topicId, topic }) {
     });
 
     slot.querySelector('#learn-known').addEventListener('click', async () => {
-      learned = await store.markLearned(topicId, item.en);
+      learned = await store.markLearned(topicId, item.key || item.en);
       queue = queue.slice(1);
       card(done + 1, total);
     });
