@@ -211,7 +211,9 @@ export async function renderGroup(root, groupId) {
     ? rowList(g.subgroups.map((s) => ({
         href: `#/s/${g.id}/${s.id}`,
         title: s.title,
-        sub: s.topics.map((id) => (TOPICS[id] ? TOPICS[id].title : id)).join(' · '),
+        // Короткая подсказка вместо склейки полных имён со скобками: четыре
+        // названия страниц занимают на телефоне четыре строки и не читаются.
+        sub: s.mix || s.topics.map((id) => (TOPICS[id] ? TOPICS[id].title : id)).join(' · '),
         meta: String(s.topics.length),
       })))
     : (expand ? topicCards(g.topics || [], g.expand === 'brief') : topicRows(g.topics || []));
@@ -219,7 +221,7 @@ export async function renderGroup(root, groupId) {
   root.innerHTML = `
     ${crumbs([{ title: 'Главная', href: '#/' }, { title: g.title }])}
     <h1 class="page-title">${icon(g.id, 'title-icon')}${esc(g.title)}</h1>
-    ${g.subtitle ? `<p class="page-sub">${esc(g.subtitle)}</p>` : ''}
+    ${g.subtitle && !g.subgroups ? `<p class="page-sub">${esc(g.subtitle)}</p>` : ''}
     ${body}
     ${g.table && !expand ? `<div class="section-title">Summary Table</div>${summaryTable(g.table)}` : ''}
     ${g.subgroups ? '' : storySection(g.story, pattern)}
