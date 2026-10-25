@@ -7,14 +7,8 @@ import { learnableWords } from './learn.js';
 // То, что разбирается на занятиях, — своим блоком и в своём порядке.
 const LESSONS = ['useful-constructions', 'phrases'];
 
-// Словарь — свой блок на главной: это не грамматика, а списки, которые учат карточками.
-const VERBS = 'verbs';
-
-/*
- * Один раздел, но на главной два заголовка: одиннадцать строк подряд читаются
- * как стена. Здесь — то, что говорится готовым куском, а не отдельным словом.
- */
-const PHRASES = ['speaking-toolkit', 'idioms', 'linking-words', 'adj-prepositions'];
+// Списки, которые учат карточками: это не грамматика, поэтому свой блок.
+const VOCAB = ['verbs', 'speech-phrases'];
 
 const byId = (id) => GROUPS.find((g) => g.id === id);
 
@@ -31,7 +25,7 @@ const groupRow = (g) => ({
 export async function renderHome(root) {
   const wordCount = String((await store.getWords()).length);
   const dueCount = (await store.dueWords()).length;
-  const grammar = GROUPS.filter((g) => ![...LESSONS, VERBS].includes(g.id)).map((g) => ({
+  const grammar = GROUPS.filter((g) => ![...LESSONS, ...VOCAB].includes(g.id)).map((g) => ({
     href: `#/g/${g.id}`,
     icon: icon(g.id) || g.icon,
     title: g.title,
@@ -43,17 +37,16 @@ export async function renderHome(root) {
 
   const lessons = LESSONS.map(byId).filter(Boolean).map(groupRow);
 
-  // Страницы словаря ведут прямо из главной: промежуточный список не нужен.
-  // Справа у строки — сколько карточек на странице: видно размер списка до захода.
-  const vocabRow = (id, glyph) => ({
-    href: `#/t/${id}`,
-    icon: icon(glyph),
-    title: TOPICS[id].title,
-    sub: TOPICS[id].intro || '',
-    meta: String(learnableWords(TOPICS[id]).length),
-  });
-  const vocab = (byId(VERBS)?.topics || []).filter((id) => TOPICS[id] && !PHRASES.includes(id));
-  const phrases = PHRASES.filter((id) => TOPICS[id]);
+  // Справа у строки — сколько карточек внутри раздела, а не сколько страниц.
+  const vocab = VOCAB.map(byId).filter(Boolean).map((g) => ({
+    href: `#/g/${g.id}`,
+    icon: icon(g.id) || g.icon,
+    title: g.title,
+    sub: g.subtitle || '',
+    meta: String((g.topics || [])
+      .filter((id) => TOPICS[id])
+      .reduce((n, id) => n + learnableWords(TOPICS[id]).length, 0)),
+  }));
 
 
   root.innerHTML = `
@@ -61,10 +54,8 @@ export async function renderHome(root) {
     <p class="page-sub">Личный конспект, слова и практика с AI.</p>
     <div class="list-label">Grammar</div>
     ${rowList(grammar)}
-    <div class="list-label">Vocabulary</div>
-    ${rowList(vocab.map((id) => vocabRow(id, VERBS)))}
-    <div class="list-label">Phrases</div>
-    ${rowList(phrases.map((id) => vocabRow(id, 'phrases')))}
+    <div class="list-label">Words</div>
+    ${rowList(vocab)}
     <div class="list-label">Lessons with Ekaterina</div>
     ${rowList(lessons)}
     <div class="list-label">My Words</div>

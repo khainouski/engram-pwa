@@ -114,7 +114,7 @@ export const GROUPS = [
   },
   {
     id: 'speaking-grammar',
-    title: 'Speaking',
+    title: 'Everyday Grammar',
     subtitle: 'nouns & articles · sentence building · verbs & describing · prepositions · unreal · reported speech',
     icon: '🗣️',
     subgroups: [
@@ -135,9 +135,9 @@ export const GROUPS = [
       {
         id: 'describing',
         title: 'Verbs & Describing',
-        topics: ['gerund-infinitive', 'adverbs', 'comparisons'],
+        topics: ['gerund-infinitive', 'adverbs', 'comparisons', 'ing-ed-adjectives'],
         expand: true,
-        mix: '-ing или to / still · yet · already / сравнения',
+        mix: '-ing или to / still · yet · already / сравнения / -ing и -ed прилагательные',
       },
       {
         id: 'prepositions',
@@ -165,9 +165,16 @@ export const GROUPS = [
   {
     id: 'verbs',
     title: 'Vocabulary',
-    subtitle: 'глаголы · неправильные · фразовые · прилагательные · существительные · коллокации · реакции в диалоге · идиомы · связки · предлоги при прилагательных',
+    subtitle: 'глаголы · неправильные · фразовые · прилагательные · существительные · коллокации',
     icon: '🔤',
-    topics: ['common-verbs', 'irregular-verbs', 'phrasal-verbs', 'adjectives', 'ing-ed-adjectives', 'nouns', 'collocations', 'speaking-toolkit', 'idioms', 'linking-words', 'adj-prepositions'],
+    topics: ['common-verbs', 'irregular-verbs', 'phrasal-verbs', 'adjectives', 'nouns', 'collocations'],
+  },
+  {
+    id: 'speech-phrases',
+    title: 'Phrases',
+    subtitle: 'реакции в диалоге · идиомы · связки · предлоги при прилагательных',
+    icon: '💬',
+    topics: ['speaking-toolkit', 'idioms', 'linking-words', 'adj-prepositions'],
   },
   {
     id: 'phrases',
@@ -182,8 +189,8 @@ export const GROUPS = [
     id: 'useful-constructions',
     title: 'Useful Constructions',
     icon: '🧩',
-    topics: ['used-to', 'decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall', 'miss-skip', 'phrasal-verbs-core', 'recommend', 'appreciate', 'get-stuck', 'end-up', 'time-consuming', 'supposed-to', 'habit'],
-    mix: 'used to / not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on / miss · skip / figure out · come up with · end up · look forward to · bring up · run into · bump into / recommend + V-ing · recommend that / appreciate + noun · V-ing · I’d appreciate it if / get stuck · be stuck / end up + V-ing · in / at · adjective / time-consuming / be supposed to / habit: have · get into · break · out of habit',
+    topics: ['decide-not-to', 'every-other', 'on-my-own', 'try-not-to', 'be-adjective', 'downplay-exaggerate', 'actually', 'am-i-right', 'sacrifice', 'in-my-opinion', 'ahead-vs-in-front', 'meet-up-reschedule', 'running-late', 'lets-face-it', 'this-these', 'in-vain', 'make-it', 'could-you-tell-me', 'little-few', 'the-least-the-most', 'manage-to-worth', 'keep-ing', 'figure-out', 'fall', 'miss-skip', 'phrasal-verbs-core', 'recommend', 'appreciate', 'get-stuck', 'end-up', 'time-consuming', 'supposed-to', 'habit'],
+    mix: 'not to + verb / every other / on my own / try not to / to be + adjective / downplay / exaggerate / actually / am I right? / sacrifice / in my opinion / ahead of me vs in front of me / meet up / reschedule / running late / behind schedule / let’s face it / this is vs these are / in vain / make it / could you tell me what… / little · a little · few · a few / the least · the most / managed to · it’s worth + V-ing / keep + V-ing · keep me posted / figure out · figure it out / fall behind · fall through · fall apart · fall back on / miss · skip / figure out · come up with · end up · look forward to · bring up · run into · bump into / recommend + V-ing · recommend that / appreciate + noun · V-ing · I’d appreciate it if / get stuck · be stuck / end up + V-ing · in / at · adjective / time-consuming / be supposed to / habit: have · get into · break · out of habit',
   },
 ];
 
@@ -772,24 +779,6 @@ He works → He doesn't work → Does he work?`,
   },
 
   // ────────────────────────── USEFUL CONSTRUCTIONS ──────────────────────────
-  'used-to': {
-    title: 'used to / didn’t use to',
-    formula: 'I used to + verb · I didn’t use to + verb',
-    detail: 'Раньше делал, а сейчас уже нет — ситуация изменилась. Привычки и ситуации в прошлом.',
-    markers: ['used to', 'didn’t use to', 'but I do now'],
-    use: [
-      { en: 'I used to + verb', ru: 'Утверждение: раньше делал, а сейчас уже нет.', ex: 'I used to work with PHP. — Раньше я работал с PHP.' },
-      { en: 'I didn’t use to + verb', ru: 'Отрицание: раньше не делал, а сейчас делаю.', ex: 'I didn’t use to work with Go, but I do now. — Раньше я не работал с Go, а сейчас работаю.' },
-    ],
-    notes: [{ en: 'didn’t use to, not ✘ didn’t used to', ru: 'После didn’t идёт use to без -d: didn’t уже показывает прошлое.' }],
-    examples: [
-      { en: 'I used to work with PHP.', ru: 'Раньше я работал с PHP.' },
-      { en: 'I didn’t use to solve such problems, but I do now.', ru: 'Раньше я не решал такие задачи, а сейчас решаю.' },
-      { en: 'I didn’t use to work with Go, but I do now.', ru: 'Раньше я не работал с Go, а сейчас работаю.' },
-      { en: 'I didn’t use to conduct interviews, but I do now.', ru: 'Раньше я не проводил собеседования, а сейчас провожу.' },
-    ],
-    compare: ['every-other', 'habit'],
-  },
   'decide-not-to': {
     title: 'decide / agree / promise + not to',
     formula: 'decide / agree / promise + not to + verb',
@@ -827,7 +816,7 @@ He works → He doesn't work → Does he work?`,
       { en: 'I wash my hair every other day.', ru: 'Я мою голову через день.' },
       { en: 'We have this meeting every other week.', ru: 'У нас эта встреча раз в две недели.' },
     ],
-    compare: ['used-to'],
+    compare: ['be-used-to'],
   },
   'on-my-own': {
     title: 'on my own',
@@ -847,7 +836,7 @@ He works → He doesn't work → Does he work?`,
       { en: 'I did it on my own.', ru: 'Я сделал это сам.' },
       { en: 'I learned English on my own.', ru: 'Я самостоятельно выучил английский.' },
     ],
-    compare: ['used-to'],
+    compare: ['be-used-to'],
   },
   'try-not-to': {
     title: 'try not to + verb',
@@ -1730,7 +1719,7 @@ He works → He doesn't work → Does he work?`,
       { en: 'I woke up at 6 a.m. out of habit.', ru: 'Я проснулась в шесть утра по привычке.' },
       { en: 'I still call him sometimes, just out of habit.', ru: 'Я до сих пор иногда ему звоню, просто по привычке.' },
     ],
-    compare: ['fall', 'used-to', 'keep-ing'],
+    compare: ['fall', 'be-used-to', 'keep-ing'],
   },
   // ─────────────────────────────── VERBS ───────────────────────────────
   'common-verbs': {
@@ -3564,12 +3553,19 @@ He works → He doesn't work → Does he work?`,
     title: 'used to / be used to / get used to',
     formula: 'used to + V · be used to + V-ing / noun · get used to + V-ing',
     detail: 'Три похожих оборота о разном: раньше так было, сейчас привычно, привыкаю сейчас.',
-    markers: ['used to', 'be used to', 'get used to', 'I’m not used to'],
+    markers: ['used to', 'didn’t use to', 'be used to', 'get used to', 'I’m not used to'],
     use: [
       { en: 'used to + verb', ru: 'Раньше делал регулярно, а сейчас нет.',
         exs: [
           { en: 'I used to live in Minsk.', ru: 'Раньше я жил в Минске.' },
+          { en: 'I used to work with PHP.', ru: 'Раньше я работал с PHP.' },
           { en: 'She used to smoke.', ru: 'Она раньше курила.' },
+        ] },
+      { en: 'didn’t use to + verb', ru: 'Отрицание: раньше не делал, а сейчас делаю.',
+        exs: [
+          { en: 'I didn’t use to work with Go, but I do now.', ru: 'Раньше я не работал с Go, а сейчас работаю.' },
+          { en: 'I didn’t use to conduct interviews, but I do now.', ru: 'Раньше я не проводил собеседования, а сейчас провожу.' },
+          { en: 'I didn’t use to solve such problems, but I do now.', ru: 'Раньше я не решал такие задачи, а сейчас решаю.' },
         ] },
       { en: 'be used to + V-ing / noun', ru: 'Привычно, уже не напрягает.',
         exs: [
@@ -3594,8 +3590,9 @@ He works → He doesn't work → Does he work?`,
       { en: 'used to + verb ≠ be used to + V-ing', ru: 'I used to swim — раньше плавал. I’m used to swimming — мне привычно плавать.' },
       { en: '✘ I’m used to work late', ru: 'После be used to идёт -ing или существительное: used to working.' },
       { en: 'would for actions, used to for states', ru: '✘ I would have a car. Про состояния только used to: I used to have a car.' },
+      { en: 'didn’t use to, not ✘ didn’t used to', ru: 'После didn’t идёт use to без -d: didn’t уже показывает прошлое.' },
     ],
-    compare: ['used-to', 'gerund-infinitive'],
+    compare: ['habit', 'gerund-infinitive'],
   },
   'adj-prepositions': {
     title: 'Adjective / Verb + Preposition',

@@ -107,11 +107,16 @@ function mountLearnSlots(root) {
 }
 
 function topicRows(ids) {
-  return rowList(ids.filter((id) => TOPICS[id]).map((id) => ({
-    href: `#/t/${id}`,
-    title: TOPICS[id].title,
-    sub: TOPICS[id].formula,
-  })));
+  return rowList(ids.filter((id) => TOPICS[id]).map((id) => {
+    const cards = learnableWords(TOPICS[id]).length;
+    return {
+      href: `#/t/${id}`,
+      title: TOPICS[id].title,
+      // У страницы со списком формулы нет — там вводка и размер списка.
+      sub: TOPICS[id].formula || TOPICS[id].intro || '',
+      meta: cards >= 4 ? String(cards) : '',
+    };
+  }));
 }
 
 /*
